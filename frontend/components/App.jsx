@@ -6,6 +6,7 @@ import { addItem } from '../actions/item_actions.js';
 import * as Catalog from '../catalog';
 import CatalogContainer from './Catalog';
 import Editor from './Editor/Editor';
+import LayoutsIndex from './layouts_index_container.js';
 
 class App extends Component {
 
@@ -20,14 +21,20 @@ class App extends Component {
     this.setState({locked: !this.state.locked});
   }
 
+  saveLayout() {
+    this.props.saveLayout(this.refs.name.value);
+  }
+
   render() {
     return (
       <div style={styles.container}>
         <CatalogContainer />
         <div style={styles.main}>
           <h1>Square Space</h1>
+          <LayoutsIndex />
           <button onClick={this.lockGrid.bind(this)}>{this.state.locked ? "Unlock" : "Lock"}</button>
-          <button onClick={this.props.saveLayout}>Save</button>
+          <button onClick={this.saveLayout.bind(this)}>Save</button>
+          <input type="text" ref="name" />
           <GridLayout locked={this.state.locked}/>
         </div>
         { this.props.editor ? <Editor /> : "" }
@@ -51,7 +58,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  saveLayout: () => dispatch(saveLayout()),
+  saveLayout: name => dispatch(saveLayout(name)),
   addItem: (c, p) => dispatch(addItem(c, p)),
 });
 

@@ -14,10 +14,7 @@ class GridLayout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [0, 1, 2, 3, 4].map(function(i, key, list) {
-        return {i: i.toString(), x: i * 2, y: 0, w: 2, h: 2, add: i === (list.length - 1).toString()};
-      }),
-      counter: 0,
+      layout: JSON.parse(JSON.stringify(props.items))
     };
   }
 
@@ -36,6 +33,14 @@ class GridLayout extends Component {
     );
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.items.length === 0 || this.props.items.length === 0) return;
+    if (nextProps.items.length !== this.props.items.length) return;
+    if (this.props.items[0].i !== nextProps.items[0].i) {
+      this.setState({layout: JSON.parse(JSON.stringify(nextProps.items))});
+    }
+  }
+
   layoutChange(layout) {
     this.props.changeLayout(layout);
   }
@@ -44,6 +49,7 @@ class GridLayout extends Component {
 
     return (
       <Grid
+        layout={this.state.layout}
         draggableHandle='.draggable-handle'
         margin={[0,0]}
         isDraggable={!this.props.locked}

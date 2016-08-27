@@ -5,6 +5,6 @@ import { combineReducers } from 'redux';
 
 export default combineReducers({
   items: ItemReducer,
-  layout: LayoutReducer,
+  layouts: LayoutReducer,
   editor: EditorReducer,
 });
