@@ -12,8 +12,8 @@ const Root = ({ store }) => (
   <Provider store={store}>
     <Router history={hashHistory}>
       <Route path="/">
-        <Route path="sites" onEnter={() => store.dispatch(requestSites())}>
-          <IndexRoute component={SitesIndex} />
+        <Route path="sites">
+          <IndexRoute component={SitesIndex} onEnter={() => store.dispatch(requestSites())}/>
           <Route path=":siteId" component={Sidebar} onEnter={state => store.dispatch(requestSite(state.params.siteId))}>
             <IndexRedirect to='editor' />
             <Route path="editor" component={SiteDetail}/>

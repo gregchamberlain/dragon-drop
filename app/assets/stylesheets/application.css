@@ -133,3 +133,51 @@
   margin-left: 64px;
   background: #eee;
 }
+
+.editor-sidebar {
+  position: fixed;
+  padding: 15px;
+  top: 0;
+  left: 64px;
+  height: 100%;
+  width: 200px;
+  background: #666;
+}
+
+.editor-sidebar > .sidebar-header {
+    font-size: 16px;
+    color: #ccc;
+    margin: 15px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.editor-sidebar > .sidebar-group {
+  padding-top: 20px;
+}
+
+.editor-sidebar > .sidebar-group > h1 {
+  margin: 0;
+  font-size: 16px;
+  color: #eee;
+}
+
+.editor-sidebar > .sidebar-group > ul {
+  color: #eee;
+  margin: 0;
+  padding: 10px;
+  line-height: 24px;
+  list-style: none;
+}
+
+.editor-sidebar > .sidebar-group > ul > li {
+  cursor: pointer;
+}
+
+.editor-sidebar > .sidebar-group > ul > li:hover {
+  color: #ccc;
+}
+
+.editor-content {
+  margin-left: 200px;
+}
