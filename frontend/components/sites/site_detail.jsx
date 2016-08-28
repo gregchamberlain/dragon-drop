@@ -6,6 +6,7 @@ const SiteDetail = ({ site, pages }) => (
     <ul>
       {pages && pages.map(page => <li key={page.id}>{page.name}</li>)}
     </ul>
+    <div style={{height: 1000}}></div>
   </div>
 );
 

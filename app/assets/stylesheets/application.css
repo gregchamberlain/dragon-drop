@@ -120,7 +120,12 @@
 }
 
 .sites-sidebar .sidebar-item:hover {
-  color: #35b5e5;
+  color: #03A9F4;
+  background: #555;
+}
+
+.sites-sidebar .sidebar-item.active {
+  color: #03A9F4;
   background: #555;
 }
 
