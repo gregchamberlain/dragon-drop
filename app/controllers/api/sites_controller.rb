@@ -1,6 +1,6 @@
 class Api::SitesController < ApplicationController
 	def index
-		render json: Site.include(pages: :components).all
+		render json: Site.all
 	end
 
 	def create
