@@ -5,7 +5,7 @@ import Catalog from '../catalog';
 const items = (state = {}, action) => {
   switch (action.type) {
     case ACTIONS.ADD_ITEM:
-     const i = 'i' + Math.floor(Math.random() * 10000); // Random id
+     const i = 'i' + Math.floor(Math.random() * 1000000); // Random id
      return Object.assign({}, state, {[i]: {
        component: action.component,
        i: i,

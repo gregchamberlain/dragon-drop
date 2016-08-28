@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160827205002) do
+ActiveRecord::Schema.define(version: 20160828004827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "components", force: :cascade do |t|
+    t.string   "name"
+    t.string   "layout"
+    t.text     "props"
+    t.integer  "page_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "components", ["page_id"], name: "index_components_on_page_id", using: :btree
 
   create_table "layouts", force: :cascade do |t|
     t.string   "name"
@@ -22,5 +33,27 @@ ActiveRecord::Schema.define(version: 20160827205002) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "pages", force: :cascade do |t|
+    t.string   "name"
+    t.string   "path"
+    t.integer  "site_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "pages", ["site_id", "path"], name: "index_pages_on_site_id_and_path", unique: true, using: :btree
+
+  create_table "sites", force: :cascade do |t|
+    t.string   "name"
+    t.string   "identifier"
+    t.integer  "user_id"
+    t.boolean  "template"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "sites", ["identifier"], name: "index_sites_on_identifier", unique: true, using: :btree
+  add_index "sites", ["user_id"], name: "index_sites_on_user_id", using: :btree
 
 end

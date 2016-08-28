@@ -1,0 +1,24 @@
+{
+	"user": {
+		"username": "string:uniq",
+		"password_digest": "string",
+		"session_token": "string:uniq",
+	},
+	"site": {
+		"name": "string",
+		"identifier": "string:uniq",
+		"user_id": "integer:index",
+		"template": "boolean"
+	},
+	"page": {
+		"name": "string",
+		"path": "string",							// Unique with v
+		"site_id": "integer:index"		// Unique with ^
+	},
+	"component": {
+		"name": "string",
+		"layout": "string(json)",
+		"props": "text(json)",
+		"page_id": "integer:index"
+	}
+}

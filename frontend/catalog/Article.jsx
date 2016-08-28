@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import Inputs from '../util/inputs';
 
 const Article = ({ title, content, textAlign }) => (
-  <div style={{textAlign}}>
+  <div style={{textAlign, overflow: 'hidden'}}>
     <h1>{title}</h1>
     <p>{content}</p>
   </div>
