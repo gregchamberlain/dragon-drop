@@ -19,6 +19,14 @@
    font-family: Arial, Helvetica, sans-serif;
  }
 
+  html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: #eee;
+    box-sizing: border-box;
+  }
+
  input, label {
    width: 95%;
  }
@@ -89,3 +97,34 @@
    margin: 40px auto;
    background: #eee;
  }
+
+.sites-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 64px;
+  background: #444;
+}
+
+.sites-sidebar .sidebar-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #ccc;
+  width: 64px;
+  height: 64px;
+  cursor: pointer;
+  transition: color 0.25s, background 0.25s;
+}
+
+.sites-sidebar .sidebar-item:hover {
+  color: #35b5e5;
+  background: #555;
+}
+
+.sites-content {
+  margin-left: 64px;
+  background: #eee;
+}
