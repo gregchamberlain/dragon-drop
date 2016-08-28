@@ -13,7 +13,9 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
     case ACTIONS.REQUEST_SITE:
       API.fetchSite(
         action.siteId,
-        response => console.log(normalize(response, site).entities.sites[1].pages)
+        response => {
+          dispatch(ACTIONS.receiveSite(normalize(response, site)));
+        }
       );
       return next(action);
     default:
