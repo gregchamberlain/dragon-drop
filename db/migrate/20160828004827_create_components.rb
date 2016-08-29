@@ -1,10 +1,10 @@
 class CreateComponents < ActiveRecord::Migration
   def change
     create_table :components do |t|
-      t.string :name
-      t.string :layout
-      t.text :props
-      t.integer :page_id
+      t.string :name, null: false
+      t.string :layout, null: false
+      t.text :props, null: false
+      t.integer :page_id, null: false
 
       t.timestamps null: false
     end

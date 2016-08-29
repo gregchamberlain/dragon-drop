@@ -6,6 +6,7 @@ const PageReducer = (state = {}, action) => {
     case RECEIVE_PAGES:
       return {...state, ...action.response.entities.pages}
     case RECEIVE_SITE:
+      console.log(action.response);
       return {...state, ...action.response.entities.pages}
     default:
       return state;

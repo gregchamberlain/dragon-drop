@@ -18,6 +18,12 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
         }
       );
       return next(action);
+    case ACTIONS.CREATE_SITE:
+      API.createSite(
+        action.site,
+        response => dispatch(ACTIONS.receiveSite(normalize(response, site)))
+      );
+      return next(action);
     default:
       return next(action);
   }

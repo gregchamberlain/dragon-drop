@@ -15,3 +15,13 @@ export const fetchSite = (siteId, success, error) => {
     error
   });
 };
+
+export const createSite = (site, success, error) => {
+  $.ajax({
+    method: 'post',
+    url: 'api/sites',
+    data: {site: site},
+    success,
+    error
+  });
+};

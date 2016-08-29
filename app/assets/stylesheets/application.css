@@ -136,7 +136,6 @@
 
 .editor-sidebar {
   position: fixed;
-  padding: 15px;
   top: 0;
   left: 64px;
   height: 100%;
@@ -180,4 +179,58 @@
 
 .editor-content {
   margin-left: 200px;
+}
+
+.modal-overlay {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 40px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-container {
+  min-width: 400px;
+  min-height: 400px;
+  background: #eee;
+  border-radius: 10px;
+}
+
+.modal-header {
+  border-top-left-radius: 10px;
+  background: #ccc;
+  line-height: 40px;
+  border-top-right-radius: 10px;
+  height: 40px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.sidebar-tabs {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  font-size: 24px;
+}
+
+.sidebar-tabs > .tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.25s, background 0.25s;
+}
+
+.sidebar-tabs > .tab:hover {
+  background: #444;
+  color: #03A9F4
 }

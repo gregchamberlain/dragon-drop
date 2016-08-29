@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :sites, only: [:index, :create, :show] do
       resources :pages, only: [:index, :create]
     end
+    resources :pages, only: [:update, :destroy, :show]
   end
 
 end

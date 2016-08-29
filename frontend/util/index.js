@@ -4,3 +4,5 @@ export const parseLayout = layout => (
 
 
 export const mergePages = (state, pages) => pages.map(id => state[id]);
+
+export const mergeComponents = (state, components) => components.map(id => state[id]);

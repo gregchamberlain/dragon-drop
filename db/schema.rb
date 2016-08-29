@@ -17,10 +17,10 @@ ActiveRecord::Schema.define(version: 20160828004827) do
   enable_extension "plpgsql"
 
   create_table "components", force: :cascade do |t|
-    t.string   "name"
-    t.string   "layout"
-    t.text     "props"
-    t.integer  "page_id"
+    t.string   "name",       null: false
+    t.string   "layout",     null: false
+    t.text     "props",      null: false
+    t.integer  "page_id",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -35,22 +35,23 @@ ActiveRecord::Schema.define(version: 20160828004827) do
   end
 
   create_table "pages", force: :cascade do |t|
-    t.string   "name"
-    t.string   "path"
-    t.integer  "site_id"
+    t.string   "name",       null: false
+    t.string   "path",       null: false
+    t.integer  "site_id",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  add_index "pages", ["site_id", "name"], name: "index_pages_on_site_id_and_name", unique: true, using: :btree
   add_index "pages", ["site_id", "path"], name: "index_pages_on_site_id_and_path", unique: true, using: :btree
 
   create_table "sites", force: :cascade do |t|
-    t.string   "name"
-    t.string   "identifier"
-    t.integer  "user_id"
-    t.boolean  "template"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",                       null: false
+    t.string   "identifier",                 null: false
+    t.integer  "user_id",                    null: false
+    t.boolean  "template",   default: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   add_index "sites", ["identifier"], name: "index_sites_on_identifier", unique: true, using: :btree
