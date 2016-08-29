@@ -9,7 +9,7 @@ Example Site Response with Pages included
   name: 'Test Site',
   identifier: 'test-site',
   pages: [
-    {id: 1, name: 'Home', path: '/'}
+    {id: 1, name: 'Home', path: '/'},
     {id: 2, name: 'About', path: '/about'}
   ]
 }
