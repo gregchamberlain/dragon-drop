@@ -45,6 +45,7 @@ This will be normalized to
 Heres an example of how these actions would look and be dispatched
 
 ```js
+// schema.js
 // Normalizr Schema setup
 const site = Schema('sites');
 const arrayOfSites = arrayOf(site);
@@ -54,12 +55,15 @@ site.define({
   pages: arrayOfPages
 })
 
+// entity_actions.js
 const receiveEntity = response => ({
     type: 'RECEIVE_ENTITY',
     response
 });
 
-// fetchSite takes in an id and responses with the site including pages
+//site_middleware.js
+// fetchSite takes in an id and responds with the site including pages
+// (see example response above)
 fetchSite(1, resp => dispatch(receiveEntity(normalize(resp, site))));
 ```
 With this data structure a `Reducer` can listen for any `receiveEntity` or `removeEntity` action. Once it receives this action it can check the `action.response.entities` object for data it is responsible for and only update the state if such data is preset. (This is especially useful for nested data, all data can be updated in state with one dispatch)
