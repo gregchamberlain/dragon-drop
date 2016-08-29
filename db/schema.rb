@@ -27,13 +27,6 @@ ActiveRecord::Schema.define(version: 20160828004827) do
 
   add_index "components", ["page_id"], name: "index_components_on_page_id", using: :btree
 
-  create_table "layouts", force: :cascade do |t|
-    t.string   "name"
-    t.text     "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "pages", force: :cascade do |t|
     t.string   "name",       null: false
     t.string   "path",       null: false
