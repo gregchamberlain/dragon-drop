@@ -40,8 +40,8 @@
 
 
 ## Routes
-|Path                               |Component               |
-|: ------------------------------- :|: -------------------- :|
+|Path       |Component  |
+|-----------|-----------|
 | /                                 | Home                   |
 | /account                          | AccountContainer       |
 | /sites                            | SitesIndexContainer    |
