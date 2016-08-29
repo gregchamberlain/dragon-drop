@@ -1,3 +1,5 @@
+# Sample Redux State
+
 ```
 {
   currentUser: {
