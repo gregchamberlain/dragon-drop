@@ -29,24 +29,24 @@
   - Sends request to node backend to compile and deploy the site
 - `GET /api/sites/:id`
   - Includes the sites pages
-- `POST /api/sites/:site_id/pages`
 - `GET /api/sites/templates`
   - Retrieves sites marked as templates
 
 
 #### Pages
 
+- `POST /api/sites/:site_id/pages`
 - `GET /api/pages`
   - Includes the pages components
 - `PATCH /api/pages/:id`
   - Accepts nested attributes for components
 - `DELETE /api/pages/:id`
-- `POST /api/pages/:page_id/components`
 - `GET /api/pages/templates`
   - Retrieves pages marked as templates
 
 #### Components
 
+- `POST /api/pages/:page_id/components`
 - `DELETE /api/components/:id`
 
 ## Node API

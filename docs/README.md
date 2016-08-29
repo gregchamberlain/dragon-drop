@@ -8,7 +8,7 @@ DragonDrop is a web application inpired by Squarespace build using React and Red
 - [ ] Sites with pages for navigation
 - [ ] Drag and Drop site building
 - [ ] Page and Site templates
-- [ ] Compile created site to html/js
+- [ ] Publish site (allow others to see the preview page i.e www.dragon-drop.com/sites/1)
 
 
 ## Design Docs
@@ -40,12 +40,14 @@ DragonDrop is a web application inpired by Squarespace build using React and Red
 - [ ] Seed Sites
 - [ ] CRUD API from `SitesController`, plus template endpoints
 - [ ] Sites components w/ styles and routes
-  - SitesIndex
-  - SitesIndexItem
-  - SitesForm
-  - SitesSettings
-  - TemplateIndexx
+  - `SitesIndex`
+  - `SitesIndexItem`
+  - `SiteDetail`
+  - `SitesForm`
+  - `SitesSettings`
+  - `TemplateIndexx`
 - [ ] Redux cycle for sites
+- [ ] Styling all components and overall `SiteDetail` page layout
 
 ### Phase 3: Pages Model, API, and basic components (1 day)
 **Objective:** Pages can be created, read, updated, destroyed through API and app
@@ -54,9 +56,9 @@ DragonDrop is a web application inpired by Squarespace build using React and Red
 - [ ] CRUD API from `PagesController`, plus template endpoints
 - [ ] Sites start w/ default home page
 - [ ] Basic Page components w/ styles and routes
-  - PageNavigation
-  - PageSettings
-  - TemplateIndex
+  - `PageNavigation`
+  - `PageSettings`
+  - `TemplateIndex`
 - [ ] Redux cycle for pages
 
 ### Phase 4: Components Model, API and components (1 day)
@@ -65,9 +67,10 @@ DragonDrop is a web application inpired by Squarespace build using React and Red
 - [ ] Redux cycle for adding and removing a `Component` from a page
 - [ ] Pages accept nested attributes for `Components` when updating
 - [ ] Create a few test components for the catalog.
-  - Image
-  - Header
-  - Paragraph
+  - `Image`
+  - `Header`
+  - `Paragraph`
+- [ ] Add styling to catalog components
 
 ### Phase 5: Drag and Drop Editing (2 days)
 - [ ] Drag and Drop editing of pages
@@ -76,23 +79,26 @@ DragonDrop is a web application inpired by Squarespace build using React and Red
 - [ ] Redux action to save the modified page
 - [ ] Redux acions to populate the editor w/ saved pages
 - [ ] Wrapper component for moving/resizing/selecting `Component`
+- [ ] Style `Wrapper` and `LayoutEditor` components
 
 ### Phase 6: Component Prop Editing (1 days)
 - [ ] Util for specifying catalog component prop inputTypes
 - [ ] component to edit available props for `Component`
 - [ ] Redux cycle for updating `Component` props attribute
+- [ ] Add styling for `PropEditor` component
 
 ### Phase 7: Site Preview and Catalog Components (1 day)
 - [ ] Components/Routes to preview Created site
 - [ ] create more components for the catalog
+- [ ] Add styling to additional catalog components
 
-### Phase 8: Site packaging and deployment (2 days)
+
+### Bonus Phases
+#### Site packaging and deployment
 - [ ] Setup node server with webpack and skeleton react Project
 - [ ] Setup react skeleton to consume data from pages/components
 - [ ] Webpack to compile react app string into bundled data
 - [ ] export bundled data as bundle.js and skeleton index.html to AWS S3 static hosting
-
-### Bonus Phases
 
 #### Analytics
 - [ ] Add ability to track site/page visits
