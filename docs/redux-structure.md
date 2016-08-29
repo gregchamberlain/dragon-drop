@@ -47,9 +47,9 @@ Heres an example of how these actions would look and be dispatched
 ```js
 // schema.js
 // Normalizr Schema setup
-const site = Schema('sites');
+const site = new Schema('sites');
 const arrayOfSites = arrayOf(site);
-const page = Schema('pages');
+const page = new Schema('pages');
 const arrayOfPages = arrayOf(page);
 site.define({
   pages: arrayOfPages
