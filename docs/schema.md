@@ -33,6 +33,6 @@
 | --------- | ----------- | ----- |:------:|:---:|:----:|:---------:|:---------:|
 |id         |integer      |       |✓       |✓    |✓     |           |✓          |
 |name       |string       |       |✓       |     |      |           |           |
-|layout     |string       |       |✓       |     |      |           |           |
+|layout     |string(JSON) |       |✓       |     |      |           |           |
 |props      |string(JSON) |       |✓       |     |      |           |           |
-|page_id    |string(JSON) |       |✓       |✓    |      |✓page      |  &nbsp;   |
+|page_id    |integer      |       |✓       |✓    |      |✓page      |  &nbsp;   |
