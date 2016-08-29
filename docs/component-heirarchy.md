@@ -35,6 +35,8 @@
           - Toolbar (saveLayout)
     - ProductsIndexContainer [BONUS]
       - ProductsIndex
+    - AnalyticsContainer [BONUS]
+      - Analytics
     - SiteSettingsContainer (updateSite)
       - SiteSettings (updateSite)
 
@@ -50,4 +52,5 @@
 | /sites/:site_id/editor/:page_id   | LayoutEditorContainer  |
 | /sites/:site_id/preview           | SitePreview            |
 | /sites/:site_id/products          | ProductsIndexContainer |
+| /sites/:site_id/analytics         | AnalyticsContainer     |
 | /sites/:site_id/settings          | SiteSettingsContainer  |
