@@ -8,7 +8,7 @@ DragonDrop is a web application inpired by Squarespace build using React and Red
 - [ ] Sites with pages for navigation
 - [ ] Drag and Drop site building
 - [ ] Page and Site templates
-- [ ] Publish site (allow others to see the preview page i.e www.dragon-drop.com/sites/1)
+- [ ] Publish site (allow others to see the preview page)
 
 
 ## Design Docs
