@@ -27,6 +27,13 @@ class RegistrationForm extends Component {
     }
   }
 
+  demo = () => {
+    this.props.login({
+      email: "demo@dragon-drop.com",
+      password: "password"
+    })
+  }
+
   render() {
     const confirm = this.props.loginForm ? "" : (
       <div className="form-group">
@@ -66,6 +73,7 @@ class RegistrationForm extends Component {
         </div>
         {confirm}
         <input type="submit" value={this.props.loginForm ? "Login" : "Sign Up"}/>
+        <button onClick={this.demo}>Demo</button>
         <div>{link}</div>
       </form>
     );

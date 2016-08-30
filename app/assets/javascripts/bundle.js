@@ -60,6 +60,8 @@
 	
 	var _root2 = _interopRequireDefault(_root);
 	
+	var _reactRouter = __webpack_require__(437);
+	
 	var _session_actions = __webpack_require__(335);
 	
 	var ACTIONS = _interopRequireWildcard(_session_actions);
@@ -70,13 +72,14 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var defaultState = { session: { currentUser: window.currentUser, errors: [] } };
-	var store = (0, _store2.default)(defaultState);
-	window.store = store;
-	window.ACTIONS = ACTIONS;
 	document.addEventListener('DOMContentLoaded', function () {
+	
+	  var defaultState = { session: { currentUser: window.currentUser, errors: [] } };
+	  var store = window.store = (0, _store2.default)(defaultState);
+	  var history = (0, _reactRouterRedux.syncHistoryWithStore)(_reactRouter.hashHistory, store);
 	  var root = document.getElementById('root');
-	  (0, _reactDom.render)(_react2.default.createElement(_root2.default, { store: store }), root);
+	
+	  (0, _reactDom.render)(_react2.default.createElement(_root2.default, { store: store, history: history }), root);
 	});
 
 /***/ },
@@ -60577,6 +60580,8 @@
 	
 	var API = _interopRequireWildcard(_user_api);
 	
+	var _reactRouterRedux = __webpack_require__(547);
+	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	var SessionMiddleware = function SessionMiddleware(_ref) {
@@ -60587,14 +60592,16 @@
 	      switch (action.type) {
 	        case ACTIONS.LOGIN:
 	          API.login(action.user, function (user) {
-	            return dispatch(ACTIONS.receiveCurrentUser(user));
+	            dispatch(ACTIONS.receiveCurrentUser(user));
+	            dispatch((0, _reactRouterRedux.push)('/sites'));
 	          }, function (err) {
 	            return dispatch(ACTIONS.receiveErrors(err.responseJSON));
 	          });
 	          return next(action);
 	        case ACTIONS.LOGOUT:
 	          API.logout(function (user) {
-	            return next(action);
+	            next(action);
+	            dispatch((0, _reactRouterRedux.push)('/'));
 	          }, function (err) {
 	            next(action);
 	            dispatch(ACTIONS.receiveErrors(err.responseJSON));
@@ -60602,7 +60609,8 @@
 	          break;
 	        case ACTIONS.SIGNUP:
 	          API.signup(action.user, function (user) {
-	            return dispatch(ACTIONS.receiveCurrentUser(user));
+	            dispatch(ACTIONS.receiveCurrentUser(user));
+	            dispatch((0, _reactRouterRedux.push)('/sites'));
 	          }, function (err) {
 	            return dispatch(ACTIONS.receiveErrors(err.responseJSON));
 	          });
@@ -60706,12 +60714,13 @@
 	
 	var Root = function Root(_ref) {
 	  var store = _ref.store;
+	  var history = _ref.history;
 	  return _react2.default.createElement(
 	    _reactRedux.Provider,
 	    { store: store },
 	    _react2.default.createElement(
 	      _reactRouter.Router,
-	      { history: _reactRouter.hashHistory },
+	      { history: history },
 	      _react2.default.createElement(
 	        _reactRouter.Route,
 	        { path: '/', component: _home2.default },
@@ -67101,6 +67110,10 @@
 	
 	var _toolbar2 = _interopRequireDefault(_toolbar);
 	
+	var _sites_index_item = __webpack_require__(552);
+	
+	var _sites_index_item2 = _interopRequireDefault(_sites_index_item);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var brand = _react2.default.createElement(
@@ -67135,20 +67148,10 @@
 	      'Your Sites'
 	    ),
 	    _react2.default.createElement(
-	      'ul',
-	      null,
+	      'div',
+	      { className: 'sites-container' },
 	      sites.map(function (site) {
-	        return _react2.default.createElement(
-	          'li',
-	          { key: site.id },
-	          _react2.default.createElement(
-	            _reactRouter.Link,
-	            { to: '/sites/' + site.id },
-	            site.name,
-	            ' - ',
-	            site.identifier
-	          )
-	        );
+	        return _react2.default.createElement(_sites_index_item2.default, { key: site.id, site: site });
 	      })
 	    )
 	  );
@@ -68446,6 +68449,13 @@
 	      };
 	    };
 	
+	    _this.demo = function () {
+	      _this.props.login({
+	        email: "demo@dragon-drop.com",
+	        password: "password"
+	      });
+	    };
+	
 	    _this.state = {
 	      email: "",
 	      password: "",
@@ -68516,6 +68526,11 @@
 	        ),
 	        confirm,
 	        _react2.default.createElement('input', { type: 'submit', value: this.props.loginForm ? "Login" : "Sign Up" }),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.demo },
+	          'Demo'
+	        ),
 	        _react2.default.createElement(
 	          'div',
 	          null,
@@ -68988,6 +69003,47 @@
 	    };
 	  };
 	}
+
+/***/ },
+/* 552 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(437);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var SitesIndexItem = function SitesIndexItem(_ref) {
+	  var site = _ref.site;
+	  var router = _ref.router;
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'sites-index-item', onClick: function onClick() {
+	        return router.push('/sites/' + site.id);
+	      } },
+	    _react2.default.createElement(
+	      'h1',
+	      null,
+	      site.name
+	    ),
+	    _react2.default.createElement(
+	      'h3',
+	      null,
+	      site.identifier
+	    )
+	  );
+	};
+	
+	exports.default = (0, _reactRouter.withRouter)(SitesIndexItem);
 
 /***/ }
 /******/ ]);

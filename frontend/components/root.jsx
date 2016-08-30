@@ -10,9 +10,9 @@ import Sidebar from './ui/sidebar.jsx';
 import Home from './home.jsx';
 import RegistrationModal from './registration/registration_modal.jsx';
 
-const Root = ({ store }) => (
+const Root = ({ store, history }) => (
   <Provider store={store}>
-    <Router history={hashHistory}>
+    <Router history={history}>
       <Route path="/" component={Home}>
         <Route path="login" component={RegistrationModal}/>
         <Route path="signup" component={RegistrationModal}/>
