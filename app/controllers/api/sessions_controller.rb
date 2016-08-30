@@ -4,12 +4,19 @@ class Api::SessionsController < ApplicationController
     @user = User.find_by_credentials(user_params[:email], user_params[:password])
     if @user
       login(@user)
+      render '/api/users/show'
     else
       render json: ["invalid username or password"], status: 400
     end
   end
 
   def destroy
-    logout
+    if current_user
+      current_user.reset_session_token!
+      session[:session_token] = nil
+      render json: {}
+    else
+      render json: ["No current session"], status: 404
+    end
   end
 end
