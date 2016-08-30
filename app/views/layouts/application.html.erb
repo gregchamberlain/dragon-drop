@@ -3,6 +3,10 @@
 <head>
   <title>DragonDrop</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
+  <script>
+    var user = <%= current_user ? (render '/api/users/user.json.jbuilder', user: current_user).html_safe : {} %>
+    window.currentUser = user.id ? user : null
+  </script>
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
 </head>

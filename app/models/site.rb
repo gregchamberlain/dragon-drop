@@ -1,5 +1,6 @@
 class Site < ActiveRecord::Base
 	has_many :pages
+	belongs_to :user
 
 	validates :name, :identifier, :user_id, presence: true
 	after_initialize :ensure_identifier

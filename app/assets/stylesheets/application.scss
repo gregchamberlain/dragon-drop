@@ -1,18 +1,7 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any styles
- * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
- * file per style scope.
- *
- *= require_tree .
- *= require_self
- */
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "toolbar";
+@import "modal";
 
  * {
    box-sizing: border-box;
@@ -27,9 +16,11 @@
     box-sizing: border-box;
   }
 
- input, label {
-   width: 95%;
- }
+  body, #root {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
 
  .react-grid-layout {
    position: relative;
@@ -181,36 +172,6 @@
   margin-left: 200px;
 }
 
-.modal-overlay {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  padding: 40px;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-container {
-  min-width: 400px;
-  min-height: 400px;
-  background: #eee;
-  border-radius: 10px;
-}
-
-.modal-header {
-  border-top-left-radius: 10px;
-  background: #ccc;
-  line-height: 40px;
-  border-top-right-radius: 10px;
-  height: 40px;
-  font-size: 24px;
-  text-align: center;
-}
 
 .sidebar-tabs {
   display: flex;

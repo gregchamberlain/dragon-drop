@@ -3,7 +3,7 @@ class Api::SitesController < ApplicationController
 	before_action :find_site, only: [:show]
 
 	def index
-		render json: Site.all
+		render json: current_user.sites
 	end
 
 	def create

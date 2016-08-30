@@ -1,0 +1,44 @@
+$toolbar-background: #444;
+$toolbar-item-highlight: rgba(255, 255, 255, 0.1);
+
+.toolbar-layout {
+  width: 100%;
+  height: 100%;
+
+  .toolbar {
+    position: fixed;
+    display: flex;
+    height: 56px;
+    width: 100%;
+    background: $toolbar-background;
+
+    .space {
+      flex: 1;
+    }
+
+    .toolbar-item {
+      font-size: 14px;
+
+      a {
+        color: #ccc;
+        display: block;
+        height: 100%;
+        padding: 10px 15px;
+        line-height: 36px;
+        text-decoration: none;
+        &:hover {
+          background: $toolbar-item-highlight;
+          color: #eee;
+        }
+      }
+
+      &.brand {
+        font-size: 20px;
+      }
+
+    }
+  }
+  .content {
+    padding-top: 56px;
+  }
+}

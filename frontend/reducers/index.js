@@ -3,6 +3,8 @@ import LayoutReducer from './layout_reducer.js';
 import ItemReducer from './item_reducer.js';
 import SiteReducer from './site_reducer.js';
 import PageReducer from './page_reducer.js';
+import SessionReducer from './session_reducer.js';
+import { routerReducer } from 'react-router-redux';
 import { combineReducers } from 'redux';
 
 export default combineReducers({
@@ -11,4 +13,6 @@ export default combineReducers({
   editor: EditorReducer,
   sites: SiteReducer,
   pages: PageReducer,
+  session: SessionReducer,
+  routing: routerReducer
 });
