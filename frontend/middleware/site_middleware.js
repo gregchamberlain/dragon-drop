@@ -37,6 +37,8 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
         err => console.log(err)
       );
       return next(action);
+    case ACTIONS.DESTROY_SITE:
+      return next(action);
     default:
       return next(action);
   }

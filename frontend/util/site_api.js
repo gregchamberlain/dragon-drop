@@ -7,6 +7,12 @@ export const fetchSites = (success, error) => {
   });
 };
 
+export const destroySite = (site, success, error) => {
+  $.ajax({
+
+  });
+};
+
 export const fetchSite = (siteId, success, error) => {
   $.ajax({
     method: 'get',
