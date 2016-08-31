@@ -1,9 +1,17 @@
 class Api::SitesController < ApplicationController
 
-	before_action :find_site, only: [:show]
+	before_action :find_site, only: [:show, :destroy, :update]
 
 	def index
 		render json: current_user.sites
+	end
+
+	def update
+		if @site.update(site_params)
+			render json: @site.to_json(include: {pages: {include: :components } } )
+		else
+			render json: @site.errors.full_messages
+		end
 	end
 
 	def create
@@ -23,9 +31,20 @@ class Api::SitesController < ApplicationController
 		render json: @site.to_json(include: {pages: {include: :components } } )
 	end
 
+	def destroy
+		if @site.destroy
+			render json: @site
+		else
+			render json: @site.errors.full_messages
+		end
+	end
+
 	private
 	def find_site
 		@site = Site.find(params[:id])
+		if @site.user != current_user
+			render json: ["You don't have permissions for this site"], status: 403
+		end
 	end
 
 	def site_params

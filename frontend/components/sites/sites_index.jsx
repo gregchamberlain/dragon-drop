@@ -12,9 +12,10 @@ const right = [
 
 const SitesIndex = ({ sites, currentUser, logout }) => (
   <Toolbar brand={brand} right={[<a href="javascript:void(0)" onClick={logout}>Logout</a>]}>
-    <h1>Your Sites</h1>
-    <div className='sites-index-container'>
-      {sites.map(site => <SitesIndexItem key={site.id} site={site} />)}
+    <div className='sites-index'>
+      <div className="sites-index-items">
+        {sites.map(site => <SitesIndexItem key={site.id} site={site} />)}
+      </div>
     </div>
   </Toolbar>
 );

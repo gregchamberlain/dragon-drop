@@ -1,9 +1,18 @@
-.sites-index-container {
-  display: flex;
+.sites-index {
+  padding-top: 56px;
+  background: #eceff1;
+  height: 100%;
 }
 
 .sites-index-item {
-  box-shadow: 2px 2px 5px black;
+  background: #fff;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 2px 1px -1px rgba(0,0,0,0.12);
+  border-radius: 2px;
   padding: 10px;
   cursor: pointer;
+}
+
+.sites-index-items {
+  padding: 40px;
+  display: flex;
 }
