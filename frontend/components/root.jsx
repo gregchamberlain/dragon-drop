@@ -8,7 +8,7 @@ import { requestSites, requestSite } from '../actions/site_actions.js';
 import SiteDetail from './sites/site_detail_container.js';
 import Sidebar from './ui/sidebar.jsx';
 import Home from './home.jsx';
-import RegistrationModal from './registration/registration_modal.jsx';
+import RegistrationLayout from './registration/registration_layout.jsx';
 
 const validateUser = (store) => {
   return (nextState, replace) => {
@@ -32,9 +32,9 @@ const takeCurrentUserToSites = (store) => {
 const Root = ({ store, history }) => (
   <Provider store={store}>
     <Router history={history}>
-      <Route path="/" component={Home} onEnter={takeCurrentUserToSites(store)}>
-        <Route path="login" component={RegistrationModal}/>
-        <Route path="signup" component={RegistrationModal}/>
+      <Route path="/" component={Home}>
+        <Route path="login" component={RegistrationLayout}/>
+        <Route path="signup" component={RegistrationLayout}/>
       </Route>
       <Route path="/sites" onEnter={validateUser(store)}>
         <IndexRoute component={SitesIndex} onEnter={() => store.dispatch(requestSites())}/>

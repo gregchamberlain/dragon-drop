@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const store = window.store = configureStore(defaultState);
   const history = syncHistoryWithStore(hashHistory, store);
   const root = document.getElementById('root');
-  
+
   render(
-    <Root store={store} history={history}/>
+    <Root store={store} history={hashHistory}/>
   , root);
 });

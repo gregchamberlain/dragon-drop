@@ -29,14 +29,11 @@ class RegistrationForm extends Component {
 
   render() {
     const confirm = this.props.loginForm ? "" : (
-      <div className="form-group">
-        <label>Confirm Password</label>
         <input
           type="password"
-          className="form-control"
+          placeholder="Confirm Password"
           onChange={this.update("confirm")}
           value={this.state.confirm}/>
-      </div>
     );
 
     const link = this.props.loginForm ? (
@@ -46,26 +43,23 @@ class RegistrationForm extends Component {
     );
 
     return (
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.onSubmit} className="registration-form">
         {this.props.errors}
-        <div className="form-group">
-          <label>Email</label>
           <input
             type="text"
-            className="form-control"
+            placeholder="Email"
             onChange={this.update("email")}
             value={this.state.email}/>
-        </div>
-        <div className="form-group">
-          <label>Password</label>
           <input
             type="password"
-            className="form-control"
+            placeholder="Password"
             onChange={this.update("password")}
             value={this.state.password}/>
-        </div>
         {confirm}
-        <input type="submit" value={this.props.loginForm ? "Login" : "Sign Up"}/>
+        <div className="buttons">
+          <button onClick={this.props.onCancel}>Cancel</button>
+          <button type="submit">{this.props.loginForm ? "Login" : "Sign Up"}</button>
+        </div>
         <div>{link}</div>
       </form>
     );

@@ -79,7 +79,7 @@
 	  var history = (0, _reactRouterRedux.syncHistoryWithStore)(_reactRouter.hashHistory, store);
 	  var root = document.getElementById('root');
 	
-	  (0, _reactDom.render)(_react2.default.createElement(_root2.default, { store: store, history: history }), root);
+	  (0, _reactDom.render)(_react2.default.createElement(_root2.default, { store: store, history: _reactRouter.hashHistory }), root);
 	});
 
 /***/ },
@@ -66721,9 +66721,9 @@
 	
 	var _home2 = _interopRequireDefault(_home);
 	
-	var _registration_modal = __webpack_require__(534);
+	var _registration_layout = __webpack_require__(537);
 	
-	var _registration_modal2 = _interopRequireDefault(_registration_modal);
+	var _registration_layout2 = _interopRequireDefault(_registration_layout);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -66757,9 +66757,9 @@
 	      { history: history },
 	      _react2.default.createElement(
 	        _reactRouter.Route,
-	        { path: '/', component: _home2.default, onEnter: takeCurrentUserToSites(store) },
-	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _registration_modal2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _registration_modal2.default })
+	        { path: '/', component: _home2.default },
+	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _registration_layout2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _registration_layout2.default })
 	      ),
 	      _react2.default.createElement(
 	        _reactRouter.Route,
@@ -69707,48 +69707,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Home);
 
 /***/ },
-/* 534 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _modal = __webpack_require__(514);
-	
-	var _modal2 = _interopRequireDefault(_modal);
-	
-	var _reactRouter = __webpack_require__(432);
-	
-	var _registration_form_container = __webpack_require__(535);
-	
-	var _registration_form_container2 = _interopRequireDefault(_registration_form_container);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var RegistrationModal = function RegistrationModal(_ref) {
-	  var onClose = _ref.onClose;
-	  var router = _ref.router;
-	  return _react2.default.createElement(
-	    _modal2.default,
-	    {
-	      title: router.isActive('/login') ? "Login" : "Sign Up",
-	      onClose: function onClose() {
-	        return router.push('/');
-	      } },
-	    _react2.default.createElement(_registration_form_container2.default, { loginForm: router.isActive('/login') })
-	  );
-	};
-	
-	exports.default = (0, _reactRouter.withRouter)(RegistrationModal);
-
-/***/ },
+/* 534 */,
 /* 535 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -69858,20 +69817,11 @@
 	  _createClass(RegistrationForm, [{
 	    key: 'render',
 	    value: function render() {
-	      var confirm = this.props.loginForm ? "" : _react2.default.createElement(
-	        'div',
-	        { className: 'form-group' },
-	        _react2.default.createElement(
-	          'label',
-	          null,
-	          'Confirm Password'
-	        ),
-	        _react2.default.createElement('input', {
-	          type: 'password',
-	          className: 'form-control',
-	          onChange: this.update("confirm"),
-	          value: this.state.confirm })
-	      );
+	      var confirm = this.props.loginForm ? "" : _react2.default.createElement('input', {
+	        type: 'password',
+	        placeholder: 'Confirm Password',
+	        onChange: this.update("confirm"),
+	        value: this.state.confirm });
 	
 	      var link = this.props.loginForm ? _react2.default.createElement(
 	        _reactRouter.Link,
@@ -69885,38 +69835,33 @@
 	
 	      return _react2.default.createElement(
 	        'form',
-	        { onSubmit: this.onSubmit },
+	        { onSubmit: this.onSubmit, className: 'registration-form' },
 	        this.props.errors,
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'form-group' },
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            'Email'
-	          ),
-	          _react2.default.createElement('input', {
-	            type: 'text',
-	            className: 'form-control',
-	            onChange: this.update("email"),
-	            value: this.state.email })
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'form-group' },
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            'Password'
-	          ),
-	          _react2.default.createElement('input', {
-	            type: 'password',
-	            className: 'form-control',
-	            onChange: this.update("password"),
-	            value: this.state.password })
-	        ),
+	        _react2.default.createElement('input', {
+	          type: 'text',
+	          placeholder: 'Email',
+	          onChange: this.update("email"),
+	          value: this.state.email }),
+	        _react2.default.createElement('input', {
+	          type: 'password',
+	          placeholder: 'Password',
+	          onChange: this.update("password"),
+	          value: this.state.password }),
 	        confirm,
-	        _react2.default.createElement('input', { type: 'submit', value: this.props.loginForm ? "Login" : "Sign Up" }),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'buttons' },
+	          _react2.default.createElement(
+	            'button',
+	            { onClick: this.props.onCancel },
+	            'Cancel'
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { type: 'submit' },
+	            this.props.loginForm ? "Login" : "Sign Up"
+	          )
+	        ),
 	        _react2.default.createElement(
 	          'div',
 	          null,
@@ -69930,6 +69875,91 @@
 	}(_react.Component);
 	
 	exports.default = (0, _reactRouter.withRouter)(RegistrationForm);
+
+/***/ },
+/* 537 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _registration_form_container = __webpack_require__(535);
+	
+	var _registration_form_container2 = _interopRequireDefault(_registration_form_container);
+	
+	var _reactRouter = __webpack_require__(432);
+	
+	var _close = __webpack_require__(515);
+	
+	var _close2 = _interopRequireDefault(_close);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var RegistrationLayout = function (_Component) {
+	  _inherits(RegistrationLayout, _Component);
+	
+	  function RegistrationLayout() {
+	    var _ref;
+	
+	    var _temp, _this, _ret;
+	
+	    _classCallCheck(this, RegistrationLayout);
+	
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+	
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = RegistrationLayout.__proto__ || Object.getPrototypeOf(RegistrationLayout)).call.apply(_ref, [this].concat(args))), _this), _this.handleKeyPress = function (e) {
+	      if (e.keyCode === 27) _this.close(e);
+	    }, _this.close = function (e) {
+	      e.preventDefault();
+	      _this.props.router.push('/');
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+	
+	  _createClass(RegistrationLayout, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      window.addEventListener('keydown', this.handleKeyPress);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      window.removeEventListener('keydown', this.handleKeyPress);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'registration-layout' },
+	        _react2.default.createElement(_registration_form_container2.default, {
+	          loginForm: this.props.router.isActive('/login'),
+	          onCancel: this.close }),
+	        _react2.default.createElement(_close2.default, { className: 'close', onClick: this.close })
+	      );
+	    }
+	  }]);
+	
+	  return RegistrationLayout;
+	}(_react.Component);
+	
+	exports.default = (0, _reactRouter.withRouter)(RegistrationLayout);
 
 /***/ }
 /******/ ]);
