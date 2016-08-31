@@ -66744,9 +66744,13 @@
 	
 	var _page_editor2 = _interopRequireDefault(_page_editor);
 	
-	var _settings = __webpack_require__(541);
+	var _pages_main_container = __webpack_require__(547);
 	
-	var _settings2 = _interopRequireDefault(_settings);
+	var _pages_main_container2 = _interopRequireDefault(_pages_main_container);
+	
+	var _settings_container = __webpack_require__(545);
+	
+	var _settings_container2 = _interopRequireDefault(_settings_container);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -66794,7 +66798,7 @@
 	          _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'editor' }),
 	          _react2.default.createElement(
 	            _reactRouter.Route,
-	            { path: 'editor', component: _site_detail_container2.default },
+	            { path: 'editor', component: _pages_main_container2.default },
 	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _page_editor2.default })
 	          ),
 	          _react2.default.createElement(_reactRouter.Route, { path: 'store', component: function component() {
@@ -66811,7 +66815,7 @@
 	                'Analytics'
 	              );
 	            } }),
-	          _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings2.default })
+	          _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings_container2.default })
 	        )
 	      )
 	    )
@@ -69334,11 +69338,16 @@
 	
 	var _reactRouter = __webpack_require__(432);
 	
+	var _loading_page = __webpack_require__(546);
+	
+	var _loading_page2 = _interopRequireDefault(_loading_page);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Sidebar = function Sidebar(_ref) {
 	  var children = _ref.children;
 	  var params = _ref.params;
+	  var loading = _ref.loading;
 	  return _react2.default.createElement(
 	    'div',
 	    { className: 'sidebar-container' },
@@ -69381,7 +69390,11 @@
 	    _react2.default.createElement(
 	      'div',
 	      { className: 'site-content' },
-	      children
+	      _react2.default.createElement(
+	        _loading_page2.default,
+	        { loading: loading },
+	        children
+	      )
 	    )
 	  );
 	};
@@ -70078,7 +70091,9 @@
 	exports.default = PageEditor;
 
 /***/ },
-/* 541 */
+/* 541 */,
+/* 542 */,
+/* 543 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -70091,7 +70106,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _settings_form = __webpack_require__(542);
+	var _settings_form = __webpack_require__(544);
 	
 	var _settings_form2 = _interopRequireDefault(_settings_form);
 	
@@ -70099,6 +70114,9 @@
 	
 	var SiteSettings = function SiteSettings(_ref) {
 	  var children = _ref.children;
+	  var site = _ref.site;
+	  var update = _ref.update;
+	  var destroy = _ref.destroy;
 	  return _react2.default.createElement(
 	    'div',
 	    { className: 'site-settings-page' },
@@ -70107,14 +70125,14 @@
 	      null,
 	      'Site Settings'
 	    ),
-	    _react2.default.createElement(_settings_form2.default, { site: { name: "test site", identifier: "test-site" } })
+	    _react2.default.createElement(_settings_form2.default, { site: site, update: update, destroy: destroy })
 	  );
 	};
 	
 	exports.default = SiteSettings;
 
 /***/ },
-/* 542 */
+/* 544 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -70200,6 +70218,141 @@
 	}(_react.Component);
 	
 	exports.default = SiteSettingsForm;
+
+/***/ },
+/* 545 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(496);
+	
+	var _settings = __webpack_require__(543);
+	
+	var _settings2 = _interopRequireDefault(_settings);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(state, ownProps) {
+	  return {
+	    site: state.sites[ownProps.params.siteId]
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    update: function update(site) {
+	      return console.log("updating site...", site);
+	    },
+	    destroy: function destroy(site) {
+	      return console.log("destroying site...", site);
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_settings2.default);
+
+/***/ },
+/* 546 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var LoadingPage = function LoadingPage(_ref) {
+	  var loading = _ref.loading;
+	  var children = _ref.children;
+	  return _react2.default.createElement(
+	    "div",
+	    { className: "loading-page" },
+	    loading ? _react2.default.createElement(
+	      "h1",
+	      null,
+	      "Loading...."
+	    ) : children
+	  );
+	};
+	
+	exports.default = LoadingPage;
+
+/***/ },
+/* 547 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(496);
+	
+	var _pages_main = __webpack_require__(548);
+	
+	var _pages_main2 = _interopRequireDefault(_pages_main);
+	
+	var _util = __webpack_require__(344);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
+	  var sites = _ref.sites;
+	  var pages = _ref.pages;
+	  var params = _ref2.params;
+	  return {
+	    site: sites[params.siteId] || {},
+	    pages: sites[params.siteId] && sites[params.siteId].pages ? (0, _util.mergePages)(pages, sites[params.siteId].pages) : []
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_pages_main2.default);
+
+/***/ },
+/* 548 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _editor_sidebar = __webpack_require__(521);
+	
+	var _editor_sidebar2 = _interopRequireDefault(_editor_sidebar);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var PagesMain = function PagesMain(_ref) {
+	  var site = _ref.site;
+	  var pages = _ref.pages;
+	  var params = _ref.params;
+	  var children = _ref.children;
+	  return _react2.default.createElement(
+	    _editor_sidebar2.default,
+	    { site: site, pages: pages, params: params },
+	    children
+	  );
+	};
+	
+	exports.default = PagesMain;
 
 /***/ }
 /******/ ]);

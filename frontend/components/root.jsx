@@ -11,7 +11,8 @@ import Home from './home.jsx';
 import RegistrationLayout from './registration/registration_layout.jsx';
 import { fetchSites, fetchSite } from '../util/router_utils.js';
 import PageEditor from '../components/pages/page_editor.jsx';
-import SiteSettings from '../components/sites/settings.jsx';
+import PagesMain from '../components/sites/pages/pages_main_container.jsx';
+import SiteSettings from '../components/sites/settings/settings_container.jsx';
 
 const validateUser = (store) => {
   return (nextState, replace) => {
@@ -43,7 +44,7 @@ const Root = ({ store, history }) => (
         <IndexRoute component={SitesIndex} onEnter={fetchSites(store)}/>
         <Route path=":siteId" component={Sidebar} onEnter={fetchSite(store)}>
           <IndexRedirect to='editor' />
-          <Route path="editor" component={SiteDetail}>
+          <Route path="editor" component={PagesMain}>
             <IndexRoute component={PageEditor} />
           </Route>
           <Route path="store" component={() => <div>Store</div>}/>

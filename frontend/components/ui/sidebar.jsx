@@ -3,9 +3,10 @@ import Pages from 'react-icons/lib/fa/copy';
 import Cart from 'react-icons/lib/fa/shopping-cart';
 import Chart from 'react-icons/lib/fa/pie-chart';
 import Gear from 'react-icons/lib/fa/cog';
-import { Link } from 'react-router'
+import { Link } from 'react-router';
+import LoadingPage from './loading_page.jsx';
 
-const Sidebar = ({ children, params }) => (
+const Sidebar = ({ children, params, loading }) => (
   <div className='sidebar-container'>
     <div className="sites-sidebar">
       <Link
@@ -34,7 +35,9 @@ const Sidebar = ({ children, params }) => (
       </Link>
     </div>
     <div className="site-content">
-      {children}
+      <LoadingPage loading={loading}>
+        {children}
+      </LoadingPage>
     </div>
   </div>
 );
