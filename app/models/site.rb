@@ -3,16 +3,12 @@ class Site < ActiveRecord::Base
 	belongs_to :user
 
 	validates :name, :identifier, :user_id, presence: true
+	validates :identifier, uniqueness: true
 	after_initialize :ensure_identifier
 
 
 	def ensure_identifier
 		self.identifier ||= Site.generateUniqueIdentifier(name)
-	end
-
-	def create!
-		self.pages.create(name: "Home", path: "/");
-		super
 	end
 
 	def self.nouns

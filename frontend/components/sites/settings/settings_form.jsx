@@ -35,6 +35,10 @@ export default class SiteSettingsForm extends Component {
     return (
       <form className="site-settings-form">
         <input type="text" onChange={this.updateState("name")} value={this.state.name}/>
+        <textarea
+          placeholder="Description"
+          onChange={this.updateState("description")}
+          value={this.state.description} />
         <input type="text" onChange={this.updateState("identifier")} value={this.state.identifier}/>
         <button type="submit" disabled={unchanged} onClick={this.update}>Update</button>
         <button className="destroy-button" onClick={this.destroy}>delete site</button>

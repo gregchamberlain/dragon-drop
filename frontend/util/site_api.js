@@ -37,9 +37,9 @@ export const updateSite = (site, success, error) => {
 
 export const createSite = (site, success, error) => {
   $.ajax({
-    method: 'post',
+    method: 'POST',
     url: 'api/sites',
-    data: {site: site},
+    data: {site},
     success,
     error
   });

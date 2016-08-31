@@ -27,7 +27,8 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
     case ACTIONS.CREATE_SITE:
       API.createSite(
         action.site,
-        response => dispatch(receiveEntity(normalize(response, site)))
+        response => dispatch(receiveEntity(normalize(response, site))),
+        err => console.log(err)
       );
       return next(action);
     case ACTIONS.UPDATE_SITE:

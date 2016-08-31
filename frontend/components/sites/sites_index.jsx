@@ -4,6 +4,7 @@ import NewSiteModal from './new_site_modal.jsx';
 import Toolbar from '../ui/toolbar.jsx';
 import SitesIndexItem from './sites_index_item.jsx';
 import LoadingPage from '../ui/loading_page.jsx';
+import NewSiteForm from './new_site_form_container.js';
 
 const brand = <Link to="/sites">DragonDrop</Link>;
 const right = [
@@ -17,6 +18,7 @@ const SitesIndex = ({ sites, currentUser, logout, loading }) => (
       <div className='sites-index'>
         <div className="sites-index-items">
           {sites.map(site => <SitesIndexItem key={site.id} site={site} />)}
+          <NewSiteForm />
         </div>
       </div>
     </LoadingPage>

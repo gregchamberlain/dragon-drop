@@ -58035,6 +58035,8 @@
 	        case ACTIONS.CREATE_SITE:
 	          API.createSite(action.site, function (response) {
 	            return dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(response, _schema.site)));
+	          }, function (err) {
+	            return console.log(err);
 	          });
 	          return next(action);
 	        case ACTIONS.UPDATE_SITE:
@@ -58111,7 +58113,7 @@
 	
 	var createSite = exports.createSite = function createSite(site, success, error) {
 	  $.ajax({
-	    method: 'post',
+	    method: 'POST',
 	    url: 'api/sites',
 	    data: { site: site },
 	    success: success,
@@ -68457,6 +68459,10 @@
 	
 	var _loading_page2 = _interopRequireDefault(_loading_page);
 	
+	var _new_site_form_container = __webpack_require__(547);
+	
+	var _new_site_form_container2 = _interopRequireDefault(_new_site_form_container);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var brand = _react2.default.createElement(
@@ -68497,7 +68503,8 @@
 	          { className: 'sites-index-items' },
 	          sites.map(function (site) {
 	            return _react2.default.createElement(_sites_index_item2.default, { key: site.id, site: site });
-	          })
+	          }),
+	          _react2.default.createElement(_new_site_form_container2.default, null)
 	        )
 	      )
 	    )
@@ -70405,6 +70412,10 @@
 	        'form',
 	        { className: 'site-settings-form' },
 	        _react2.default.createElement('input', { type: 'text', onChange: this.updateState("name"), value: this.state.name }),
+	        _react2.default.createElement('textarea', {
+	          placeholder: 'Description',
+	          onChange: this.updateState("description"),
+	          value: this.state.description }),
 	        _react2.default.createElement('input', { type: 'text', onChange: this.updateState("identifier"), value: this.state.identifier }),
 	        _react2.default.createElement(
 	          'button',
@@ -70424,6 +70435,121 @@
 	}(_react.Component);
 	
 	exports.default = SiteSettingsForm;
+
+/***/ },
+/* 547 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(497);
+	
+	var _new_site_form = __webpack_require__(548);
+	
+	var _new_site_form2 = _interopRequireDefault(_new_site_form);
+	
+	var _site_actions = __webpack_require__(334);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {};
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    createSite: function createSite(site) {
+	      return dispatch((0, _site_actions.createSite)(site));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_new_site_form2.default);
+
+/***/ },
+/* 548 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var NewSiteForm = function (_Component) {
+	  _inherits(NewSiteForm, _Component);
+	
+	  function NewSiteForm(props) {
+	    _classCallCheck(this, NewSiteForm);
+	
+	    var _this = _possibleConstructorReturn(this, (NewSiteForm.__proto__ || Object.getPrototypeOf(NewSiteForm)).call(this, props));
+	
+	    _this.update = function (name) {
+	      return function (e) {
+	        _this.setState(_defineProperty({}, name, e.target.value));
+	      };
+	    };
+	
+	    _this.submit = function (e) {
+	      e.preventDefault();
+	      _this.props.createSite(_this.state);
+	    };
+	
+	    _this.state = {
+	      name: "",
+	      description: ""
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(NewSiteForm, [{
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "form",
+	        { onSubmit: this.submit, className: "new-site-form" },
+	        _react2.default.createElement("input", {
+	          placeholder: "Site Name",
+	          type: "text",
+	          value: this.state.name,
+	          onChange: this.update("name") }),
+	        _react2.default.createElement("textarea", {
+	          placeholder: "Description",
+	          value: this.state.description,
+	          onChange: this.update("description") }),
+	        _react2.default.createElement(
+	          "button",
+	          { type: "submit" },
+	          "Create"
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return NewSiteForm;
+	}(_react.Component);
+	
+	exports.default = NewSiteForm;
 
 /***/ }
 /******/ ]);

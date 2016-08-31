@@ -5,8 +5,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def current_user
-    puts "ASDASDASDASDA"
-    p @current_user ||= User.find_by_session_token(session[:session_token])
+    @current_user ||= User.find_by_session_token(session[:session_token])
   end
 
   def login(user)
@@ -22,6 +21,5 @@ class ApplicationController < ActionController::Base
     unless current_user
       render json: ["You need to log in to edit sites"], status: 403
     end
-    sleep(2)
   end
 end
