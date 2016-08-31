@@ -23,20 +23,23 @@
     height: 100%;
   }
 
-  .home-splash-image {
+
+  .home-section {
     width: 100%;
     height: 100%;
-    background: url(https://hd.unsplash.com/photo-1414690165279-49ab0a9a7e66);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    padding-top: 56px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     color: #fff;
     text-shadow: 0px 0px 10px black;
+  }
+  .splash-image {
+    flex-direction: column;
+    background: url(https://hd.unsplash.com/photo-1414690165279-49ab0a9a7e66);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    flex-direction: column;
   }
 
   .demo-button {
@@ -223,5 +226,5 @@
 
 .sidebar-tabs > .tab:hover {
   background: #444;
-  color: #03A9F4
+  color: #03A9F4;
 }

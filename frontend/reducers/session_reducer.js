@@ -4,7 +4,6 @@ import { merge } from 'lodash';
 const SessionReducer = (state = {currentUser: null, errors: []}, action) => {
   switch (action.type) {
     case ACTIONS.RECEIVE_CURRENT_USER:
-      console.log(action.user);
       return {currentUser: action.user, errors: []};
     case ACTIONS.LOGOUT:
       return {currentUser: null, errors: []};

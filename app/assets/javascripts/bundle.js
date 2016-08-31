@@ -57341,7 +57341,6 @@
 	
 	  switch (action.type) {
 	    case ACTIONS.RECEIVE_CURRENT_USER:
-	      console.log(action.user);
 	      return { currentUser: action.user, errors: [] };
 	    case ACTIONS.LOGOUT:
 	      return { currentUser: null, errors: [] };
@@ -68792,8 +68791,8 @@
 	        'Sign Up'
 	      )], brand: brand },
 	    _react2.default.createElement(
-	      'div',
-	      { className: 'home-splash-image' },
+	      'section',
+	      { className: 'home-section splash-image' },
 	      _react2.default.createElement(
 	        'button',
 	        { className: 'demo-button', onClick: loginAsGuest },

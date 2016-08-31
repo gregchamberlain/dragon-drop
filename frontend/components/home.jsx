@@ -12,10 +12,10 @@ const Home = ({ children, currentUser, loginAsGuest  }) => {
       <Link to="/login">Login</Link>,
       <Link to="/signup">Sign Up</Link>,
     ]} brand={brand}>
-      <div className="home-splash-image">
+      <section className="home-section splash-image">
         <button className="demo-button" onClick={loginAsGuest}>demo</button>
         <h1>Build a better web</h1>
-      </div>
+      </section>
       {children}
     </Toolbar>
   );
