@@ -15,8 +15,7 @@ class Api::SitesController < ApplicationController
 	end
 
 	def create
-		@site = Site.new(site_params);
-		@site.user_id = 1
+		@site = current_user.sites.new(site_params);
 		@site.pages.new(name: 'Home', path: '/')
 		@site.identifier = Site.generateUniqueIdentifier(@site.name);
 		if @site.save
