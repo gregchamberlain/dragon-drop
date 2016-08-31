@@ -9,7 +9,7 @@ import SiteDetail from './sites/site_detail_container.js';
 import Home from './home.jsx';
 import RegistrationLayout from './registration/registration_layout.jsx';
 import { fetchSites, fetchSite } from '../util/router_utils.js';
-import PageEditor from '../components/pages/page_editor.jsx';
+import PageEditor from '../components/sites/pages/page_editor.jsx';
 import PagesMain from '../components/sites/pages/pages_main_container.jsx';
 import SiteSettings from '../components/sites/settings/settings_container.jsx';
 
