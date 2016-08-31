@@ -46,7 +46,7 @@ class RegistrationForm extends Component {
       <form onSubmit={this.onSubmit} className="registration-form">
         {this.props.errors}
           <input
-            type="text"
+            type="email"
             placeholder="Email"
             onChange={this.update("email")}
             value={this.state.email}/>
