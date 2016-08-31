@@ -16,6 +16,16 @@ export const fetchSite = (siteId, success, error) => {
   });
 };
 
+export const updateSite = (site, success, error) => {
+  $.ajax({
+    method: 'PATCH',
+    url: `api/sites/${site.id}`,
+    data: {site},
+    success,
+    error
+  });
+};
+
 export const createSite = (site, success, error) => {
   $.ajax({
     method: 'post',

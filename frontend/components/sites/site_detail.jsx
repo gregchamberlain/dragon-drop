@@ -1,10 +1,11 @@
 import React from 'react';
-import EditorSidebar from '../ui/editor_sidebar.jsx';
+import Sidebar from '../ui/sidebar.jsx';
 
-const SiteDetail = ({ site, pages, params, children }) => (
-  <EditorSidebar site={site} pages={pages} params={params}>
+const SiteDetail = ({ site, pages, params, children, loading }) => (
+  <Sidebar loading={loading} params={params}>
+  {console.log("loading...", loading)}
     {children}
-  </EditorSidebar>
+  </Sidebar>
 );
 
 export default SiteDetail;

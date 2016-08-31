@@ -57204,7 +57204,7 @@
 	    switch (action.type) {
 	      case ACTIONS.RECEIVE_ENTITY:
 	        return {
-	          v: (0, _lodash.merge)(initState, state, action.resp.entities.sites)
+	          v: (0, _lodash.merge)(state, action.resp.entities.sites, { loading: false })
 	        };
 	      case ACTIONS.REMOVE_ENTITY:
 	        var nextState = (0, _lodash.merge)(initState, state);
@@ -57244,6 +57244,7 @@
 	var REQUEST_SITE = exports.REQUEST_SITE = 'REQUEST_SITE';
 	var RECEIVE_SITE = exports.RECEIVE_SITE = 'RECEIVE_SITE';
 	var CREATE_SITE = exports.CREATE_SITE = 'CREATE_SITE';
+	var UPDATE_SITE = exports.UPDATE_SITE = 'UPDATE_SITE';
 	
 	var createSite = exports.createSite = function createSite(site) {
 	  return {
@@ -57262,6 +57263,13 @@
 	  return {
 	    type: REQUEST_SITE,
 	    siteId: siteId
+	  };
+	};
+	
+	var updateSite = exports.updateSite = function updateSite(site) {
+	  return {
+	    type: UPDATE_SITE,
+	    site: site
 	  };
 	};
 
@@ -57985,6 +57993,14 @@
 	            return dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(response, _schema.site)));
 	          });
 	          return next(action);
+	        case ACTIONS.UPDATE_SITE:
+	          dispatch((0, _entity_actions.loadingEntity)(action.site.id));
+	          API.updateSite(action.site, function (response) {
+	            return dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(response, _schema.site)));
+	          }, function (err) {
+	            return console.log(err);
+	          });
+	          return next(action);
 	        default:
 	          return next(action);
 	      }
@@ -58016,6 +58032,16 @@
 	  $.ajax({
 	    method: 'get',
 	    url: 'api/sites/' + siteId,
+	    success: success,
+	    error: error
+	  });
+	};
+	
+	var updateSite = exports.updateSite = function updateSite(site, success, error) {
+	  $.ajax({
+	    method: 'PATCH',
+	    url: 'api/sites/' + site.id,
+	    data: { site: site },
 	    success: success,
 	    error: error
 	  });
@@ -66726,10 +66752,6 @@
 	
 	var _site_detail_container2 = _interopRequireDefault(_site_detail_container);
 	
-	var _sidebar = __webpack_require__(528);
-	
-	var _sidebar2 = _interopRequireDefault(_sidebar);
-	
 	var _home = __webpack_require__(533);
 	
 	var _home2 = _interopRequireDefault(_home);
@@ -66794,7 +66816,7 @@
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _sites_index_container2.default, onEnter: (0, _router_utils.fetchSites)(store) }),
 	        _react2.default.createElement(
 	          _reactRouter.Route,
-	          { path: ':siteId', component: _sidebar2.default, onEnter: (0, _router_utils.fetchSite)(store) },
+	          { path: ':siteId', component: _site_detail_container2.default, onEnter: (0, _router_utils.fetchSite)(store) },
 	          _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'editor' }),
 	          _react2.default.createElement(
 	            _reactRouter.Route,
@@ -68801,6 +68823,7 @@
 	  var params = _ref2.params;
 	  return {
 	    site: sites[params.siteId] || {},
+	    loading: sites.loading,
 	    pages: sites[params.siteId] && sites[params.siteId].pages ? (0, _util.mergePages)(pages, sites[params.siteId].pages) : []
 	  };
 	};
@@ -68821,9 +68844,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _editor_sidebar = __webpack_require__(521);
+	var _sidebar = __webpack_require__(528);
 	
-	var _editor_sidebar2 = _interopRequireDefault(_editor_sidebar);
+	var _sidebar2 = _interopRequireDefault(_sidebar);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -68832,9 +68855,11 @@
 	  var pages = _ref.pages;
 	  var params = _ref.params;
 	  var children = _ref.children;
+	  var loading = _ref.loading;
 	  return _react2.default.createElement(
-	    _editor_sidebar2.default,
-	    { site: site, pages: pages, params: params },
+	    _sidebar2.default,
+	    { loading: loading, params: params },
+	    console.log("loading...", loading),
 	    children
 	  );
 	};
@@ -70181,7 +70206,7 @@
 	
 	    _this.update = function (e) {
 	      e.preventDefault();
-	      console.log("updating");
+	      _this.props.update(_this.state);
 	    };
 	
 	    _this.state = (0, _lodash.merge)({}, props.site);
@@ -70235,6 +70260,8 @@
 	
 	var _settings2 = _interopRequireDefault(_settings);
 	
+	var _site_actions = __webpack_require__(331);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state, ownProps) {
@@ -70246,7 +70273,7 @@
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    update: function update(site) {
-	      return console.log("updating site...", site);
+	      return dispatch((0, _site_actions.updateSite)(site));
 	    },
 	    destroy: function destroy(site) {
 	      return console.log("destroying site...", site);
@@ -70279,9 +70306,17 @@
 	    "div",
 	    { className: "loading-page" },
 	    loading ? _react2.default.createElement(
-	      "h1",
-	      null,
-	      "Loading...."
+	      "div",
+	      { className: "sk-cube-grid" },
+	      _react2.default.createElement("div", { className: "sk-cube sk-cube1" }),
+	      _react2.default.createElement("div", { className: "sk-cube sk-cube2" }),
+	      _react2.default.createElement("div", { className: "sk-cube sk-cube3" }),
+	      _react2.default.createElement("div", { className: "sk-cube sk-cube4" }),
+	      _react2.default.createElement("div", { className: "sk-cube sk-cube5" }),
+	      _react2.default.createElement("div", { className: "sk-cube sk-cube6" }),
+	      _react2.default.createElement("div", { className: "sk-cube sk-cube7" }),
+	      _react2.default.createElement("div", { className: "sk-cube sk-cube8" }),
+	      _react2.default.createElement("div", { className: "sk-cube sk-cube9" })
 	    ) : children
 	  );
 	};

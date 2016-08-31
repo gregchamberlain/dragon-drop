@@ -29,6 +29,14 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
         response => dispatch(receiveEntity(normalize(response, site)))
       );
       return next(action);
+    case ACTIONS.UPDATE_SITE:
+      dispatch(loadingEntity(action.site.id));
+      API.updateSite(
+        action.site,
+        response => dispatch(receiveEntity(normalize(response, site))),
+        err => console.log(err)
+      );
+      return next(action);
     default:
       return next(action);
   }

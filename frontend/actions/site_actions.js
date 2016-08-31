@@ -3,6 +3,7 @@ export const RECEIVE_SITES = 'RECEIVE_SITES';
 export const REQUEST_SITE = 'REQUEST_SITE';
 export const RECEIVE_SITE = 'RECEIVE_SITE';
 export const CREATE_SITE = 'CREATE_SITE';
+export const UPDATE_SITE = 'UPDATE_SITE';
 
 export const createSite = site => ({
   type: CREATE_SITE,
@@ -16,4 +17,9 @@ export const requestSites = () => ({
 export const requestSite = siteId => ({
   type: REQUEST_SITE,
   siteId
+});
+
+export const updateSite = site => ({
+  type: UPDATE_SITE,
+  site
 });

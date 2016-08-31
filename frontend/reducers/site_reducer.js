@@ -6,7 +6,7 @@ const initState = { loading: false };
 const SiteReducer = (state = {}, action) => {
   switch (action.type) {
     case ACTIONS.RECEIVE_ENTITY:
-      return merge(initState, state, action.resp.entities.sites);
+      return merge(state, action.resp.entities.sites, {loading: false});
     case ACTIONS.REMOVE_ENTITY:
       let nextState = merge(initState, state);
       Object.keys(action.resp.entities.sites).forEach(id => {

@@ -4,6 +4,7 @@ import { mergePages } from '../../util';
 
 const mapStateToProps = ({ sites, pages }, { params }) => ({
   site: sites[params.siteId] || {},
+  loading: sites.loading,
   pages: sites[params.siteId] && sites[params.siteId].pages ? mergePages(pages, sites[params.siteId].pages) : [],
 });
 

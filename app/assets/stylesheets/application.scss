@@ -5,6 +5,7 @@
 @import "registration";
 @import "page_editor";
 @import "sidebar";
+@import "loading";
 
 
  * {
@@ -273,9 +274,4 @@ button {
 .sidebar-tabs > .tab:hover {
   background: #444;
   color: #03A9F4;
-}
-
-
-.loading-page {
-  height: 100%;
 }

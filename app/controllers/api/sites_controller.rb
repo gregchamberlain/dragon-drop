@@ -26,6 +26,7 @@ class Api::SitesController < ApplicationController
 	end
 
 	def show
+		sleep(2)
 		@site = Site.includes(pages: :components).find(params[:id])
 		render json: @site.to_json(include: {pages: {include: :components } } )
 	end

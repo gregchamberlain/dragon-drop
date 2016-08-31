@@ -6,7 +6,6 @@ import App from './app.jsx';
 import SitesIndex from './sites/sites_index_container.js';
 import { requestSites, requestSite } from '../actions/site_actions.js';
 import SiteDetail from './sites/site_detail_container.js';
-import Sidebar from './ui/sidebar.jsx';
 import Home from './home.jsx';
 import RegistrationLayout from './registration/registration_layout.jsx';
 import { fetchSites, fetchSite } from '../util/router_utils.js';
@@ -42,7 +41,7 @@ const Root = ({ store, history }) => (
       </Route>
       <Route path="/sites" onEnter={validateUser(store)}>
         <IndexRoute component={SitesIndex} onEnter={fetchSites(store)}/>
-        <Route path=":siteId" component={Sidebar} onEnter={fetchSite(store)}>
+        <Route path=":siteId" component={SiteDetail} onEnter={fetchSite(store)}>
           <IndexRedirect to='editor' />
           <Route path="editor" component={PagesMain}>
             <IndexRoute component={PageEditor} />

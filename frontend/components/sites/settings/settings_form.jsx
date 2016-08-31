@@ -22,7 +22,7 @@ export default class SiteSettingsForm extends Component {
 
   update = e => {
     e.preventDefault();
-    console.log("updating")
+    this.props.update(this.state);
   }
 
 
