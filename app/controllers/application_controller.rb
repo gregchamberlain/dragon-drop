@@ -17,4 +17,10 @@ class ApplicationController < ActionController::Base
   def user_params
     params.require(:user).permit(:email, :password)
   end
+
+  def authorize
+    unless current_user
+      render json: ["You need to log in to edit sites"], status: 403
+    end
+  end
 end

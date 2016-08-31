@@ -46,6 +46,7 @@ class RegistrationForm extends Component {
       <form onSubmit={this.onSubmit} className="registration-form">
         {this.props.errors}
           <input
+            autoFocus={true}
             type="email"
             placeholder="Email"
             onChange={this.update("email")}

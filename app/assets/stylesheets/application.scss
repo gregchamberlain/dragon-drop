@@ -3,12 +3,18 @@
 @import "sites";
 @import "home";
 @import "registration";
+@import "page_editor";
+@import "sidebar";
 
 
  * {
    box-sizing: border-box;
    font-family: 'Roboto', sans-serif;
  }
+
+button {
+  cursor: pointer;
+}
 
   html {
     height: 100%;
@@ -230,11 +236,14 @@
   list-style: none;
 }
 
-.editor-sidebar > .sidebar-group > ul > li {
+.editor-sidebar > .sidebar-group > ul > a {
+  text-decoration: none;
+  font-size: inherit;
+  color: inherit;
   cursor: pointer;
 }
 
-.editor-sidebar > .sidebar-group > ul > li:hover {
+.editor-sidebar > .sidebar-group > ul > a:hover {
   color: #ccc;
 }
 

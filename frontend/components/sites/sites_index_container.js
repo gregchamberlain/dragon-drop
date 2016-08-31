@@ -1,8 +1,10 @@
 import { connect } from 'react-redux';
 import SitesIndex from './sites_index.jsx';
 import { logout } from '../../actions/session_actions.js';
+import { toArray } from '../../util/entity_utils.js';
+
 const mapStateToProps = ({ sites, session }) => ({
-  sites: Object.keys(sites).map(id => sites[id]),
+  sites: toArray(sites),
   currentUser: session.currentUser
 });
 

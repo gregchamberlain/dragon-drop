@@ -13,17 +13,7 @@ export const requestSites = () => ({
   type: REQUEST_SITES
 });
 
-export const receiveSites = response => ({
-  type: RECEIVE_SITES,
-  response
-});
-
 export const requestSite = siteId => ({
   type: REQUEST_SITE,
   siteId
-});
-
-export const receiveSite = response => ({
-  type: RECEIVE_SITE,
-  response
 });

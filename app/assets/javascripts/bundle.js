@@ -57184,26 +57184,48 @@
 	  value: true
 	});
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 	
-	var _site_actions = __webpack_require__(331);
+	var _entity_actions = __webpack_require__(537);
 	
-	var ACTIONS = _interopRequireWildcard(_site_actions);
+	var ACTIONS = _interopRequireWildcard(_entity_actions);
+	
+	var _lodash = __webpack_require__(194);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	var initState = { loading: false };
 	
 	var SiteReducer = function SiteReducer() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
 	
-	  switch (action.type) {
-	    case ACTIONS.RECEIVE_SITES:
-	      return _extends({}, state, action.response.entities.sites);
-	    case ACTIONS.RECEIVE_SITE:
-	      return _extends({}, state, action.response.entities.sites);
-	    default:
-	      return state;
-	  }
+	  var _ret = function () {
+	    switch (action.type) {
+	      case ACTIONS.RECEIVE_ENTITY:
+	        return {
+	          v: (0, _lodash.merge)(initState, state, action.resp.entities.sites)
+	        };
+	      case ACTIONS.REMOVE_ENTITY:
+	        var nextState = (0, _lodash.merge)(initState, state);
+	        Object.keys(action.resp.entities.sites).forEach(function (id) {
+	          delete nextState[id];
+	        });
+	        return {
+	          v: nextState
+	        };
+	      case ACTIONS.LOADING_ENTITY:
+	        return {
+	          v: (0, _lodash.merge)({}, state, { loading: action.entity })
+	        };
+	      default:
+	        return {
+	          v: state
+	        };
+	    }
+	  }();
+	
+	  if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 	};
 	
 	exports.default = SiteReducer;
@@ -57236,24 +57258,10 @@
 	  };
 	};
 	
-	var receiveSites = exports.receiveSites = function receiveSites(response) {
-	  return {
-	    type: RECEIVE_SITES,
-	    response: response
-	  };
-	};
-	
 	var requestSite = exports.requestSite = function requestSite(siteId) {
 	  return {
 	    type: REQUEST_SITE,
 	    siteId: siteId
-	  };
-	};
-	
-	var receiveSite = exports.receiveSite = function receiveSite(response) {
-	  return {
-	    type: RECEIVE_SITE,
-	    response: response
 	  };
 	};
 
@@ -57267,22 +57275,21 @@
 	  value: true
 	});
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
 	var _page_actions = __webpack_require__(333);
 	
 	var _site_actions = __webpack_require__(331);
+	
+	var _entity_actions = __webpack_require__(537);
+	
+	var _lodash = __webpack_require__(194);
 	
 	var PageReducer = function PageReducer() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
 	
 	  switch (action.type) {
-	    case _page_actions.RECEIVE_PAGES:
-	      return _extends({}, state, action.response.entities.pages);
-	    case _site_actions.RECEIVE_SITE:
-	      console.log(action.response);
-	      return _extends({}, state, action.response.entities.pages);
+	    case _entity_actions.RECEIVE_ENTITY:
+	      return (0, _lodash.merge)({}, state, action.resp.entities.pages);
 	    default:
 	      return state;
 	  }
@@ -57937,6 +57944,8 @@
 	  value: true
 	});
 	
+	var _entity_actions = __webpack_require__(537);
+	
 	var _site_actions = __webpack_require__(331);
 	
 	var ACTIONS = _interopRequireWildcard(_site_actions);
@@ -57958,18 +57967,22 @@
 	    return function (action) {
 	      switch (action.type) {
 	        case ACTIONS.REQUEST_SITES:
+	          dispatch((0, _entity_actions.loadingEntity)(true));
 	          API.fetchSites(function (sites) {
-	            dispatch(ACTIONS.receiveSites((0, _normalizr.normalize)(sites, _schema.arrayOfSites)));
+	            dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(sites, _schema.arrayOfSites)));
+	          }, function (err) {
+	            return console.log(err);
 	          });
 	          return next(action);
 	        case ACTIONS.REQUEST_SITE:
+	          dispatch((0, _entity_actions.loadingEntity)(action.siteId));
 	          API.fetchSite(action.siteId, function (response) {
-	            dispatch(ACTIONS.receiveSite((0, _normalizr.normalize)(response, _schema.site)));
+	            dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(response, _schema.site)));
 	          });
 	          return next(action);
 	        case ACTIONS.CREATE_SITE:
 	          API.createSite(action.site, function (response) {
-	            return dispatch(ACTIONS.receiveSite((0, _normalizr.normalize)(response, _schema.site)));
+	            return dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(response, _schema.site)));
 	          });
 	          return next(action);
 	        default:
@@ -66721,9 +66734,19 @@
 	
 	var _home2 = _interopRequireDefault(_home);
 	
-	var _registration_layout = __webpack_require__(537);
+	var _registration_layout = __webpack_require__(534);
 	
 	var _registration_layout2 = _interopRequireDefault(_registration_layout);
+	
+	var _router_utils = __webpack_require__(539);
+	
+	var _page_editor = __webpack_require__(540);
+	
+	var _page_editor2 = _interopRequireDefault(_page_editor);
+	
+	var _settings = __webpack_require__(541);
+	
+	var _settings2 = _interopRequireDefault(_settings);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -66764,16 +66787,16 @@
 	      _react2.default.createElement(
 	        _reactRouter.Route,
 	        { path: '/sites', onEnter: validateUser(store) },
-	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _sites_index_container2.default, onEnter: function onEnter() {
-	            return store.dispatch((0, _site_actions.requestSites)());
-	          } }),
+	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _sites_index_container2.default, onEnter: (0, _router_utils.fetchSites)(store) }),
 	        _react2.default.createElement(
 	          _reactRouter.Route,
-	          { path: ':siteId', component: _sidebar2.default, onEnter: function onEnter(state) {
-	              return store.dispatch((0, _site_actions.requestSite)(state.params.siteId));
-	            } },
+	          { path: ':siteId', component: _sidebar2.default, onEnter: (0, _router_utils.fetchSite)(store) },
 	          _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'editor' }),
-	          _react2.default.createElement(_reactRouter.Route, { path: 'editor', component: _site_detail_container2.default }),
+	          _react2.default.createElement(
+	            _reactRouter.Route,
+	            { path: 'editor', component: _site_detail_container2.default },
+	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _page_editor2.default })
+	          ),
 	          _react2.default.createElement(_reactRouter.Route, { path: 'store', component: function component() {
 	              return _react2.default.createElement(
 	                'div',
@@ -66788,13 +66811,7 @@
 	                'Analytics'
 	              );
 	            } }),
-	          _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: function component() {
-	              return _react2.default.createElement(
-	                'div',
-	                null,
-	                'Settings'
-	              );
-	            } })
+	          _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings2.default })
 	        )
 	      )
 	    )
@@ -68296,15 +68313,15 @@
 	
 	var _session_actions = __webpack_require__(335);
 	
+	var _entity_utils = __webpack_require__(538);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(_ref) {
 	  var sites = _ref.sites;
 	  var session = _ref.session;
 	  return {
-	    sites: Object.keys(sites).map(function (id) {
-	      return sites[id];
-	    }),
+	    sites: (0, _entity_utils.toArray)(sites),
 	    currentUser: session.currentUser
 	  };
 	};
@@ -68737,7 +68754,7 @@
 	  return _react2.default.createElement(
 	    'div',
 	    { className: 'sites-index-item', onClick: function onClick() {
-	        return router.push('/sites/' + site.id);
+	        return router.push('/sites/' + site.id + '/editor');
 	      } },
 	    _react2.default.createElement(
 	      'h1',
@@ -68809,27 +68826,13 @@
 	var SiteDetail = function SiteDetail(_ref) {
 	  var site = _ref.site;
 	  var pages = _ref.pages;
-	  return site && pages ? _react2.default.createElement(
+	  var params = _ref.params;
+	  var children = _ref.children;
+	  return _react2.default.createElement(
 	    _editor_sidebar2.default,
-	    { site: site, pages: pages },
-	    _react2.default.createElement(
-	      'h1',
-	      null,
-	      site.name
-	    ),
-	    _react2.default.createElement(
-	      'ul',
-	      null,
-	      pages && pages.map(function (page) {
-	        return _react2.default.createElement(
-	          'li',
-	          { key: page.id },
-	          page.name
-	        );
-	      })
-	    ),
-	    _react2.default.createElement('div', { style: { height: 1000 } })
-	  ) : _react2.default.createElement('div', null);
+	    { site: site, pages: pages, params: params },
+	    children
+	  );
 	};
 	
 	exports.default = SiteDetail;
@@ -68872,15 +68875,18 @@
 	
 	var _wrench2 = _interopRequireDefault(_wrench);
 	
+	var _reactRouter = __webpack_require__(432);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var EditorSidebar = function EditorSidebar(_ref) {
 	  var children = _ref.children;
 	  var site = _ref.site;
 	  var pages = _ref.pages;
+	  var params = _ref.params;
 	  return _react2.default.createElement(
 	    'div',
-	    null,
+	    { className: 'editor-sidebar-container' },
 	    _react2.default.createElement(
 	      'div',
 	      { className: 'editor-sidebar' },
@@ -68921,8 +68927,8 @@
 	          null,
 	          pages.map(function (page) {
 	            return _react2.default.createElement(
-	              'li',
-	              { key: page.id },
+	              _reactRouter.Link,
+	              { key: page.id, to: '/sites/' + params.siteId + '/editor/' + page.id },
 	              _react2.default.createElement(_fileO2.default, null),
 	              ' ',
 	              page.name,
@@ -69335,7 +69341,7 @@
 	  var params = _ref.params;
 	  return _react2.default.createElement(
 	    'div',
-	    { className: 'sites-container' },
+	    { className: 'sidebar-container' },
 	    _react2.default.createElement(
 	      'div',
 	      { className: 'sites-sidebar' },
@@ -69374,7 +69380,7 @@
 	    ),
 	    _react2.default.createElement(
 	      'div',
-	      { className: 'sites-content' },
+	      { className: 'site-content' },
 	      children
 	    )
 	  );
@@ -69707,7 +69713,91 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Home);
 
 /***/ },
-/* 534 */,
+/* 534 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _registration_form_container = __webpack_require__(535);
+	
+	var _registration_form_container2 = _interopRequireDefault(_registration_form_container);
+	
+	var _reactRouter = __webpack_require__(432);
+	
+	var _close = __webpack_require__(515);
+	
+	var _close2 = _interopRequireDefault(_close);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var RegistrationLayout = function (_Component) {
+	  _inherits(RegistrationLayout, _Component);
+	
+	  function RegistrationLayout() {
+	    var _ref;
+	
+	    var _temp, _this, _ret;
+	
+	    _classCallCheck(this, RegistrationLayout);
+	
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+	
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = RegistrationLayout.__proto__ || Object.getPrototypeOf(RegistrationLayout)).call.apply(_ref, [this].concat(args))), _this), _this.handleKeyPress = function (e) {
+	      if (e.keyCode === 27) _this.close(e);
+	    }, _this.close = function (e) {
+	      e.preventDefault();
+	      _this.props.router.push('/');
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+	
+	  _createClass(RegistrationLayout, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      window.addEventListener('keydown', this.handleKeyPress);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      window.removeEventListener('keydown', this.handleKeyPress);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'registration-layout' },
+	        _react2.default.createElement(_registration_form_container2.default, {
+	          loginForm: this.props.router.isActive('/login'),
+	          onCancel: this.close }),
+	        _react2.default.createElement(_close2.default, { className: 'close', onClick: this.close })
+	      );
+	    }
+	  }]);
+	
+	  return RegistrationLayout;
+	}(_react.Component);
+	
+	exports.default = (0, _reactRouter.withRouter)(RegistrationLayout);
+
+/***/ },
 /* 535 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -69838,7 +69928,8 @@
 	        { onSubmit: this.onSubmit, className: 'registration-form' },
 	        this.props.errors,
 	        _react2.default.createElement('input', {
-	          type: 'text',
+	          autoFocus: true,
+	          type: 'email',
 	          placeholder: 'Email',
 	          onChange: this.update("email"),
 	          value: this.state.email }),
@@ -69878,6 +69969,152 @@
 
 /***/ },
 /* 537 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var RECEIVE_ENTITY = exports.RECEIVE_ENTITY = 'RECEIVE_ENTITY';
+	var REMOVE_ENTITY = exports.REMOVE_ENTITY = 'REMOVE_ENTITY';
+	var LOADING_ENTITY = exports.LOADING_ENTITY = 'LOADING_ENTITY';
+	
+	var receiveEntity = exports.receiveEntity = function receiveEntity(resp) {
+	  return {
+	    type: RECEIVE_ENTITY,
+	    resp: resp
+	  };
+	};
+	
+	var removeEntity = exports.removeEntity = function removeEntity(resp) {
+	  return {
+	    type: REMOVE_ENTITY,
+	    resp: resp
+	  };
+	};
+	
+	var loadingEntity = exports.loadingEntity = function loadingEntity(entity) {
+	  return {
+	    type: LOADING_ENTITY,
+	    entity: entity
+	  };
+	};
+
+/***/ },
+/* 538 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var toArray = exports.toArray = function toArray(obj) {
+	  return Object.keys(obj).map(function (id) {
+	    return obj[id];
+	  }).filter(function (entity) {
+	    return entity.id;
+	  });
+	};
+
+/***/ },
+/* 539 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.fetchSite = exports.fetchSites = undefined;
+	
+	var _site_actions = __webpack_require__(331);
+	
+	var fetchSites = exports.fetchSites = function fetchSites(store) {
+	  return function () {
+	    return store.dispatch((0, _site_actions.requestSites)());
+	  };
+	};
+	
+	var fetchSite = exports.fetchSite = function fetchSite(store) {
+	  return function (state) {
+	    return store.dispatch((0, _site_actions.requestSite)(state.params.siteId));
+	  };
+	};
+
+/***/ },
+/* 540 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("Cannot destructure undefined"); }
+	
+	var PageEditor = function PageEditor(_ref) {
+	  _objectDestructuringEmpty(_ref);
+	
+	  return _react2.default.createElement(
+	    "div",
+	    { className: "page-editor" },
+	    _react2.default.createElement(
+	      "h1",
+	      null,
+	      "Page Editor"
+	    )
+	  );
+	};
+	
+	exports.default = PageEditor;
+
+/***/ },
+/* 541 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _settings_form = __webpack_require__(542);
+	
+	var _settings_form2 = _interopRequireDefault(_settings_form);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var SiteSettings = function SiteSettings(_ref) {
+	  var children = _ref.children;
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'site-settings-page' },
+	    _react2.default.createElement(
+	      'h1',
+	      null,
+	      'Site Settings'
+	    ),
+	    _react2.default.createElement(_settings_form2.default, { site: { name: "test site", identifier: "test-site" } })
+	  );
+	};
+	
+	exports.default = SiteSettings;
+
+/***/ },
+/* 542 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -69892,17 +70129,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _registration_form_container = __webpack_require__(535);
-	
-	var _registration_form_container2 = _interopRequireDefault(_registration_form_container);
-	
-	var _reactRouter = __webpack_require__(432);
-	
-	var _close = __webpack_require__(515);
-	
-	var _close2 = _interopRequireDefault(_close);
+	var _lodash = __webpack_require__(194);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -69910,56 +70141,65 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var RegistrationLayout = function (_Component) {
-	  _inherits(RegistrationLayout, _Component);
+	var SiteSettingsForm = function (_Component) {
+	  _inherits(SiteSettingsForm, _Component);
 	
-	  function RegistrationLayout() {
-	    var _ref;
+	  function SiteSettingsForm(props) {
+	    _classCallCheck(this, SiteSettingsForm);
 	
-	    var _temp, _this, _ret;
+	    var _this = _possibleConstructorReturn(this, (SiteSettingsForm.__proto__ || Object.getPrototypeOf(SiteSettingsForm)).call(this, props));
 	
-	    _classCallCheck(this, RegistrationLayout);
+	    _this.updateState = function (name) {
+	      return function (e) {
+	        _this.setState(_defineProperty({}, name, e.target.value));
+	      };
+	    };
 	
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-	
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = RegistrationLayout.__proto__ || Object.getPrototypeOf(RegistrationLayout)).call.apply(_ref, [this].concat(args))), _this), _this.handleKeyPress = function (e) {
-	      if (e.keyCode === 27) _this.close(e);
-	    }, _this.close = function (e) {
+	    _this.destroy = function (e) {
 	      e.preventDefault();
-	      _this.props.router.push('/');
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	      var confirmation = confirm("are you sure you want to delete this site?");
+	      console.log(confirmation);
+	    };
+	
+	    _this.update = function (e) {
+	      e.preventDefault();
+	      console.log("updating");
+	    };
+	
+	    _this.state = (0, _lodash.merge)({}, props.site);
+	    return _this;
 	  }
 	
-	  _createClass(RegistrationLayout, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      window.addEventListener('keydown', this.handleKeyPress);
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      window.removeEventListener('keydown', this.handleKeyPress);
-	    }
-	  }, {
+	  _createClass(SiteSettingsForm, [{
 	    key: 'render',
 	    value: function render() {
+	      var site = this.props.site;
+	
+	      var unchanged = (0, _lodash.isEqual)(site, this.state);
+	
 	      return _react2.default.createElement(
-	        'div',
-	        { className: 'registration-layout' },
-	        _react2.default.createElement(_registration_form_container2.default, {
-	          loginForm: this.props.router.isActive('/login'),
-	          onCancel: this.close }),
-	        _react2.default.createElement(_close2.default, { className: 'close', onClick: this.close })
+	        'form',
+	        { className: 'site-settings-form' },
+	        _react2.default.createElement('input', { type: 'text', onChange: this.updateState("name"), value: this.state.name }),
+	        _react2.default.createElement('input', { type: 'text', onChange: this.updateState("identifier"), value: this.state.identifier }),
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'submit', disabled: unchanged, onClick: this.update },
+	          'Update'
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { className: 'destroy-button', onClick: this.destroy },
+	          'delete site'
+	        )
 	      );
 	    }
 	  }]);
 	
-	  return RegistrationLayout;
+	  return SiteSettingsForm;
 	}(_react.Component);
 	
-	exports.default = (0, _reactRouter.withRouter)(RegistrationLayout);
+	exports.default = SiteSettingsForm;
 
 /***/ }
 /******/ ]);

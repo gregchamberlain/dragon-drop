@@ -5,9 +5,10 @@ import Image from 'react-icons/lib/fa/image';
 import Brush from 'react-icons/lib/fa/paint-brush';
 import Compass from 'react-icons/lib/fa/compass';
 import Wrench from 'react-icons/lib/fa/wrench';
+import { Link } from 'react-router';
 
-const EditorSidebar = ({ children, site, pages }) => (
-  <div>
+const EditorSidebar = ({ children, site, pages, params }) => (
+  <div className="editor-sidebar-container">
     <div className='editor-sidebar'>
       <div className="sidebar-tabs">
         <div className="tab"><Compass /></div>
@@ -18,7 +19,11 @@ const EditorSidebar = ({ children, site, pages }) => (
       <div className='sidebar-group'>
         <h1>Pages</h1>
         <ul>
-          {pages.map(page =>  <li key={page.id}><File /> {page.name} - <small>{page.path}</small></li>)}
+          {pages.map(page =>  (
+            <Link key={page.id} to={`/sites/${params.siteId}/editor/${page.id}`}>
+              <File /> {page.name} - <small>{page.path}</small>
+            </Link>
+          ))}
           <li><Plus /> New Page</li>
         </ul>
       </div>

@@ -1,6 +1,7 @@
 class Api::SitesController < ApplicationController
 
 	before_action :find_site, only: [:show, :destroy, :update]
+	before_action :authorize
 
 	def index
 		render json: current_user.sites
@@ -16,8 +17,7 @@ class Api::SitesController < ApplicationController
 
 	def create
 		@site = current_user.sites.new(site_params);
-		@site.pages.new(name: 'Home', path: '/')
-		@site.identifier = Site.generateUniqueIdentifier(@site.name);
+		@site.pages.new(name: 'Home', path: '/');
 		if @site.save
 			render json: @site.to_json(include: :pages)
 		else

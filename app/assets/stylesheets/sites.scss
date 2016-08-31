@@ -1,3 +1,5 @@
+$light-blue-600: #03A9F4;
+
 .sites-index {
   padding-top: 56px;
   background: #eceff1;
@@ -15,4 +17,63 @@
 .sites-index-items {
   padding: 40px;
   display: flex;
+}
+
+.sites-content {
+  height: 100%;
+}
+
+.site-settings-page {
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.site-settings-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  input {
+    font-size: 24px;
+    box-sizing: border-box;
+    display: block;
+    margin: 10px 0;
+    background: none;
+    border: none;
+    border-bottom: 2px solid #888;
+    padding: 5px;
+    outline: none;
+
+    &:focus {
+      border-bottom: 2px solid black;
+    }
+
+  }
+
+  button {
+    border:none;
+    background: black;
+    font-weight: 700;
+    color: white;
+    outline: none;
+    border-radius: 18px;
+    padding: 10px 40px;
+    margin: 10px 0;
+    font-size: 14px;
+    text-transform: uppercase;
+
+    &:disabled {
+      background: #ccc;
+    }
+  }
+
+  .destroy-button {
+    padding: 10px 20px;
+    font-size: 10px;
+    background: red;
+  }
 }

@@ -9,6 +9,9 @@ import SiteDetail from './sites/site_detail_container.js';
 import Sidebar from './ui/sidebar.jsx';
 import Home from './home.jsx';
 import RegistrationLayout from './registration/registration_layout.jsx';
+import { fetchSites, fetchSite } from '../util/router_utils.js';
+import PageEditor from '../components/pages/page_editor.jsx';
+import SiteSettings from '../components/sites/settings.jsx';
 
 const validateUser = (store) => {
   return (nextState, replace) => {
@@ -37,13 +40,15 @@ const Root = ({ store, history }) => (
         <Route path="signup" component={RegistrationLayout}/>
       </Route>
       <Route path="/sites" onEnter={validateUser(store)}>
-        <IndexRoute component={SitesIndex} onEnter={() => store.dispatch(requestSites())}/>
-        <Route path=":siteId" component={Sidebar} onEnter={state => store.dispatch(requestSite(state.params.siteId))}>
+        <IndexRoute component={SitesIndex} onEnter={fetchSites(store)}/>
+        <Route path=":siteId" component={Sidebar} onEnter={fetchSite(store)}>
           <IndexRedirect to='editor' />
-          <Route path="editor" component={SiteDetail}/>
+          <Route path="editor" component={SiteDetail}>
+            <IndexRoute component={PageEditor} />
+          </Route>
           <Route path="store" component={() => <div>Store</div>}/>
           <Route path="analytics" component={() => <div>Analytics</div>}/>
-          <Route path="settings" component={() => <div>Settings</div>}/>
+          <Route path="settings" component={SiteSettings}/>
         </Route>
       </Route>
     </Router>
