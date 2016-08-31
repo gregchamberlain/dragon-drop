@@ -74,7 +74,7 @@
 	
 	document.addEventListener('DOMContentLoaded', function () {
 	
-	  var defaultState = { session: { currentUser: window.currentUser, errors: [] } };
+	  var defaultState = { session: { currentUser: window.currentUser, errors: [], loading: false } };
 	  var store = window.store = (0, _store2.default)(defaultState);
 	  var history = (0, _reactRouterRedux.syncHistoryWithStore)(_reactRouter.hashHistory, store);
 	  var root = document.getElementById('root');
@@ -57336,16 +57336,20 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	var SessionReducer = function SessionReducer() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? { currentUser: null, errors: [] } : arguments[0];
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? { currentUser: null, errors: [], loading: false } : arguments[0];
 	  var action = arguments[1];
 	
 	  switch (action.type) {
 	    case ACTIONS.RECEIVE_CURRENT_USER:
-	      return { currentUser: action.user, errors: [] };
-	    case ACTIONS.LOGOUT:
-	      return { currentUser: null, errors: [] };
+	      return { currentUser: action.user, errors: [], loading: false };
 	    case ACTIONS.RECEIVE_ERRORS:
-	      return { currentUser: null, errors: action.errors };
+	      return { currentUser: null, errors: action.errors, loading: false };
+	    case ACTIONS.LOGIN:
+	      return (0, _lodash.merge)({}, state, { loading: true });
+	    case ACTIONS.SIGNUP:
+	      return (0, _lodash.merge)({}, state, { loading: true });
+	    case ACTIONS.LOGOUT:
+	      return (0, _lodash.merge)({}, state, { loading: true });
 	    default:
 	      return state;
 	  }
@@ -60961,13 +60965,12 @@
 	          return next(action);
 	        case ACTIONS.LOGOUT:
 	          API.logout(function (user) {
-	            next(action);
+	            dispatch(ACTIONS.receiveCurrentUser(null));
 	            dispatch((0, _reactRouterRedux.push)('/'));
 	          }, function (err) {
-	            next(action);
-	            dispatch(ACTIONS.receiveErrors(err.responseJSON));
+	            return dispatch(ACTIONS.receiveErrors(err.responseJSON));
 	          });
-	          break;
+	          return next(action);
 	        case ACTIONS.SIGNUP:
 	          API.signup(action.user, function (user) {
 	            dispatch(ACTIONS.receiveCurrentUser(user));
@@ -67529,7 +67532,7 @@
 	    ),
 	    _react2.default.createElement(
 	      'div',
-	      { className: 'sites-container' },
+	      { className: 'sites-index-container' },
 	      sites.map(function (site) {
 	        return _react2.default.createElement(_sites_index_item2.default, { key: site.id, site: site });
 	      })
@@ -68773,30 +68776,60 @@
 	  { to: '/' },
 	  'DragonDrop'
 	);
-	
+	var right = [_react2.default.createElement(
+	  _reactRouter.Link,
+	  { to: '/login' },
+	  'Login'
+	), _react2.default.createElement(
+	  _reactRouter.Link,
+	  { to: '/signup' },
+	  'Sign Up'
+	)];
 	var Home = function Home(_ref) {
 	  var children = _ref.children;
-	  var currentUser = _ref.currentUser;
+	  var loading = _ref.loading;
 	  var loginAsGuest = _ref.loginAsGuest;
 	
 	  return _react2.default.createElement(
-	    _toolbar2.default,
-	    { right: [_react2.default.createElement(
-	        _reactRouter.Link,
-	        { to: '/login' },
-	        'Login'
-	      ), _react2.default.createElement(
-	        _reactRouter.Link,
-	        { to: '/signup' },
-	        'Sign Up'
-	      )], brand: brand },
+	    'div',
+	    { style: { height: '100%' } },
+	    _react2.default.createElement(
+	      'header',
+	      { className: 'home-header' },
+	      _react2.default.createElement(
+	        'nav',
+	        { className: 'content' },
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/', className: 'brand' },
+	          'DRAGONDROP'
+	        ),
+	        _react2.default.createElement('div', { className: 'flex-space' }),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: 'signup' },
+	          'Sign Up'
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: 'login', className: 'border' },
+	          'Login'
+	        )
+	      )
+	    ),
 	    _react2.default.createElement(
 	      'section',
 	      { className: 'home-section splash-image' },
 	      _react2.default.createElement(
 	        'button',
 	        { className: 'demo-button', onClick: loginAsGuest },
-	        'demo'
+	        loading ? _react2.default.createElement(
+	          'div',
+	          { className: 'spinner' },
+	          _react2.default.createElement('div', { className: 'bounce1' }),
+	          _react2.default.createElement('div', { className: 'bounce2' }),
+	          _react2.default.createElement('div', { className: 'bounce3' })
+	        ) : "DEMO"
 	      ),
 	      _react2.default.createElement(
 	        'h1',
@@ -68810,7 +68843,7 @@
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    currentUser: state.session.currentUser
+	    loading: state.session.loading
 	  };
 	};
 	

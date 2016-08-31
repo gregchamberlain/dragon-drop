@@ -17,15 +17,12 @@ const SessionMiddleware = ({getState, dispatch}) => next => action => {
     case ACTIONS.LOGOUT:
       API.logout(
         user => {
-          next(action);
+          dispatch(ACTIONS.receiveCurrentUser(null));
           dispatch(push('/'));
         },
-        err => {
-          next(action);
-          dispatch(ACTIONS.receiveErrors(err.responseJSON));
-        }
+        err => dispatch(ACTIONS.receiveErrors(err.responseJSON))
       );
-      break;
+      return next(action);
     case ACTIONS.SIGNUP:
       API.signup(
         action.user,
