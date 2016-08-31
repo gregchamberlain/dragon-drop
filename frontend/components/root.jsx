@@ -10,14 +10,33 @@ import Sidebar from './ui/sidebar.jsx';
 import Home from './home.jsx';
 import RegistrationModal from './registration/registration_modal.jsx';
 
+const validateUser = (store) => {
+  return (nextState, replace) => {
+    if (!store.getState().session.currentUser) {
+      replace({
+        pathname: '/login',
+        state: { nextPathname: nextState.location.pathname }
+      });
+    }
+  };
+};
+
+const takeCurrentUserToSites = (store) => {
+  return (nextState, replace) => {
+    if (store.getState().session.currentUser) {
+      replace('/sites');
+    }
+  };
+};
+
 const Root = ({ store, history }) => (
   <Provider store={store}>
     <Router history={history}>
-      <Route path="/" component={Home}>
+      <Route path="/" component={Home} onEnter={takeCurrentUserToSites(store)}>
         <Route path="login" component={RegistrationModal}/>
         <Route path="signup" component={RegistrationModal}/>
       </Route>
-      <Route path="/sites">
+      <Route path="/sites" onEnter={validateUser(store)}>
         <IndexRoute component={SitesIndex} onEnter={() => store.dispatch(requestSites())}/>
         <Route path=":siteId" component={Sidebar} onEnter={state => store.dispatch(requestSite(state.params.siteId))}>
           <IndexRedirect to='editor' />

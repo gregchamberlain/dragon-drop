@@ -16,10 +16,10 @@
   }
 
   .modal-container {
-    min-width: 400px;
-    border-radius: 10px;
+    border-radius: 2px;
     background: #fff;
     z-index: 2;
+    box-shadow: 0 0 10px #81D4FA;
   }
 
   .modal-body {
@@ -28,18 +28,16 @@
 
   .modal-heading {
     position: relative;
-    border-top-left-radius: 10px;
-    background: #eee;
     line-height: 40px;
     color: #444;
-    border-top-right-radius: 10px;
     height: 40px;
     font-size: 18px;
     text-align: center;
+    border-bottom: 1px solid #ddd;
 
     .modal-close {
       cursor: pointer;
-      color: #ccc;
+      color: #81D4FA;
       position: absolute;
       right: 10px;
       top: 10px;

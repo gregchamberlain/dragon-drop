@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
 import Toolbar from './ui/toolbar.jsx';
-import { Link, withRouter } from 'react-router';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { login } from '../actions/session_actions.js';
 
 const brand = <Link to="/">DragonDrop</Link>;
-const right = [
-  <Link to="/login">Login</Link>,
-  <Link to="/signup">Sign Up</Link>,
-];
 
-const Home = ({ children, currentUser, router }) => {
-  if (currentUser) router.push('/sites');
+const Home = ({ children, currentUser, loginAsGuest  }) => {
   return (
-    <Toolbar right={right} brand={brand}>
-      Home!!!
+    <Toolbar right={[
+      <Link to="/login">Login</Link>,
+      <Link to="/signup">Sign Up</Link>,
+    ]} brand={brand}>
+      <div className="home-splash-image">
+        <button className="demo-button" onClick={loginAsGuest}>demo</button>
+        <h1>Build a better web</h1>
+      </div>
       {children}
     </Toolbar>
   );
@@ -23,4 +25,10 @@ const mapStateToProps = state => ({
   currentUser: state.session.currentUser
 });
 
-export default connect(mapStateToProps)(withRouter(Home));
+const mapDispatchToProps = dispatch => ({
+  loginAsGuest: () => dispatch(
+    login({email: "demo@dragon-drop.com", password: "password"})
+  ),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

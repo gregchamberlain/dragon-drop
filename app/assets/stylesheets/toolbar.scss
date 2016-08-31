@@ -1,4 +1,4 @@
-$toolbar-background: #444;
+$toolbar-background: rgba(0, 0, 0, 0.5);
 $toolbar-item-highlight: rgba(255, 255, 255, 0.1);
 
 .toolbar-layout {
@@ -8,6 +8,8 @@ $toolbar-item-highlight: rgba(255, 255, 255, 0.1);
   .toolbar {
     position: fixed;
     display: flex;
+    top: 0;
+    left: 0;
     height: 56px;
     width: 100%;
     background: $toolbar-background;
@@ -17,18 +19,19 @@ $toolbar-item-highlight: rgba(255, 255, 255, 0.1);
     }
 
     .toolbar-item {
-      font-size: 14px;
+      font-size: 16px;
 
       a {
-        color: #ccc;
+        color: #eee;
         display: block;
         height: 100%;
         padding: 10px 15px;
         line-height: 36px;
         text-decoration: none;
+        cursor: pointer;
         &:hover {
           background: $toolbar-item-highlight;
-          color: #eee;
+          color: #fff;
         }
       }
 
@@ -39,6 +42,6 @@ $toolbar-item-highlight: rgba(255, 255, 255, 0.1);
     }
   }
   .content {
-    padding-top: 56px;
+    height: 100%;
   }
 }
