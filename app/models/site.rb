@@ -10,6 +10,11 @@ class Site < ActiveRecord::Base
 		self.identifier ||= Site.generateUniqueIdentifier(name)
 	end
 
+	def create!
+		self.pages.create(name: "Home", path: "/");
+		super
+	end
+
 	def self.nouns
 		%w(camp vase fall motion grandmother cap observation rule insect size gate beginner lumber ducks hammer expansion sleet pen transport throat move pear rain desk pizzas suit bee magic word bulb tramp key box lake plant heat humor pleasure haircut swing surprise rod tub join jail look memory appliance screw afternoon ghost wall statement oil holiday wrist fork sleep morning bikes rake vein oven potato pump desire glass mom battle request finger bit tree grandfather force shape berry beef office star lace pies ink peace kick crime drop guitar partner head cats sort tendency zinc mailbox laugh aunt payment copper hook)
 	end

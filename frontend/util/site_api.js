@@ -1,6 +1,6 @@
 export const fetchSites = (success, error) => {
   $.ajax({
-    method: 'get',
+    method: 'GET',
     url: 'api/sites',
     success,
     error
@@ -9,13 +9,16 @@ export const fetchSites = (success, error) => {
 
 export const destroySite = (site, success, error) => {
   $.ajax({
-
+    method: 'DELETE',
+    url: `api/sites/${site.id}`,
+    success,
+    error
   });
 };
 
 export const fetchSite = (siteId, success, error) => {
   $.ajax({
-    method: 'get',
+    method: 'GET',
     url: `api/sites/${siteId}`,
     success,
     error

@@ -16,8 +16,9 @@ export default class SiteSettingsForm extends Component {
 
   destroy = e => {
     e.preventDefault();
-    let confirmation = confirm("are you sure you want to delete this site?");
-    console.log(confirmation)
+    if (confirm("are you sure you want to delete this site?")) {
+      this.props.destroy(this.state);
+    }
   }
 
   update = e => {

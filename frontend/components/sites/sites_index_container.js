@@ -4,6 +4,7 @@ import { logout } from '../../actions/session_actions.js';
 import { toArray } from '../../util/entity_utils.js';
 
 const mapStateToProps = ({ sites, session }) => ({
+  loading: sites.loading,
   sites: toArray(sites),
   currentUser: session.currentUser
 });

@@ -57207,7 +57207,7 @@
 	          v: (0, _lodash.merge)(state, action.resp.entities.sites, { loading: false })
 	        };
 	      case ACTIONS.REMOVE_ENTITY:
-	        var nextState = (0, _lodash.merge)(initState, state);
+	        var nextState = (0, _lodash.merge)(initState, state, { loading: false });
 	        Object.keys(action.resp.entities.sites).forEach(function (id) {
 	          delete nextState[id];
 	        });
@@ -58008,6 +58008,8 @@
 	
 	var _normalizr = __webpack_require__(349);
 	
+	var _reactRouterRedux = __webpack_require__(337);
+	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	var SiteMiddleware = function SiteMiddleware(_ref) {
@@ -58044,6 +58046,13 @@
 	          });
 	          return next(action);
 	        case ACTIONS.DESTROY_SITE:
+	          dispatch((0, _entity_actions.loadingEntity)(action.site.id));
+	          API.destroySite(action.site, function (response) {
+	            dispatch((0, _entity_actions.removeEntity)((0, _normalizr.normalize)(response, _schema.site)));
+	            dispatch((0, _reactRouterRedux.push)('/sites'));
+	          }, function (err) {
+	            return console.log(err);
+	          });
 	          return next(action);
 	        default:
 	          return next(action);
@@ -58065,7 +58074,7 @@
 	});
 	var fetchSites = exports.fetchSites = function fetchSites(success, error) {
 	  $.ajax({
-	    method: 'get',
+	    method: 'GET',
 	    url: 'api/sites',
 	    success: success,
 	    error: error
@@ -58073,12 +58082,17 @@
 	};
 	
 	var destroySite = exports.destroySite = function destroySite(site, success, error) {
-	  $.ajax({});
+	  $.ajax({
+	    method: 'DELETE',
+	    url: 'api/sites/' + site.id,
+	    success: success,
+	    error: error
+	  });
 	};
 	
 	var fetchSite = exports.fetchSite = function fetchSite(siteId, success, error) {
 	  $.ajax({
-	    method: 'get',
+	    method: 'GET',
 	    url: 'api/sites/' + siteId,
 	    success: success,
 	    error: error
@@ -68395,6 +68409,7 @@
 	  var sites = _ref.sites;
 	  var session = _ref.session;
 	  return {
+	    loading: sites.loading,
 	    sites: (0, _entity_utils.toArray)(sites),
 	    currentUser: session.currentUser
 	  };
@@ -68438,6 +68453,10 @@
 	
 	var _sites_index_item2 = _interopRequireDefault(_sites_index_item);
 	
+	var _loading_page = __webpack_require__(528);
+	
+	var _loading_page2 = _interopRequireDefault(_loading_page);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var brand = _react2.default.createElement(
@@ -68459,6 +68478,7 @@
 	  var sites = _ref.sites;
 	  var currentUser = _ref.currentUser;
 	  var logout = _ref.logout;
+	  var loading = _ref.loading;
 	  return _react2.default.createElement(
 	    _toolbar2.default,
 	    { brand: brand, right: [_react2.default.createElement(
@@ -68467,14 +68487,18 @@
 	        'Logout'
 	      )] },
 	    _react2.default.createElement(
-	      'div',
-	      { className: 'sites-index' },
+	      _loading_page2.default,
+	      { loading: loading },
 	      _react2.default.createElement(
 	        'div',
-	        { className: 'sites-index-items' },
-	        sites.map(function (site) {
-	          return _react2.default.createElement(_sites_index_item2.default, { key: site.id, site: site });
-	        })
+	        { className: 'sites-index' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'sites-index-items' },
+	          sites.map(function (site) {
+	            return _react2.default.createElement(_sites_index_item2.default, { key: site.id, site: site });
+	          })
+	        )
 	      )
 	    )
 	  );
@@ -68924,7 +68948,6 @@
 	  return _react2.default.createElement(
 	    _sidebar2.default,
 	    { loading: loading, params: params },
-	    console.log("loading...", loading),
 	    children
 	  );
 	};
@@ -70267,7 +70290,7 @@
 	      return dispatch((0, _site_actions.updateSite)(site));
 	    },
 	    destroy: function destroy(site) {
-	      return console.log("destroying site...", site);
+	      return dispatch((0, _site_actions.destroySite)(site));
 	    }
 	  };
 	};
@@ -70357,8 +70380,9 @@
 	
 	    _this.destroy = function (e) {
 	      e.preventDefault();
-	      var confirmation = confirm("are you sure you want to delete this site?");
-	      console.log(confirmation);
+	      if (confirm("are you sure you want to delete this site?")) {
+	        _this.props.destroy(_this.state);
+	      }
 	    };
 	
 	    _this.update = function (e) {

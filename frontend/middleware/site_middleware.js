@@ -1,8 +1,9 @@
-import { receiveEntity, loadingEntity } from '../actions/entity_actions.js';
+import { receiveEntity, loadingEntity, removeEntity } from '../actions/entity_actions.js';
 import * as ACTIONS from '../actions/site_actions.js';
 import * as API from '../util/site_api.js';
 import { arrayOfSites, site } from '../actions/schema.js';
 import { normalize } from 'normalizr';
+import { push } from 'react-router-redux';
 
 const SiteMiddleware = ({ getState, dispatch }) => next => action => {
   switch (action.type) {
@@ -38,6 +39,15 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
       );
       return next(action);
     case ACTIONS.DESTROY_SITE:
+      dispatch(loadingEntity(action.site.id));
+      API.destroySite(
+        action.site,
+        response => {
+          dispatch(removeEntity(normalize(response, site)));
+          dispatch(push('/sites'));
+        },
+        err => console.log(err)
+      );
       return next(action);
     default:
       return next(action);
