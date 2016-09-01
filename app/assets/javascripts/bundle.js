@@ -57583,10 +57583,8 @@
 	
 	  switch (action.type) {
 	    case _loading_actions.START_LOADING:
-	      console.log('Loading ', action.key);
 	      return (0, _lodash.merge)({}, state, _defineProperty({}, action.key, action.message));
 	    case _loading_actions.STOP_LOADING:
-	      console.log(action.key, 'loaded!');
 	      var newState = (0, _lodash.merge)({}, state);
 	      delete newState[action.key];
 	      return newState;
@@ -58217,10 +58215,13 @@
 	          });
 	          return next(action);
 	        case ACTIONS.CREATE_SITE:
+	          dispatch((0, _loading_actions.startLoading)('new-site', 'Creating Site...'));
 	          API.createSite(action.site, function (response) {
+	            dispatch((0, _loading_actions.stopLoading)('new-site'));
 	            dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(response, _schema.site)));
 	            dispatch((0, _notification_actions.createNotification)('success', 'Site successfully created!'));
 	          }, function (err) {
+	            dispatch((0, _loading_actions.stopLoading)('new-site'));
 	            err.responseJSON.forEach(function (m) {
 	              return dispatch((0, _notification_actions.createNotification)('error', m));
 	            });
@@ -61261,6 +61262,8 @@
 	
 	var _reactRouterRedux = __webpack_require__(342);
 	
+	var _loading_actions = __webpack_require__(341);
+	
 	var _notification_actions = __webpack_require__(339);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
@@ -61272,35 +61275,47 @@
 	    return function (action) {
 	      switch (action.type) {
 	        case ACTIONS.LOGIN:
+	          dispatch((0, _loading_actions.startLoading)('currentUser', 'Logging in...'));
 	          API.login(action.user, function (user) {
+	            dispatch((0, _notification_actions.createNotification)('success', 'Successfully Logged In'));
 	            dispatch(ACTIONS.receiveCurrentUser(user));
+	            dispatch((0, _loading_actions.stopLoading)('currentUser'));
 	            dispatch((0, _reactRouterRedux.push)('/sites'));
 	          }, function (err) {
 	            dispatch(ACTIONS.receiveCurrentUser(null));
 	            err.responseJSON.forEach(function (m) {
 	              dispatch((0, _notification_actions.createNotification)('error', m));
+	              dispatch((0, _loading_actions.stopLoading)('currentUser'));
 	            });
 	          });
 	          return next(action);
 	        case ACTIONS.LOGOUT:
+	          dispatch((0, _loading_actions.startLoading)('logout', 'Logging Out...'));
 	          API.logout(function (user) {
+	            dispatch((0, _loading_actions.stopLoading)('logout'));
 	            dispatch(ACTIONS.receiveCurrentUser(null));
 	            dispatch((0, _reactRouterRedux.push)('/'));
+	            dispatch((0, _notification_actions.createNotification)('success', 'Successfully Logged Out'));
 	          }, function (err) {
 	            return err.responseJSON.forEach(function (m) {
+	              dispatch((0, _loading_actions.stopLoading)('logout'));
 	              dispatch(ACTIONS.receiveCurrentUser(null));
 	              dispatch((0, _notification_actions.createNotification)('error', m));
 	            });
 	          });
 	          return next(action);
 	        case ACTIONS.SIGNUP:
+	          dispatch((0, _loading_actions.startLoading)('currentUser', 'Signing Up...'));
 	          API.signup(action.user, function (user) {
 	            dispatch(ACTIONS.receiveCurrentUser(user));
+	            dispatch((0, _loading_actions.stopLoading)('currentUser'));
 	            dispatch((0, _reactRouterRedux.push)('/sites'));
+	            dispatch((0, _notification_actions.createNotification)('success', 'Successfully Signed Up'));
 	          }, function (err) {
 	            dispatch(ACTIONS.receiveCurrentUser(null));
 	            err.responseJSON.forEach(function (m) {
 	              dispatch((0, _notification_actions.createNotification)('error', m));
+	              dispatch((0, _loading_actions.stopLoading)('currentUser'));
 	            });
 	          });
 	          return next(action);
@@ -61401,6 +61416,8 @@
 	
 	var _schema = __webpack_require__(353);
 	
+	var _loading_actions = __webpack_require__(341);
+	
 	var _notification_actions = __webpack_require__(339);
 	
 	var _normalizr = __webpack_require__(354);
@@ -61412,11 +61429,14 @@
 	    return function (action) {
 	      switch (action.type) {
 	        case _template_actions.REQUEST_TEMPLATES:
+	          dispatch((0, _loading_actions.startLoading)('templates', 'Loading in Templates...'));
 	          (0, _site_api.fetchTemplates)(function (t) {
-	            return dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(t, _schema.arrayOfTemplates)));
+	            dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(t, _schema.arrayOfTemplates)));
+	            dispatch((0, _loading_actions.stopLoading)('templates'));
 	          }, function (err) {
 	            return err.responseJSON.forEach(function (e) {
 	              (0, _notification_actions.createNotification)('error', e);
+	              dispatch((0, _loading_actions.stopLoading)('templates'));
 	            });
 	          });
 	          return next(action);
@@ -68843,7 +68863,11 @@
 	          sites.map(function (site) {
 	            return _react2.default.createElement(_sites_index_item2.default, { key: site.id, site: site });
 	          }),
-	          form ? _react2.default.createElement(_new_site_form_container2.default, null) : ""
+	          form ? _react2.default.createElement(
+	            'div',
+	            { className: 'site-wrapper' },
+	            _react2.default.createElement(_new_site_form_container2.default, null)
+	          ) : ""
 	        ),
 	        _react2.default.createElement('div', { className: 'flex-space' })
 	      )
@@ -69195,9 +69219,12 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var mapStateToProps = function mapStateToProps(state) {
+	var mapStateToProps = function mapStateToProps(_ref) {
+	  var session = _ref.session;
+	  var loading = _ref.loading;
 	  return {
-	    currentUser: state.session.currentUser
+	    currentUser: session.currentUser,
+	    loading: loading['logout']
 	  };
 	};
 	
@@ -69232,9 +69259,11 @@
 	var HeaderBar = function HeaderBar(_ref) {
 	  var currentUser = _ref.currentUser;
 	  var logout = _ref.logout;
+	  var loading = _ref.loading;
 	  return _react2.default.createElement(
 	    'header',
 	    { className: 'home-header' },
+	    console.log(loading),
 	    _react2.default.createElement(
 	      'nav',
 	      { className: 'content' },
@@ -69257,7 +69286,13 @@
 	      currentUser ? _react2.default.createElement(
 	        'a',
 	        { onClick: logout },
-	        'Logout'
+	        loading ? _react2.default.createElement(
+	          'div',
+	          { className: 'spinner' },
+	          _react2.default.createElement('div', { className: 'bounce1' }),
+	          _react2.default.createElement('div', { className: 'bounce2' }),
+	          _react2.default.createElement('div', { className: 'bounce3' })
+	        ) : "logout"
 	      ) : "",
 	      !currentUser ? _react2.default.createElement(
 	        _reactRouter.Link,
@@ -69298,18 +69333,22 @@
 	  var router = _ref.router;
 	  return _react2.default.createElement(
 	    'div',
-	    { className: 'sites-index-item', onClick: function onClick() {
-	        return router.push('/sites/' + site.id + '/editor');
-	      } },
+	    { className: 'site-wrapper' },
 	    _react2.default.createElement(
-	      'h1',
-	      null,
-	      site.name
-	    ),
-	    _react2.default.createElement(
-	      'h3',
-	      null,
-	      site.identifier
+	      'div',
+	      { className: 'sites-index-item', onClick: function onClick() {
+	          return router.push('/sites/' + site.id + '/editor');
+	        } },
+	      _react2.default.createElement(
+	        'h1',
+	        null,
+	        site.name
+	      ),
+	      _react2.default.createElement(
+	        'h3',
+	        null,
+	        site.identifier
+	      )
 	    )
 	  );
 	};
@@ -69335,12 +69374,14 @@
 	var LoadingPage = function LoadingPage(_ref) {
 	  var loading = _ref.loading;
 	  var children = _ref.children;
+	  var small = _ref.small;
+	  var light = _ref.light;
 	  return _react2.default.createElement(
 	    "div",
-	    { className: "loading-page" },
+	    { className: "loading-page" + (small ? " small" : "") },
 	    loading ? _react2.default.createElement(
 	      "div",
-	      null,
+	      { className: "loading-grid" + (small ? " small" : "") + (light ? " light" : "") },
 	      _react2.default.createElement(
 	        "div",
 	        { className: "sk-cube-grid" },
@@ -69385,8 +69426,11 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {};
+	var mapStateToProps = function mapStateToProps(_ref) {
+	  var loading = _ref.loading;
+	  return {
+	    loading: loading['new-site']
+	  };
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
@@ -69403,7 +69447,7 @@
 /* 532 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -69414,6 +69458,10 @@
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	var _loading_page = __webpack_require__(530);
+	
+	var _loading_page2 = _interopRequireDefault(_loading_page);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -69452,24 +69500,32 @@
 	  }
 	
 	  _createClass(NewSiteForm, [{
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
-	        "form",
-	        { onSubmit: this.submit, className: "new-site-form" },
-	        _react2.default.createElement("input", {
-	          placeholder: "Site Name",
-	          type: "text",
-	          value: this.state.name,
-	          onChange: this.update("name") }),
-	        _react2.default.createElement("textarea", {
-	          placeholder: "Description",
-	          value: this.state.description,
-	          onChange: this.update("description") }),
+	        'div',
+	        { className: 'new-site-form' },
 	        _react2.default.createElement(
-	          "button",
-	          { type: "submit" },
-	          "Create"
+	          _loading_page2.default,
+	          { loading: this.props.loading, small: true },
+	          _react2.default.createElement(
+	            'form',
+	            { onSubmit: this.submit },
+	            _react2.default.createElement('input', {
+	              placeholder: 'Site Name',
+	              type: 'text',
+	              value: this.state.name,
+	              onChange: this.update("name") }),
+	            _react2.default.createElement('textarea', {
+	              placeholder: 'Description',
+	              value: this.state.description,
+	              onChange: this.update("description") }),
+	            _react2.default.createElement(
+	              'button',
+	              { type: 'submit' },
+	              'Create'
+	            )
+	          )
 	        )
 	      );
 	    }
@@ -70087,7 +70143,9 @@
 	
 	var mapStateToProps = function mapStateToProps(_ref) {
 	  var session = _ref.session;
+	  var loading = _ref.loading;
 	  return {
+	    loading: loading['currentUser'],
 	    errors: session.errors
 	  };
 	};
@@ -70111,6 +70169,10 @@
 	var _react2 = _interopRequireDefault(_react);
 	
 	var _reactRouter = __webpack_require__(441);
+	
+	var _loading_page = __webpack_require__(530);
+	
+	var _loading_page2 = _interopRequireDefault(_loading_page);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -70181,39 +70243,43 @@
 	      );
 	
 	      return _react2.default.createElement(
-	        'form',
-	        { onSubmit: this.onSubmit, className: 'registration-form' },
-	        this.props.errors,
-	        _react2.default.createElement('input', {
-	          autoFocus: true,
-	          type: 'email',
-	          placeholder: 'Email',
-	          onChange: this.update("email"),
-	          value: this.state.email }),
-	        _react2.default.createElement('input', {
-	          type: 'password',
-	          placeholder: 'Password',
-	          onChange: this.update("password"),
-	          value: this.state.password }),
-	        confirm,
+	        _loading_page2.default,
+	        { loading: this.props.loading, light: true },
 	        _react2.default.createElement(
-	          'div',
-	          { className: 'buttons' },
+	          'form',
+	          { onSubmit: this.onSubmit, className: 'registration-form' },
+	          this.props.errors,
+	          _react2.default.createElement('input', {
+	            autoFocus: true,
+	            type: 'email',
+	            placeholder: 'Email',
+	            onChange: this.update("email"),
+	            value: this.state.email }),
+	          _react2.default.createElement('input', {
+	            type: 'password',
+	            placeholder: 'Password',
+	            onChange: this.update("password"),
+	            value: this.state.password }),
+	          confirm,
 	          _react2.default.createElement(
-	            'button',
-	            { type: 'submit', disabled: !matching },
-	            this.props.loginForm ? "Login" : "Sign Up"
+	            'div',
+	            { className: 'buttons' },
+	            _react2.default.createElement(
+	              'button',
+	              { type: 'submit', disabled: !matching },
+	              this.props.loginForm ? "Login" : "Sign Up"
+	            ),
+	            _react2.default.createElement(
+	              'button',
+	              { onClick: this.props.onCancel },
+	              'Cancel'
+	            )
 	          ),
 	          _react2.default.createElement(
-	            'button',
-	            { onClick: this.props.onCancel },
-	            'Cancel'
+	            'div',
+	            null,
+	            link
 	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          null,
-	          link
 	        )
 	      );
 	    }
@@ -71134,9 +71200,12 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var mapStateToProps = function mapStateToProps(state) {
+	var mapStateToProps = function mapStateToProps(_ref) {
+	  var templates = _ref.templates;
+	  var loading = _ref.loading;
 	  return {
-	    sites: (0, _entity_utils.toArray)(state.templates),
+	    sites: (0, _entity_utils.toArray)(templates),
+	    loading: loading['templates'],
 	    title: 'Website Templates',
 	    form: false
 	  };

@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import LoadingPage from '../ui/loading_page.jsx';
 
 export default class NewSiteForm extends Component {
   constructor(props) {
@@ -20,18 +21,22 @@ export default class NewSiteForm extends Component {
 
   render() {
     return (
-      <form onSubmit={this.submit} className="new-site-form">
-        <input
-          placeholder="Site Name"
-          type="text"
-          value={this.state.name}
-          onChange={this.update("name")}/>
-        <textarea
-          placeholder="Description"
-          value={this.state.description}
-          onChange={this.update("description")}/>
-        <button type="submit">Create</button>
-      </form>
+      <div className="new-site-form">
+        <LoadingPage loading={this.props.loading} small={true}>
+          <form onSubmit={this.submit}>
+            <input
+              placeholder="Site Name"
+              type="text"
+              value={this.state.name}
+              onChange={this.update("name")}/>
+            <textarea
+              placeholder="Description"
+              value={this.state.description}
+              onChange={this.update("description")}/>
+            <button type="submit">Create</button>
+          </form>
+        </LoadingPage>
+      </div>
     );
   }
 }

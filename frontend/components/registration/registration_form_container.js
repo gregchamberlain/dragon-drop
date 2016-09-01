@@ -7,7 +7,8 @@ const mapDispatchToProps = dispatch => ({
   signup: user => dispatch(ACTIONS.signup(user))
 });
 
-const mapStateToProps = ({ session }) => ({
+const mapStateToProps = ({ session, loading }) => ({
+  loading: loading['currentUser'],
   errors: session.errors
 });
 

@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 import NewSiteForm from './new_site_form.jsx';
 import { createSite } from '../../actions/site_actions.js';
 
-const mapStateToProps = state => ({
-
+const mapStateToProps = ({ loading }) => ({
+  loading: loading['new-site']
 });
 
 const mapDispatchToProps = dispatch => ({

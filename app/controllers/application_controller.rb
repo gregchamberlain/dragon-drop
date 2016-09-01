@@ -3,6 +3,11 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   # protect_from_forgery with: :exception
   helper_method :current_user
+  before_action :wait
+
+  def wait
+    sleep(1)
+  end
 
   def current_user
     @current_user ||= User.find_by_session_token(session[:session_token])
@@ -18,7 +23,6 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize
-    sleep(3)
     unless current_user
       render json: ["You need to log in to edit sites"], status: 403
     end

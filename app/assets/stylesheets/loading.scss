@@ -4,12 +4,41 @@
   justify-content: center;
   flex-direction: column;
   height: 100%;
+}
+
+.loading-grid {
 
   .loading-message {
     font-size: 20px;
-    color: #444
+    color: #444;
+  }
+
+  &.small {
+    .loading-message {
+      font-size: 14px;
+
+    }
+
+    .sk-cube-grid {
+      width: 40px;
+      height: 40px;
+      margin: 20px auto;
+    }
+  }
+
+  &.light {
+
+    .loading-message {
+      color: #ccc;
+    }
+
+    .sk-cube-grid .sk-cube {
+      background-color: #ccc;
+    }
+
   }
 }
+
 
 .sk-cube-grid {
   width: 80px;

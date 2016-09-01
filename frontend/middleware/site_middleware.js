@@ -37,13 +37,16 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
       );
       return next(action);
     case ACTIONS.CREATE_SITE:
+      dispatch(startLoading('new-site', 'Creating Site...'));
       API.createSite(
         action.site,
         response => {
+          dispatch(stopLoading('new-site'));
           dispatch(receiveEntity(normalize(response, site)));
           dispatch(createNotification('success', 'Site successfully created!'));
         },
         err => {
+          dispatch(stopLoading('new-site'));
           err.responseJSON.forEach(m => dispatch(createNotification('error', m)));
           dispatch(loadingEntity(false));
         }

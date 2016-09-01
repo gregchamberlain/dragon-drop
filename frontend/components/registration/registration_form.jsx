@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link, withRouter } from 'react-router';
+import LoadingPage from '../ui/loading_page.jsx';
 
 class RegistrationForm extends Component {
   constructor(props) {
@@ -47,28 +48,30 @@ class RegistrationForm extends Component {
     );
 
     return (
-      <form onSubmit={this.onSubmit} className="registration-form">
-        {this.props.errors}
-          <input
-            autoFocus={true}
-            type="email"
-            placeholder="Email"
-            onChange={this.update("email")}
-            value={this.state.email}/>
-          <input
-            type="password"
-            placeholder="Password"
-            onChange={this.update("password")}
-            value={this.state.password}/>
-        {confirm}
-        <div className="buttons">
-          <button type="submit" disabled={!matching}>
-            {this.props.loginForm ? "Login" : "Sign Up"}
-          </button>
-          <button onClick={this.props.onCancel}>Cancel</button>
-        </div>
-        <div>{link}</div>
-      </form>
+      <LoadingPage loading={this.props.loading} light={true}>
+        <form onSubmit={this.onSubmit} className="registration-form">
+          {this.props.errors}
+            <input
+              autoFocus={true}
+              type="email"
+              placeholder="Email"
+              onChange={this.update("email")}
+              value={this.state.email}/>
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={this.update("password")}
+              value={this.state.password}/>
+          {confirm}
+          <div className="buttons">
+            <button type="submit" disabled={!matching}>
+              {this.props.loginForm ? "Login" : "Sign Up"}
+            </button>
+            <button onClick={this.props.onCancel}>Cancel</button>
+          </div>
+          <div>{link}</div>
+        </form>
+      </LoadingPage>
     );
   }
 }
