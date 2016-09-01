@@ -2,7 +2,7 @@ class Site < ActiveRecord::Base
 	has_many :pages
 	belongs_to :user
 
-	validates :name, :identifier, :user_id, presence: true
+	validates :name, :user_id, presence: true
 	validates :identifier, uniqueness: true
 	after_initialize :ensure_identifier
 
@@ -20,7 +20,11 @@ class Site < ActiveRecord::Base
 	end
 
 	def self.generateUniqueIdentifier(name)
-		identifier = name.downcase.gsub(/[^0-9a-z ]/i, '').gsub(" ", "-");
+		if name
+			identifier = name.downcase.gsub(/[^0-9a-z ]/i, '').gsub(" ", "-");
+		else
+			identifier = "#{adjs.sample}-#{nouns.sample}"
+		end
 		while (Site.find_by_identifier(identifier))
 			identifier = "#{adjs.sample}-#{nouns.sample}"
 		end

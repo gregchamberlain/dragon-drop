@@ -12,6 +12,7 @@ import { fetchSites, fetchSite } from '../util/router_utils.js';
 import PageEditor from '../components/sites/pages/page_editor.jsx';
 import PagesMain from '../components/sites/pages/pages_main_container.jsx';
 import SiteSettings from '../components/sites/settings/settings_container.jsx';
+import Notifications from './ui/notifications.jsx';
 
 const validateUser = (store) => {
   return (nextState, replace) => {
@@ -34,24 +35,26 @@ const takeCurrentUserToSites = (store) => {
 
 const Root = ({ store, history }) => (
   <Provider store={store}>
-    <Router history={history}>
-      <Route path="/" component={Home}>
-        <Route path="login" component={RegistrationLayout}/>
-        <Route path="signup" component={RegistrationLayout}/>
-      </Route>
-      <Route path="/sites" onEnter={validateUser(store)}>
-        <IndexRoute component={SitesIndex} onEnter={fetchSites(store)}/>
-        <Route path=":siteId" component={SiteDetail} onEnter={fetchSite(store)}>
-          <IndexRedirect to='editor' />
-          <Route path="editor" component={PagesMain}>
-            <IndexRoute component={PageEditor} />
-          </Route>
-          <Route path="store" component={() => <div>Store</div>}/>
-          <Route path="analytics" component={() => <div>Analytics</div>}/>
-          <Route path="settings" component={SiteSettings}/>
+    <Notifications>
+      <Router history={history}>
+        <Route path="/" component={Home}>
+          <Route path="login" component={RegistrationLayout}/>
+          <Route path="signup" component={RegistrationLayout}/>
         </Route>
-      </Route>
-    </Router>
+        <Route path="/sites" onEnter={validateUser(store)}>
+          <IndexRoute component={SitesIndex} onEnter={fetchSites(store)}/>
+          <Route path=":siteId" component={SiteDetail} onEnter={fetchSite(store)}>
+            <IndexRedirect to='editor' />
+            <Route path="editor" component={PagesMain}>
+              <IndexRoute component={PageEditor} />
+            </Route>
+            <Route path="store" component={() => <div>Store</div>}/>
+            <Route path="analytics" component={() => <div>Analytics</div>}/>
+            <Route path="settings" component={SiteSettings}/>
+          </Route>
+        </Route>
+      </Router>
+    </Notifications>
   </Provider>
 );
 

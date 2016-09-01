@@ -12,7 +12,7 @@ const right = [
   <Link to="/signup">Sign Up</Link>,
 ];
 
-const SitesIndex = ({ sites, currentUser, logout, loading }) => (
+const SitesIndex = ({ sites, currentUser, logout, loading, createNotification }) => (
   <Toolbar brand={brand} right={[<a href="javascript:void(0)" onClick={logout}>Logout</a>]}>
     <LoadingPage loading={loading}>
       <div className='sites-index'>

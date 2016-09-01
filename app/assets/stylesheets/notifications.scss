@@ -1,0 +1,21 @@
+.notifications-enter {
+  opacity: 0.01;
+  transform: translateY(200%);
+}
+
+.notifications-enter.notifications-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 500ms ease-in, transform 300ms ease-in;
+}
+
+.notifications-leave {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.notifications-leave.notifications-leave-active {
+  opacity: 0.01;
+  transform: translateX(-200%);
+  transition: opacity 300ms ease-in, transform 300ms ease-in;
+}

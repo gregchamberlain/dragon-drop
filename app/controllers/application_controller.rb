@@ -21,5 +21,6 @@ class ApplicationController < ActionController::Base
     unless current_user
       render json: ["You need to log in to edit sites"], status: 403
     end
+    sleep(2)
   end
 end

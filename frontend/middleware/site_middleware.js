@@ -4,6 +4,7 @@ import * as API from '../util/site_api.js';
 import { arrayOfSites, site } from '../actions/schema.js';
 import { normalize } from 'normalizr';
 import { push } from 'react-router-redux';
+import { createNotification } from '../actions/notification_actions.js';
 
 const SiteMiddleware = ({ getState, dispatch }) => next => action => {
   switch (action.type) {
@@ -12,7 +13,10 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
       API.fetchSites((sites) => {
         dispatch(receiveEntity(normalize(sites, arrayOfSites)));
       },
-      err => console.log(err)
+      err => {
+        err.responseJSON.forEach(m => dispatch(createNotification('error', m)));
+        dispatch(loadingEntity(false));
+      }
       );
       return next(action);
     case ACTIONS.REQUEST_SITE:
@@ -21,22 +25,38 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
         action.siteId,
         response => {
           dispatch(receiveEntity(normalize(response, site)));
+        },
+        err => {
+          err.responseJSON.forEach(m => dispatch(createNotification('error', m)));
+          dispatch(loadingEntity(false));
         }
       );
       return next(action);
     case ACTIONS.CREATE_SITE:
       API.createSite(
         action.site,
-        response => dispatch(receiveEntity(normalize(response, site))),
-        err => console.log(err)
+        response => {
+          dispatch(receiveEntity(normalize(response, site)));
+          dispatch(createNotification('success', 'Site successfully created!'));
+        },
+        err => {
+          err.responseJSON.forEach(m => dispatch(createNotification('error', m)));
+          dispatch(loadingEntity(false));
+        }
       );
       return next(action);
     case ACTIONS.UPDATE_SITE:
       dispatch(loadingEntity(action.site.id));
       API.updateSite(
         action.site,
-        response => dispatch(receiveEntity(normalize(response, site))),
-        err => console.log(err)
+        response => {
+          dispatch(receiveEntity(normalize(response, site)));
+          dispatch(createNotification('success', 'Site successfully updated!'));
+        },
+        err => {
+          err.responseJSON.forEach(m => dispatch(createNotification('error', m)));
+          dispatch(loadingEntity(false));
+        }
       );
       return next(action);
     case ACTIONS.DESTROY_SITE:
@@ -47,7 +67,10 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
           dispatch(removeEntity(normalize(response, site)));
           dispatch(push('/sites'));
         },
-        err => console.log(err)
+        err => {
+          err.responseJSON.forEach(m => dispatch(createNotification('error', m)));
+          dispatch(loadingEntity(false));
+        }
       );
       return next(action);
     default:

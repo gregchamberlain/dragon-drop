@@ -21,7 +21,7 @@ class Api::SitesController < ApplicationController
 		if @site.save
 			render json: @site.to_json(include: :pages)
 		else
-			render json: @site.errors
+			render json: @site.errors.full_messages, status: 400
 		end
 	end
 
@@ -34,7 +34,7 @@ class Api::SitesController < ApplicationController
 		if @site.destroy
 			render json: @site
 		else
-			render json: @site.errors.full_messages
+			render json: @site.errors.full_messages, status: 400
 		end
 	end
 

@@ -22347,6 +22347,10 @@
 	
 	var _session_reducer2 = _interopRequireDefault(_session_reducer);
 	
+	var _notification_reducer = __webpack_require__(549);
+	
+	var _notification_reducer2 = _interopRequireDefault(_notification_reducer);
+	
 	var _reactRouterRedux = __webpack_require__(337);
 	
 	var _redux = __webpack_require__(173);
@@ -22360,7 +22364,8 @@
 	  sites: _site_reducer2.default,
 	  pages: _page_reducer2.default,
 	  session: _session_reducer2.default,
-	  routing: _reactRouterRedux.routerReducer
+	  routing: _reactRouterRedux.routerReducer,
+	  notifications: _notification_reducer2.default
 	});
 
 /***/ },
@@ -57851,6 +57856,10 @@
 	
 	var _session_middleware2 = _interopRequireDefault(_session_middleware);
 	
+	var _notification_middleware = __webpack_require__(550);
+	
+	var _notification_middleware2 = _interopRequireDefault(_notification_middleware);
+	
 	var _reactRouterRedux = __webpack_require__(337);
 	
 	var _reactRouter = __webpack_require__(433);
@@ -57859,7 +57868,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	exports.default = (0, _redux.applyMiddleware)(_layout_middleware2.default, _site_middleware2.default, _page_middleware2.default, _session_middleware2.default, (0, _reactRouterRedux.routerMiddleware)(_reactRouter.hashHistory));
+	exports.default = (0, _redux.applyMiddleware)(_layout_middleware2.default, _site_middleware2.default, _page_middleware2.default, _session_middleware2.default, _notification_middleware2.default, (0, _reactRouterRedux.routerMiddleware)(_reactRouter.hashHistory));
 
 /***/ },
 /* 343 */
@@ -58010,6 +58019,8 @@
 	
 	var _reactRouterRedux = __webpack_require__(337);
 	
+	var _notification_actions = __webpack_require__(551);
+	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	var SiteMiddleware = function SiteMiddleware(_ref) {
@@ -58023,28 +58034,44 @@
 	          API.fetchSites(function (sites) {
 	            dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(sites, _schema.arrayOfSites)));
 	          }, function (err) {
-	            return console.log(err);
+	            err.responseJSON.forEach(function (m) {
+	              return dispatch((0, _notification_actions.createNotification)('error', m));
+	            });
+	            dispatch((0, _entity_actions.loadingEntity)(false));
 	          });
 	          return next(action);
 	        case ACTIONS.REQUEST_SITE:
 	          dispatch((0, _entity_actions.loadingEntity)(action.siteId));
 	          API.fetchSite(action.siteId, function (response) {
 	            dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(response, _schema.site)));
+	          }, function (err) {
+	            err.responseJSON.forEach(function (m) {
+	              return dispatch((0, _notification_actions.createNotification)('error', m));
+	            });
+	            dispatch((0, _entity_actions.loadingEntity)(false));
 	          });
 	          return next(action);
 	        case ACTIONS.CREATE_SITE:
 	          API.createSite(action.site, function (response) {
-	            return dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(response, _schema.site)));
+	            dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(response, _schema.site)));
+	            dispatch((0, _notification_actions.createNotification)('success', 'Site successfully created!'));
 	          }, function (err) {
-	            return console.log(err);
+	            err.responseJSON.forEach(function (m) {
+	              return dispatch((0, _notification_actions.createNotification)('error', m));
+	            });
+	            dispatch((0, _entity_actions.loadingEntity)(false));
 	          });
 	          return next(action);
 	        case ACTIONS.UPDATE_SITE:
 	          dispatch((0, _entity_actions.loadingEntity)(action.site.id));
 	          API.updateSite(action.site, function (response) {
-	            return dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(response, _schema.site)));
+	            dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(response, _schema.site)));
+	            dispatch((0, _notification_actions.createNotification)('success', 'Site successfully updated!'));
 	          }, function (err) {
-	            return console.log(err);
+	            err.responseJSON.forEach(function (m) {
+	              return dispatch((0, _notification_actions.createNotification)('error', m));
+	            });
+	            dispatch((0, _entity_actions.loadingEntity)(false));
 	          });
 	          return next(action);
 	        case ACTIONS.DESTROY_SITE:
@@ -58053,7 +58080,10 @@
 	            dispatch((0, _entity_actions.removeEntity)((0, _normalizr.normalize)(response, _schema.site)));
 	            dispatch((0, _reactRouterRedux.push)('/sites'));
 	          }, function (err) {
-	            return console.log(err);
+	            err.responseJSON.forEach(function (m) {
+	              return dispatch((0, _notification_actions.createNotification)('error', m));
+	            });
+	            dispatch((0, _entity_actions.loadingEntity)(false));
 	          });
 	          return next(action);
 	        default:
@@ -66838,6 +66868,10 @@
 	
 	var _settings_container2 = _interopRequireDefault(_settings_container);
 	
+	var _notifications = __webpack_require__(552);
+	
+	var _notifications2 = _interopRequireDefault(_notifications);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var validateUser = function validateUser(store) {
@@ -66866,42 +66900,46 @@
 	    _reactRedux.Provider,
 	    { store: store },
 	    _react2.default.createElement(
-	      _reactRouter.Router,
-	      { history: history },
+	      _notifications2.default,
+	      null,
 	      _react2.default.createElement(
-	        _reactRouter.Route,
-	        { path: '/', component: _home2.default },
-	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _registration_layout2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _registration_layout2.default })
-	      ),
-	      _react2.default.createElement(
-	        _reactRouter.Route,
-	        { path: '/sites', onEnter: validateUser(store) },
-	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _sites_index_container2.default, onEnter: (0, _router_utils.fetchSites)(store) }),
+	        _reactRouter.Router,
+	        { history: history },
 	        _react2.default.createElement(
 	          _reactRouter.Route,
-	          { path: ':siteId', component: _site_detail_container2.default, onEnter: (0, _router_utils.fetchSite)(store) },
-	          _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'editor' }),
+	          { path: '/', component: _home2.default },
+	          _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _registration_layout2.default }),
+	          _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _registration_layout2.default })
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Route,
+	          { path: '/sites', onEnter: validateUser(store) },
+	          _react2.default.createElement(_reactRouter.IndexRoute, { component: _sites_index_container2.default, onEnter: (0, _router_utils.fetchSites)(store) }),
 	          _react2.default.createElement(
 	            _reactRouter.Route,
-	            { path: 'editor', component: _pages_main_container2.default },
-	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _page_editor2.default })
-	          ),
-	          _react2.default.createElement(_reactRouter.Route, { path: 'store', component: function component() {
-	              return _react2.default.createElement(
-	                'div',
-	                null,
-	                'Store'
-	              );
-	            } }),
-	          _react2.default.createElement(_reactRouter.Route, { path: 'analytics', component: function component() {
-	              return _react2.default.createElement(
-	                'div',
-	                null,
-	                'Analytics'
-	              );
-	            } }),
-	          _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings_container2.default })
+	            { path: ':siteId', component: _site_detail_container2.default, onEnter: (0, _router_utils.fetchSite)(store) },
+	            _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'editor' }),
+	            _react2.default.createElement(
+	              _reactRouter.Route,
+	              { path: 'editor', component: _pages_main_container2.default },
+	              _react2.default.createElement(_reactRouter.IndexRoute, { component: _page_editor2.default })
+	            ),
+	            _react2.default.createElement(_reactRouter.Route, { path: 'store', component: function component() {
+	                return _react2.default.createElement(
+	                  'div',
+	                  null,
+	                  'Store'
+	                );
+	              } }),
+	            _react2.default.createElement(_reactRouter.Route, { path: 'analytics', component: function component() {
+	                return _react2.default.createElement(
+	                  'div',
+	                  null,
+	                  'Analytics'
+	                );
+	              } }),
+	            _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings_container2.default })
+	          )
 	        )
 	      )
 	    )
@@ -68485,6 +68523,7 @@
 	  var currentUser = _ref.currentUser;
 	  var logout = _ref.logout;
 	  var loading = _ref.loading;
+	  var createNotification = _ref.createNotification;
 	  return _react2.default.createElement(
 	    _toolbar2.default,
 	    { brand: brand, right: [_react2.default.createElement(
@@ -70550,6 +70589,213 @@
 	}(_react.Component);
 	
 	exports.default = NewSiteForm;
+
+/***/ },
+/* 549 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _notification_actions = __webpack_require__(551);
+	
+	var count = 0;
+	var NotificationReducer = function NotificationReducer() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _notification_actions.CREATE_NOTIFICATION:
+	      return state.concat({ id: count++, type: action.status, message: action.message });
+	    case _notification_actions.DESTROY_NOTIFICATION:
+	      return state.slice(1);
+	    default:
+	      return state;
+	  }
+	};
+	
+	exports.default = NotificationReducer;
+
+/***/ },
+/* 550 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _notification_actions = __webpack_require__(551);
+	
+	var NotificationMiddleware = function NotificationMiddleware(_ref) {
+	  var getState = _ref.getState;
+	  var dispatch = _ref.dispatch;
+	  return function (next) {
+	    return function (action) {
+	      switch (action.type) {
+	        case _notification_actions.CREATE_NOTIFICATION:
+	          setTimeout(function () {
+	            dispatch((0, _notification_actions.destroyNotification)());
+	          }, 3000);
+	          return next(action);
+	        default:
+	          return next(action);
+	      }
+	    };
+	  };
+	};
+	
+	exports.default = NotificationMiddleware;
+
+/***/ },
+/* 551 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var CREATE_NOTIFICATION = exports.CREATE_NOTIFICATION = 'CREATE_NOTIFICATION';
+	var DESTROY_NOTIFICATION = exports.DESTROY_NOTIFICATION = 'DESTROY_NOTIFICATION';
+	
+	var createNotification = exports.createNotification = function createNotification(status, message) {
+	  return {
+	    type: CREATE_NOTIFICATION,
+	    status: status,
+	    message: message
+	  };
+	};
+	
+	var destroyNotification = exports.destroyNotification = function destroyNotification() {
+	  return {
+	    type: DESTROY_NOTIFICATION
+	  };
+	};
+
+/***/ },
+/* 552 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(497);
+	
+	var _notification_item = __webpack_require__(553);
+	
+	var _notification_item2 = _interopRequireDefault(_notification_item);
+	
+	var _reactAddonsCssTransitionGroup = __webpack_require__(505);
+	
+	var _reactAddonsCssTransitionGroup2 = _interopRequireDefault(_reactAddonsCssTransitionGroup);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Notifications = function Notifications(_ref) {
+	  var notifications = _ref.notifications;
+	  var children = _ref.children;
+	  return _react2.default.createElement(
+	    'div',
+	    { style: styles.wrapper },
+	    children,
+	    _react2.default.createElement(
+	      'div',
+	      { style: styles.tray },
+	      _react2.default.createElement(
+	        _reactAddonsCssTransitionGroup2.default,
+	        {
+	          transitionName: 'notifications',
+	          transitionEnterTimeout: 500,
+	          transitionLeaveTimeout: 300 },
+	        notifications.map(function (item) {
+	          return _react2.default.createElement(_notification_item2.default, { key: item.id, notification: item });
+	        })
+	      )
+	    )
+	  );
+	};
+	
+	var styles = {
+	  wrapper: {
+	    width: '100%',
+	    height: '100%'
+	  },
+	  tray: {
+	    position: 'fixed',
+	    bottom: 0,
+	    width: 300
+	  }
+	};
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    notifications: state.notifications
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Notifications);
+
+/***/ },
+/* 553 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var getBG = function getBG(n) {
+	  switch (n.type) {
+	    case "success":
+	      return '#4CAF50';
+	    case "error":
+	      return '#f44336';
+	    default:
+	      return '#444';
+	  }
+	};
+	
+	var NotificationItem = function NotificationItem(_ref) {
+	  var notification = _ref.notification;
+	  return _react2.default.createElement(
+	    'div',
+	    { style: _extends({}, styles, { background: getBG(notification) }) },
+	    notification.message
+	  );
+	};
+	
+	var styles = {
+	  width: '100%',
+	  background: '#888',
+	  boxShadow: '2px 2px 10px black',
+	  borderRadius: 2,
+	  color: '#fff',
+	  padding: 15,
+	  margin: 15
+	};
+	
+	exports.default = NotificationItem;
 
 /***/ }
 /******/ ]);
