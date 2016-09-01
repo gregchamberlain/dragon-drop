@@ -69708,10 +69708,6 @@
 	
 	var _toolbar2 = _interopRequireDefault(_toolbar);
 	
-	var _header_bar_container = __webpack_require__(559);
-	
-	var _header_bar_container2 = _interopRequireDefault(_header_bar_container);
-	
 	var _reactRouter = __webpack_require__(439);
 	
 	var _reactRedux = __webpack_require__(503);
@@ -69742,7 +69738,35 @@
 	  return _react2.default.createElement(
 	    'div',
 	    { style: { height: '100%' } },
-	    _react2.default.createElement(_header_bar_container2.default, null),
+	    _react2.default.createElement(
+	      'header',
+	      { className: 'home-header' },
+	      _react2.default.createElement(
+	        'nav',
+	        { className: 'content' },
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/', className: 'brand' },
+	          'DRAGONDROP'
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/templates' },
+	          'Templates'
+	        ),
+	        _react2.default.createElement('div', { className: 'flex-space' }),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: 'signup' },
+	          'Sign Up'
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: 'login', className: 'border' },
+	          'Login'
+	        )
+	      )
+	    ),
 	    _react2.default.createElement(
 	      'section',
 	      { className: 'home-section splash-image' },
