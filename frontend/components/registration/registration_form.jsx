@@ -28,9 +28,13 @@ class RegistrationForm extends Component {
   }
 
   render() {
+
+    const matching = this.props.loginForm ? true : this.state.password === this.state.confirm
+
     const confirm = this.props.loginForm ? "" : (
         <input
           type="password"
+          className={matching ? "" : "invalid"}
           placeholder="Confirm Password"
           onChange={this.update("confirm")}
           value={this.state.confirm}/>
@@ -58,7 +62,9 @@ class RegistrationForm extends Component {
             value={this.state.password}/>
         {confirm}
         <div className="buttons">
-          <button type="submit">{this.props.loginForm ? "Login" : "Sign Up"}</button>
+          <button type="submit" disabled={!matching}>
+            {this.props.loginForm ? "Login" : "Sign Up"}
+          </button>
           <button onClick={this.props.onCancel}>Cancel</button>
         </div>
         <div>{link}</div>
