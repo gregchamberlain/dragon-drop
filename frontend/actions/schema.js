@@ -3,6 +3,9 @@ import { normalize, Schema, arrayOf } from 'normalizr';
 export const site = new Schema('sites');
 export const arrayOfSites = arrayOf(site);
 
+export const template = new Schema('templates');
+export const arrayOfTemplates = arrayOf(template);
+
 export const page = new Schema('pages');
 export const arrayOfPages = arrayOf(page);
 
@@ -14,5 +17,9 @@ page.define({
 });
 
 site.define({
+  pages: arrayOfPages
+});
+
+template.define({
   pages: arrayOfPages
 });

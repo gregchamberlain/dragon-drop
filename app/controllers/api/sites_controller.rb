@@ -17,7 +17,6 @@ class Api::SitesController < ApplicationController
 
 	def create
 		@site = current_user.sites.new(site_params);
-		@site.pages.new(name: 'Home', path: '/');
 		if @site.save
 			render json: @site.to_json(include: :pages)
 		else
@@ -47,7 +46,7 @@ class Api::SitesController < ApplicationController
 	end
 
 	def site_params
-		params.require(:site).permit(:name, :description, :identifier)
+		params.require(:site).permit(:name, :description, :identifier, :template)
 	end
 
 end

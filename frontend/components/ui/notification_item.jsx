@@ -20,7 +20,7 @@ const NotificationItem = ({ notification }) => (
 const styles = {
   width: '100%',
   background: '#888',
-  boxShadow: '2px 2px 10px black',
+  boxShadow: '0 1px 3px 0 rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 2px 1px -1px rgba(0,0,0,0.12)',
   borderRadius: 2,
   color: '#fff',
   padding: 15,

@@ -18,23 +18,55 @@
 
 
 		a {
+			position: relative;
 			cursor: pointer;
 			padding: 0.75% 3.5%;
 			text-decoration: none;
 			color: #fff;
 			font-size: 12px;
 			text-transform: uppercase;
-			border-radius: 2px;
+			border-radius: 1px;
+
+			&:not(.border) {
+				&:after {
+					content: "";
+					border-bottom: 1px solid white;
+					display: block;
+					margin-top: 8px;
+					position: absolute;
+					left: 50%;
+					right: 50%;
+					transition: left 0.5s, right 0.5s;
+				}
+				&:hover {
+					&:after {
+						right: 30px;
+						left: 30px;
+					}
+				}
+
+			}
+
 
 			&.brand {
 				cursor: pointer;
 				font-weight: 300;
 				font-size: 20px;
+				padding-right: 0;
+				&:after {
+					display: none;
+				}
 			}
 		}
 
 		.border {
-			border: 1px solid rgba(255, 255, 255, 0.7);
+			border: 1px solid rgba(255, 255, 255, 0.9);
+			transition: background 0.2s ease-in, color 0.2s ease-in, text-shadow 0.2s ease-in;
+			&:hover {
+				background: rgba(255, 255, 255, 0.9);
+				color: #000;
+				text-shadow: none;
+			}
 		}
 	}
 }
@@ -50,7 +82,13 @@
 	color: #fff;
 	text-transform: uppercase;
 	border-radius: 2px;
-	box-shadow: 0 0 10px black, inset 0 0 10px black;
+	transition: background 0.2s ease-in, color 0.2s ease-in;
+	&:hover {
+		background: rgba(255, 255, 255, 0.9);
+		color: #000;
+		box-shadow: none;
+		text-shadow: none;
+	}
 }
 
 .home-section {

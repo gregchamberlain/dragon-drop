@@ -58,8 +58,8 @@ class RegistrationForm extends Component {
             value={this.state.password}/>
         {confirm}
         <div className="buttons">
-          <button onClick={this.props.onCancel}>Cancel</button>
           <button type="submit">{this.props.loginForm ? "Login" : "Sign Up"}</button>
+          <button onClick={this.props.onCancel}>Cancel</button>
         </div>
         <div>{link}</div>
       </form>

@@ -4,8 +4,12 @@ class Site < ActiveRecord::Base
 
 	validates :name, :user_id, presence: true
 	validates :identifier, uniqueness: true
-	after_initialize :ensure_identifier
+	after_initialize :ensure_identifier, :create_home
 
+	def create_home
+		p self
+		self.pages.new(name: 'Home', path: '/') if self.pages.empty?
+	end
 
 	def ensure_identifier
 		self.identifier ||= Site.generateUniqueIdentifier(name)

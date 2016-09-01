@@ -1,6 +1,7 @@
 import * as ACTIONS from '../actions/session_actions.js';
 import * as API from '../util/user_api.js';
 import { push } from 'react-router-redux';
+import { createNotification } from '../actions/notification_actions.js';
 
 const SessionMiddleware = ({getState, dispatch}) => next => action => {
   switch (action.type) {
@@ -11,7 +12,12 @@ const SessionMiddleware = ({getState, dispatch}) => next => action => {
           dispatch(ACTIONS.receiveCurrentUser(user));
           dispatch(push('/sites'));
         },
-        err => dispatch(ACTIONS.receiveErrors(err.responseJSON))
+        err => {
+          dispatch(ACTIONS.receiveCurrentUser(null));
+          err.responseJSON.forEach(m => {
+            dispatch(createNotification('error', m));
+          });
+        }
       );
       return next(action);
     case ACTIONS.LOGOUT:
@@ -20,7 +26,10 @@ const SessionMiddleware = ({getState, dispatch}) => next => action => {
           dispatch(ACTIONS.receiveCurrentUser(null));
           dispatch(push('/'));
         },
-        err => dispatch(ACTIONS.receiveErrors(err.responseJSON))
+        err => err.responseJSON.forEach(m => {
+          dispatch(ACTIONS.receiveCurrentUser(null));
+          dispatch(createNotification('error', m));
+        })
       );
       return next(action);
     case ACTIONS.SIGNUP:
@@ -30,7 +39,12 @@ const SessionMiddleware = ({getState, dispatch}) => next => action => {
           dispatch(ACTIONS.receiveCurrentUser(user));
           dispatch(push('/sites'));
         },
-        err => dispatch(ACTIONS.receiveErrors(err.responseJSON))
+        err => {
+          dispatch(ACTIONS.receiveCurrentUser(null));
+          err.responseJSON.forEach(m => {
+            dispatch(createNotification('error', m));
+          });
+        }
       );
       return next(action);
     default:

@@ -4,6 +4,7 @@ import ItemReducer from './item_reducer.js';
 import SiteReducer from './site_reducer.js';
 import PageReducer from './page_reducer.js';
 import SessionReducer from './session_reducer.js';
+import TemplateReducer from './template_reducer.js';
 import NotificationReducer from './notification_reducer.js';
 import { routerReducer } from 'react-router-redux';
 import { combineReducers } from 'redux';
@@ -16,5 +17,6 @@ export default combineReducers({
   pages: PageReducer,
   session: SessionReducer,
   routing: routerReducer,
+  templates: TemplateReducer,
   notifications: NotificationReducer
 });

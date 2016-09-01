@@ -44,3 +44,12 @@ export const createSite = (site, success, error) => {
     error
   });
 };
+
+export const fetchTemplates = (success, error) => {
+  $.ajax({
+    method: 'GET',
+    url: 'api/templates',
+    success,
+    error
+  });
+};

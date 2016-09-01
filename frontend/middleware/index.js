@@ -3,6 +3,7 @@ import SiteMiddleware from './site_middleware.js';
 import PageMiddleware from './page_middleware.js';
 import SessionMiddleware from './session_middleware.js';
 import NotificationMiddleware from './notification_middleware.js';
+import TemplateMiddleware from './template_middleware.js';
 import { routerMiddleware } from 'react-router-redux';
 import { hashHistory } from 'react-router';
 
@@ -14,5 +15,6 @@ export default applyMiddleware(
   PageMiddleware,
   SessionMiddleware,
   NotificationMiddleware,
+  TemplateMiddleware,
   routerMiddleware(hashHistory)
 );

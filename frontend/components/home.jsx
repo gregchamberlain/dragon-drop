@@ -15,6 +15,7 @@ const Home = ({ children, loading, loginAsGuest  }) => {
       <header className="home-header">
         <nav className="content">
           <Link to="/" className="brand">DRAGONDROP</Link>
+          <Link to="/templates">Templates</Link>
           <div className="flex-space"/>
           <Link to="signup">Sign Up</Link>
           <Link to="login" className="border">Login</Link>
@@ -29,7 +30,7 @@ const Home = ({ children, loading, loginAsGuest  }) => {
               <div className="bounce3"></div>
             </div>
           ) : "DEMO" }
-          
+
         </button>
         <h1>Build a better web</h1>
       </section>
