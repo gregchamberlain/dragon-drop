@@ -2,6 +2,7 @@
 
 .home-header {
 	position: absolute;
+	z-index: 1;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -47,12 +48,15 @@
 
 			}
 
+			&.nav {
+				margin: 0 -2%;
+			}
+
 
 			&.brand {
 				cursor: pointer;
 				font-weight: 300;
 				font-size: 20px;
-				padding-right: 0;
 				&:after {
 					display: none;
 				}

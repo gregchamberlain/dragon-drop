@@ -25,7 +25,8 @@ const styles = {
   tray: {
     position: 'fixed',
     bottom: 0,
-    width: 300
+    width: 300,
+    zIndex: 3,
   }
 };
 

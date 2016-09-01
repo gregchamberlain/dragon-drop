@@ -58137,6 +58137,7 @@
 	          API.fetchSite(action.siteId, function (response) {
 	            dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(response, _schema.site)));
 	          }, function (err) {
+	            dispatch((0, _reactRouterRedux.push)('/sites'));
 	            err.responseJSON.forEach(function (m) {
 	              return dispatch((0, _notification_actions.createNotification)('error', m));
 	            });
@@ -68664,11 +68665,11 @@
 	
 	var mapStateToProps = function mapStateToProps(_ref) {
 	  var sites = _ref.sites;
-	  var session = _ref.session;
 	  return {
 	    loading: sites.loading,
 	    sites: (0, _entity_utils.toArray)(sites),
-	    currentUser: session.currentUser
+	    title: 'My Websites',
+	    form: true
 	  };
 	};
 	
@@ -68706,6 +68707,10 @@
 	
 	var _toolbar2 = _interopRequireDefault(_toolbar);
 	
+	var _header_bar_container = __webpack_require__(559);
+	
+	var _header_bar_container2 = _interopRequireDefault(_header_bar_container);
+	
 	var _sites_index_item = __webpack_require__(525);
 	
 	var _sites_index_item2 = _interopRequireDefault(_sites_index_item);
@@ -68736,32 +68741,38 @@
 	)];
 	
 	var SitesIndex = function SitesIndex(_ref) {
-	  var sites = _ref.sites;
-	  var currentUser = _ref.currentUser;
-	  var logout = _ref.logout;
 	  var loading = _ref.loading;
-	  var createNotification = _ref.createNotification;
+	  var sites = _ref.sites;
+	  var title = _ref.title;
+	  var form = _ref.form;
 	  return _react2.default.createElement(
-	    _toolbar2.default,
-	    { brand: brand, right: [_react2.default.createElement(
-	        'a',
-	        { href: 'javascript:void(0)', onClick: logout },
-	        'Logout'
-	      )] },
+	    'div',
+	    { className: 'fill' },
+	    _react2.default.createElement(_header_bar_container2.default, null),
 	    _react2.default.createElement(
-	      _loading_page2.default,
-	      { loading: loading },
+	      'div',
+	      { className: 'header-photo' },
 	      _react2.default.createElement(
-	        'div',
-	        { className: 'sites-index' },
+	        'h1',
+	        null,
+	        title
+	      )
+	    ),
+	    _react2.default.createElement(
+	      'div',
+	      { className: 'sites-index' },
+	      _react2.default.createElement(
+	        _loading_page2.default,
+	        { loading: loading },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'sites-index-items' },
 	          sites.map(function (site) {
 	            return _react2.default.createElement(_sites_index_item2.default, { key: site.id, site: site });
 	          }),
-	          _react2.default.createElement(_new_site_form_container2.default, null)
-	        )
+	          form ? _react2.default.createElement(_new_site_form_container2.default, null) : ""
+	        ),
+	        _react2.default.createElement('div', { className: 'flex-space' })
 	      )
 	    )
 	  );
@@ -69697,6 +69708,10 @@
 	
 	var _toolbar2 = _interopRequireDefault(_toolbar);
 	
+	var _header_bar_container = __webpack_require__(559);
+	
+	var _header_bar_container2 = _interopRequireDefault(_header_bar_container);
+	
 	var _reactRouter = __webpack_require__(439);
 	
 	var _reactRedux = __webpack_require__(503);
@@ -69727,35 +69742,7 @@
 	  return _react2.default.createElement(
 	    'div',
 	    { style: { height: '100%' } },
-	    _react2.default.createElement(
-	      'header',
-	      { className: 'home-header' },
-	      _react2.default.createElement(
-	        'nav',
-	        { className: 'content' },
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/', className: 'brand' },
-	          'DRAGONDROP'
-	        ),
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/templates' },
-	          'Templates'
-	        ),
-	        _react2.default.createElement('div', { className: 'flex-space' }),
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: 'signup' },
-	          'Sign Up'
-	        ),
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: 'login', className: 'border' },
-	          'Login'
-	        )
-	      )
-	    ),
+	    _react2.default.createElement(_header_bar_container2.default, null),
 	    _react2.default.createElement(
 	      'section',
 	      { className: 'home-section splash-image' },
@@ -70882,7 +70869,8 @@
 	  tray: {
 	    position: 'fixed',
 	    bottom: 0,
-	    width: 300
+	    width: 300,
+	    zIndex: 3
 	  }
 	};
 	
@@ -70966,7 +70954,9 @@
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    sites: (0, _entity_utils.toArray)(state.templates)
+	    sites: (0, _entity_utils.toArray)(state.templates),
+	    title: 'Website Templates',
+	    form: false
 	  };
 	};
 	
@@ -70975,6 +70965,106 @@
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_sites_index2.default);
+
+/***/ },
+/* 558 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(439);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var HeaderBar = function HeaderBar(_ref) {
+	  var currentUser = _ref.currentUser;
+	  var logout = _ref.logout;
+	  return _react2.default.createElement(
+	    'header',
+	    { className: 'home-header' },
+	    _react2.default.createElement(
+	      'nav',
+	      { className: 'content' },
+	      _react2.default.createElement(
+	        _reactRouter.Link,
+	        { to: '/', className: 'brand' },
+	        'DRAGONDROP'
+	      ),
+	      currentUser ? _react2.default.createElement(
+	        _reactRouter.Link,
+	        { to: '/sites', className: 'nav' },
+	        'My Websites'
+	      ) : "",
+	      _react2.default.createElement(
+	        _reactRouter.Link,
+	        { to: '/templates', className: 'nav' },
+	        'Templates'
+	      ),
+	      _react2.default.createElement('div', { className: 'flex-space' }),
+	      currentUser ? _react2.default.createElement(
+	        'a',
+	        { onClick: logout },
+	        'Logout'
+	      ) : "",
+	      !currentUser ? _react2.default.createElement(
+	        _reactRouter.Link,
+	        { to: 'signup' },
+	        'Sign Up'
+	      ) : "",
+	      !currentUser ? _react2.default.createElement(
+	        _reactRouter.Link,
+	        { to: 'login', className: 'border' },
+	        'Login'
+	      ) : ""
+	    )
+	  );
+	};
+	
+	exports.default = HeaderBar;
+
+/***/ },
+/* 559 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(503);
+	
+	var _header_bar = __webpack_require__(558);
+	
+	var _header_bar2 = _interopRequireDefault(_header_bar);
+	
+	var _session_actions = __webpack_require__(336);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    currentUser: state.session.currentUser
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    logout: function logout() {
+	      return dispatch((0, _session_actions.logout)());
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_header_bar2.default);
 
 /***/ }
 /******/ ]);

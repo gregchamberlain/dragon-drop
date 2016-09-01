@@ -3,10 +3,11 @@ import SitesIndex from './sites_index.jsx';
 import { logout } from '../../actions/session_actions.js';
 import { toArray } from '../../util/entity_utils.js';
 
-const mapStateToProps = ({ sites, session }) => ({
+const mapStateToProps = ({ sites }) => ({
   loading: sites.loading,
   sites: toArray(sites),
-  currentUser: session.currentUser
+  title: 'My Websites',
+  form: true,
 });
 
 const mapDispatchToProps = dispatch => ({

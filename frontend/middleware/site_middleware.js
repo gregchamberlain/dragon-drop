@@ -27,6 +27,7 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
           dispatch(receiveEntity(normalize(response, site)));
         },
         err => {
+          dispatch(push('/sites'))
           err.responseJSON.forEach(m => dispatch(createNotification('error', m)));
           dispatch(loadingEntity(false));
         }

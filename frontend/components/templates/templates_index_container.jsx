@@ -3,7 +3,9 @@ import SitesIndex from '../sites/sites_index.jsx';
 import { toArray } from '../../util/entity_utils.js';
 
 const mapStateToProps = state => ({
-  sites: toArray(state.templates)
+  sites: toArray(state.templates),
+  title: 'Website Templates',
+  form: false,
 });
 
 const mapDispatchToProps = dispatch => ({

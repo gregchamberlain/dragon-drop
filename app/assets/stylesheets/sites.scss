@@ -1,22 +1,53 @@
 $light-blue-600: #03A9F4;
 
 .sites-index {
-  padding-top: 56px;
-  background: #eceff1;
-  height: 100%;
+  position: absolute;
+  top: 40%;
   width: 100%;
+  background: #eceff1;
+  bottom: 0;
 }
 
 .sites-index-item {
+  position: relative;
   background: #fff;
   box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 2px 1px -1px rgba(0,0,0,0.12);
-  border-radius: 2px;
+  border-radius: 5px;
   padding: 10px;
   margin: 15px;
   cursor: pointer;
+  min-width: 250px;
+  border-top: 5px solid #ccc;
+  border-left: 5px solid #ccc;
+  border-right: 5px solid #ccc;
+  border-bottom: 10px solid #ccc;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: -3px;
+    border-top: 1px solid #888;
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
+    bottom: -10px;
+    height: 10px;
+    width: calc(100% + 6px);
+  }
+
+  &:before {
+    top: -5px;
+    left: -5px;
+    border-radius: 5px;
+    content: "";
+    position: absolute;
+    width: calc(100% + 7px);
+    height: calc(100% + 12px);
+    border: 2px solid #888;
+  }
 }
 
 .sites-index-items {
+  width: 100%;
   padding: 40px;
   display: flex;
   flex-wrap: wrap;

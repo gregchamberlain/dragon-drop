@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import NewSiteModal from './new_site_modal.jsx';
 import Toolbar from '../ui/toolbar.jsx';
+import HeaderBar from '../ui/header_bar_container.jsx';
 import SitesIndexItem from './sites_index_item.jsx';
 import LoadingPage from '../ui/loading_page.jsx';
 import NewSiteForm from './new_site_form_container.js';
@@ -12,17 +13,22 @@ const right = [
   <Link to="/signup">Sign Up</Link>,
 ];
 
-const SitesIndex = ({ sites, currentUser, logout, loading, createNotification }) => (
-  <Toolbar brand={brand} right={[<a href="javascript:void(0)" onClick={logout}>Logout</a>]}>
+const SitesIndex = ({ loading, sites, title, form }) => (
+  <div className="fill">
+    <HeaderBar />
+    <div className="header-photo">
+      <h1>{title}</h1>
+    </div>
+    <div className='sites-index'>
     <LoadingPage loading={loading}>
-      <div className='sites-index'>
-        <div className="sites-index-items">
-          {sites.map(site => <SitesIndexItem key={site.id} site={site} />)}
-          <NewSiteForm />
-        </div>
+      <div className="sites-index-items">
+        {sites.map(site => <SitesIndexItem key={site.id} site={site} />)}
+        { form ? <NewSiteForm /> : ""}
       </div>
+      <div className="flex-space"/>
     </LoadingPage>
-  </Toolbar>
+    </div>
+  </div>
 );
 
 export default SitesIndex;
