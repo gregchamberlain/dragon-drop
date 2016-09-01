@@ -3,8 +3,8 @@ import SitesIndex from './sites_index.jsx';
 import { logout } from '../../actions/session_actions.js';
 import { toArray } from '../../util/entity_utils.js';
 
-const mapStateToProps = ({ sites }) => ({
-  loading: sites.loading,
+const mapStateToProps = ({ sites, loading }) => ({
+  loading: loading['sites'],
   sites: toArray(sites),
   title: 'My Websites',
   form: true,

@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize
+    sleep(3)
     unless current_user
       render json: ["You need to log in to edit sites"], status: 403
     end

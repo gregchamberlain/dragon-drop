@@ -4,12 +4,17 @@
   justify-content: center;
   flex-direction: column;
   height: 100%;
+
+  .loading-message {
+    font-size: 20px;
+    color: #444
+  }
 }
 
 .sk-cube-grid {
   width: 80px;
   height: 80px;
-  margin: 100px auto;
+  margin: 40px auto;
 }
 
 .sk-cube-grid .sk-cube {

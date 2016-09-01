@@ -1,6 +1,7 @@
 import { receiveEntity, loadingEntity, removeEntity } from '../actions/entity_actions.js';
 import * as ACTIONS from '../actions/site_actions.js';
 import * as API from '../util/site_api.js';
+import { startLoading, stopLoading } from '../actions/loading_actions.js';
 import { arrayOfSites, site } from '../actions/schema.js';
 import { normalize } from 'normalizr';
 import { push } from 'react-router-redux';
@@ -10,7 +11,9 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
   switch (action.type) {
     case ACTIONS.REQUEST_SITES:
       dispatch(loadingEntity(true));
+      dispatch(startLoading('sites', 'Fetching your websites...'))
       API.fetchSites((sites) => {
+        dispatch(stopLoading('sites'));
         dispatch(receiveEntity(normalize(sites, arrayOfSites)));
       },
       err => {
