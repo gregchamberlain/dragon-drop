@@ -60,11 +60,11 @@
     }
 
     &:disabled {
-      border: 1px solid rgba(200, 200, 200, 0.5);
-      color: #aaa;
+      border: 1px solid rgba(200, 200, 200, 0.2);
+      color: rgba(200, 200, 200, 0.2);
       cursor: not-allowed;
       &:hover {
-        color: #aaa;
+        color: rgba(200, 200, 200, 0.2);
       }
     }
 
