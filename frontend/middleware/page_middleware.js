@@ -6,6 +6,7 @@ import { receiveEntity } from '../actions/entity_actions.js';
 import { startLoading, stopLoading } from '../actions/loading_actions.js';
 import { arrayOfPages, page } from '../actions/schema.js';
 import { createNotification } from '../actions/notification_actions.js'
+import * as API from '../util/api_utils.js';
 
 const PageMiddleware = ({ getState, dispatch }) => next => action => {
   switch (action.type) {
@@ -16,23 +17,16 @@ const PageMiddleware = ({ getState, dispatch }) => next => action => {
       );
       return next(action);
     case CREATE_PAGE:
-      dispatch(startLoading('create-page', 'Creating your page...'))
-      createPage(
-        action.siteId,
-        action.page,
-        resp => {
-          dispatch(stopLoading('create-page'));
+      API.call({
+        dispatch,
+        request: createPage(action.siteId, action.page),
+        loading: ['create-page', 'Creating your page...'],
+        success: resp => {
           dispatch(receiveEntity(normalize(resp, page)));
           dispatch(addPage(action.siteId, resp.id));
-          dispatch(createNotification('success', 'Page successfully created'));
-        },
-        err => {
-          dispatch(stopLoading('create-page'));
-          err.responseJSON.forEach(e => {
-            dispatch(createNotification('error', e))
-          })
+          return 'Page successfully created';
         }
-      )
+      });
       return next(action);
     default:
       return next(action);

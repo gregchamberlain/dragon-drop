@@ -7,12 +7,18 @@ export const fetchPages = (siteId, success, error) => {
   });
 };
 
-export const createPage = (siteId, page, success, error) => {
-  $.ajax({
-    method: 'POST',
-    url: `api/sites/${siteId}/pages`,
-    data: {page},
-    success,
-    error
-  });
-};
+export const createPage = (siteId, page) => ({
+  method: 'POST',
+  url: `api/sites/${siteId}/pages`,
+  data: {page}
+});
+
+// export const createPage = (siteId, page, success, error) => {
+//   $.ajax({
+//     method: 'POST',
+//     url: `api/sites/${siteId}/pages`,
+//     data: {page},
+//     success,
+//     error
+//   });
+// };

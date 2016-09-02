@@ -5,7 +5,7 @@ export default class SiteSettingsForm extends Component {
 
   constructor(props) {
     super(props);
-    this.state = merge({}, props.site);
+    this.state = merge({name: "", description: "", identifier: ""}, props.site);
   }
 
   updateState = name => {
@@ -34,12 +34,18 @@ export default class SiteSettingsForm extends Component {
 
     return (
       <form className="site-settings-form">
-        <input type="text" onChange={this.updateState("name")} value={this.state.name}/>
+        <input
+          type="text"
+          value={this.state.name}
+          onChange={this.updateState("name")} />
         <textarea
           placeholder="Description"
-          onChange={this.updateState("description")}
-          value={this.state.description} />
-        <input type="text" onChange={this.updateState("identifier")} value={this.state.identifier}/>
+          value={this.state.description}
+          onChange={this.updateState("description")} />
+        <input
+          type="text"
+          value={this.state.identifier}
+          onChange={this.updateState("identifier")} />
         <button type="submit" disabled={unchanged} onClick={this.update}>Update</button>
         <button className="destroy-button" onClick={this.destroy}>delete site</button>
       </form>
