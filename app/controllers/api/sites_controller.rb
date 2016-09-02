@@ -9,7 +9,7 @@ class Api::SitesController < ApplicationController
 
 	def update
 		if @site.update(site_params)
-			render json: @site.to_json(include: {pages: {include: :components } } )
+			render json: @site.to_json(include: { pages: {include: :components } } )
 		else
 			render json: @site.errors.full_messages, status: 400
 		end
