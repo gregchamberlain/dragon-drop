@@ -51,7 +51,7 @@ const Root = ({ store, history }) => (
               <IndexRoute component={PageEditor} />
               <Route
                 path=":pageId"
-                onEnter={fetchPage(store)}
+                onEnter={() => {}}
                 component={LayoutEditor}/>
             </Route>
             <Route path="store" component={() => <div>Store</div>}/>

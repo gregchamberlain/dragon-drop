@@ -61313,10 +61313,8 @@
 	  var success = _ref.success;
 	  var error = _ref.error;
 	  var prev = _ref.prev;
-	  var stale = _ref.stale;
+	  var preloaded = _ref.preloaded;
 	
-	  console.log(stale);
-	  if (stale === undefined) stale = true;
 	  var onSuccess = function onSuccess(resp) {
 	    var successMessage = success && success(resp);
 	    dispatch((0, _loading_actions.stopLoading)(loading[0]));
@@ -61333,7 +61331,7 @@
 	
 	  // Only set loading state if the object has not been previously fetched
 	
-	  if (stale) {
+	  if (!preloaded) {
 	    !(prev && (Array.isArray(prev) || Object.keys(prev).length)) && dispatch(_loading_actions.startLoading.apply(undefined, _toConsumableArray(loading)));
 	    var req = (0, _lodash.merge)(request, { success: onSuccess, error: onError });
 	    $.ajax(req);
@@ -61382,7 +61380,7 @@
 	        case _page_actions.REQUEST_PAGE:
 	          var prevPage = getState().pages[action.pageId];
 	          (0, _api_utils.call)({
-	            stale: !(prevPage && prevPage.components),
+	            preloaded: prevPage && prevPage.components,
 	            dispatch: dispatch,
 	            request: (0, _page_api.fetchPage)(action.pageId),
 	            loading: ['page', 'Fetching Page...'],
@@ -67580,7 +67578,7 @@
 	              _react2.default.createElement(_reactRouter.IndexRoute, { component: _page_editor2.default }),
 	              _react2.default.createElement(_reactRouter.Route, {
 	                path: ':pageId',
-	                onEnter: (0, _router_utils.fetchPage)(store),
+	                onEnter: function onEnter() {},
 	                component: _layout_editor_container2.default })
 	            ),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'store', component: function component() {
@@ -70843,6 +70841,10 @@
 	
 	var _page_settings_container2 = _interopRequireDefault(_page_settings_container);
 	
+	var _Catalog = __webpack_require__(653);
+	
+	var _Catalog2 = _interopRequireDefault(_Catalog);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var EditorSidebar = function EditorSidebar(_ref) {
@@ -70876,11 +70878,7 @@
 	        _react2.default.createElement(
 	          _tabs.Tab,
 	          { icon: _react2.default.createElement(_plus2.default, null) },
-	          _react2.default.createElement(
-	            'div',
-	            null,
-	            'Catalog'
-	          )
+	          _react2.default.createElement(_Catalog2.default, { params: params })
 	        )
 	      )
 	    ),
@@ -72229,6 +72227,10 @@
 	
 	    var _this = _possibleConstructorReturn(this, (GridLayout.__proto__ || Object.getPrototypeOf(GridLayout)).call(this, props));
 	
+	    _this.itemLayoutChange = function (_l, _o, newItem) {
+	      console.log(newItem);
+	    };
+	
 	    console.log(props);
 	    _this.state = {
 	      items: [0, 1, 2, 3, 4].map(function (i, key, list) {
@@ -72242,7 +72244,7 @@
 	  _createClass(GridLayout, [{
 	    key: 'createElement',
 	    value: function createElement(el) {
-	      var i = el.layout.i;
+	      var i = 'n' + el.id;
 	      Object.keys(el.layout).forEach(function (e) {
 	        if (e === "i") return;
 	        el.layout[e] = parseInt(el.layout[e]);
@@ -72262,14 +72264,9 @@
 	      );
 	    }
 	  }, {
-	    key: 'layoutChange',
-	    value: function layoutChange(layout) {
-	      this.props.changeLayout(layout);
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
-	
+	      console.log(this.props.components);
 	      return _react2.default.createElement(
 	        _loading_page2.default,
 	        { loading: this.props.loading },
@@ -72282,15 +72279,10 @@
 	              margin: [0, 0],
 	              isDraggable: !this.props.locked,
 	              isResizable: !this.props.locked,
-	              onLayoutChange: this.layoutChange.bind(this),
 	              className: 'layout',
 	              draggableCancel: '.draggable-cancel',
-	              onDragStart: function onDragStart() {
-	                return console.log("dragStart!");
-	              },
-	              onDragStop: function onDragStop(layout, old, newitem) {
-	                return console.log(layout, old, newitem);
-	              },
+	              onResizeStop: this.itemLayoutChange,
+	              onDragStop: this.itemLayoutChange,
 	              cols: 12,
 	              rowHeight: 30,
 	              width: 1200 },
@@ -82111,6 +82103,85 @@
 	  };
 	}
 	module.exports = exports['default'];
+
+/***/ },
+/* 653 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _catalog = __webpack_require__(196);
+	
+	var _catalog2 = _interopRequireDefault(_catalog);
+	
+	var _reactRedux = __webpack_require__(510);
+	
+	var _component_actions = __webpack_require__(444);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var CatalogContainerr = function CatalogContainerr(_ref) {
+	  var create = _ref.create;
+	  return _react2.default.createElement(
+	    'div',
+	    { style: styles.container },
+	    Object.keys(_catalog2.default).map(function (key) {
+	      return _react2.default.createElement(
+	        'div',
+	        { style: styles.item, key: key, onClick: function onClick() {
+	            return create(key);
+	          } },
+	        key
+	      );
+	    })
+	  );
+	};
+	
+	var styles = {
+	  container: {
+	    width: '100%'
+	  },
+	  item: {
+	    display: 'flex',
+	    alignItems: 'center',
+	    justifyContent: 'center',
+	    minHeight: 50,
+	    margin: '10px 0',
+	    background: '#ccc',
+	    cursor: 'pointer'
+	  }
+	};
+	
+	var makeComponent = function makeComponent(name) {
+	  return {
+	    name: name,
+	    layout: {
+	      x: 0,
+	      y: 10000, // puts it at the bottom
+	      w: 4,
+	      h: 6
+	    },
+	    props: _catalog2.default[name].defaultProps
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, _ref2) {
+	  var params = _ref2.params;
+	  return {
+	    create: function create(name) {
+	      return dispatch((0, _component_actions.createComponent)(params.pageId, makeComponent(name)));
+	    }
+	  };
+	};
+	exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(CatalogContainerr);
 
 /***/ }
 /******/ ]);

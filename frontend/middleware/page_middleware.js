@@ -18,9 +18,9 @@ const PageMiddleware = ({ getState, dispatch }) => next => action => {
       );
       return next(action);
     case REQUEST_PAGE:
-      const prevPage = getState().pages[action.pageId]
+      const prevPage = getState().pages[action.pageId];
       call({
-        stale: !(prevPage && prevPage.components),
+        preloaded: prevPage && prevPage.components,
         dispatch,
         request: fetchPage(action.pageId),
         loading: ['page', 'Fetching Page...'],

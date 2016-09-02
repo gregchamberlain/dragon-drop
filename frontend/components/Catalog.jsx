@@ -1,12 +1,12 @@
 import React from 'react';
 import Catalog from '../catalog';
 import { connect } from 'react-redux';
-import { addItem } from '../actions/item_actions.js';
+import { createComponent } from '../actions/component_actions';
 
-const CatalogContainerr = ({ addItemCall }) => (
+const CatalogContainerr = ({ create }) => (
   <div style={styles.container}>
     {Object.keys(Catalog).map(key => (
-      <div style={styles.item} key={key} onClick={() => addItemCall(key)}>
+      <div style={styles.item} key={key} onClick={() => create(key)}>
         {key}
       </div>
     ))}
@@ -15,21 +15,31 @@ const CatalogContainerr = ({ addItemCall }) => (
 
 const styles = {
   container: {
-    width: 200,
-    background: '#888',
+    width: '100%'
   },
   item: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 50,
-    margin: 10,
+    margin: '10px 0',
     background: '#ccc',
     cursor: 'pointer'
   }
 };
 
-const mapDispatchToProps = dispatch => ({
-  addItemCall: (name) => dispatch(addItem(name)),
+const makeComponent = name => ({
+  name: name,
+  layout: {
+    x: 0,
+    y: 10000, // puts it at the bottom
+    w: 4,
+    h: 6,
+  },
+  props: Catalog[name].defaultProps
+});
+
+const mapDispatchToProps = (dispatch, { params }) => ({
+  create: (name) => dispatch(createComponent(params.pageId, makeComponent(name))),
 });
 export default connect(null, mapDispatchToProps)(CatalogContainerr);

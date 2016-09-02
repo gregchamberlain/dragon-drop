@@ -24,7 +24,7 @@ class GridLayout extends Component {
   }
 
   createElement(el) {
-    let i = el.layout.i;
+    let i = `n${el.id}`;
     Object.keys(el.layout).forEach(e => {
       if (e === "i") return;
       el.layout[e] = parseInt(el.layout[e])
@@ -42,12 +42,12 @@ class GridLayout extends Component {
     );
   }
 
-  layoutChange(layout) {
-    this.props.changeLayout(layout);
+  itemLayoutChange = (_l, _o, newItem) => {
+    console.log(newItem);
   }
 
   render() {
-
+    console.log(this.props.components);
     return (
       <LoadingPage loading={this.props.loading}>
         <div className="grid-wrapper">
@@ -55,11 +55,10 @@ class GridLayout extends Component {
             margin={[0,0]}
             isDraggable={!this.props.locked}
             isResizable={!this.props.locked}
-            onLayoutChange={this.layoutChange.bind(this)}
             className="layout"
             draggableCancel=".draggable-cancel"
-            onDragStart={() => console.log("dragStart!")}
-            onDragStop={(layout, old, newitem) => console.log(layout, old, newitem)}
+            onResizeStop={this.itemLayoutChange}
+            onDragStop={this.itemLayoutChange}
             cols={12}
             rowHeight={30}
             width={1200}>
