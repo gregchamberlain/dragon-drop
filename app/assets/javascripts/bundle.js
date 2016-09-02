@@ -57218,7 +57218,7 @@
 	          v: (0, _lodash.merge)(state, action.resp.entities.sites)
 	        };
 	      case _entity_actions.REMOVE_ENTITY:
-	        var nextState = (0, _lodash.merge)(initState, state);
+	        var nextState = (0, _lodash.merge)({}, state);
 	        Object.keys(action.resp.entities.sites).forEach(function (id) {
 	          delete nextState[id];
 	        });
