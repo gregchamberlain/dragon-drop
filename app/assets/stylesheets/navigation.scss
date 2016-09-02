@@ -10,6 +10,7 @@
       align-items: center;
       color: #ccc;
       height: 30px;
+      cursor: pointer;
 
       &:hover {
         color: #eee;
@@ -31,7 +32,6 @@
         text-overflow: ellipsis;
         color: inherit;
         line-height: 26px;
-        cursor: pointer;
         text-decoration: none;
 
         &.active {

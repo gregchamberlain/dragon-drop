@@ -22339,7 +22339,7 @@
 	
 	var _site_reducer2 = _interopRequireDefault(_site_reducer);
 	
-	var _page_reducer = __webpack_require__(332);
+	var _page_reducer = __webpack_require__(333);
 	
 	var _page_reducer2 = _interopRequireDefault(_page_reducer);
 	
@@ -57205,7 +57205,7 @@
 	
 	var ACTIONS = _interopRequireWildcard(_entity_actions);
 	
-	var _site_actions = __webpack_require__(334);
+	var _site_actions = __webpack_require__(332);
 	
 	var _lodash = __webpack_require__(194);
 	
@@ -57289,74 +57289,6 @@
 
 /***/ },
 /* 332 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _page_actions = __webpack_require__(333);
-	
-	var _site_actions = __webpack_require__(334);
-	
-	var _entity_actions = __webpack_require__(331);
-	
-	var _lodash = __webpack_require__(194);
-	
-	var PageReducer = function PageReducer() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	  var action = arguments[1];
-	
-	  switch (action.type) {
-	    case _entity_actions.RECEIVE_ENTITY:
-	      return (0, _lodash.merge)({}, state, action.resp.entities.pages);
-	    default:
-	      return state;
-	  }
-	};
-	
-	exports.default = PageReducer;
-
-/***/ },
-/* 333 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var REQUEST_PAGES = exports.REQUEST_PAGES = 'REQUEST_PAGES';
-	var RECEIVE_PAGES = exports.RECEIVE_PAGES = 'RECEIVE_PAGES';
-	var CREATE_PAGE = exports.CREATE_PAGE = 'CREATE_PAGE';
-	
-	var requestPages = exports.requestPages = function requestPages(siteId) {
-	  return {
-	    type: REQUEST_PAGES,
-	    siteId: siteId
-	  };
-	};
-	
-	var receivePages = exports.receivePages = function receivePages(siteId, response) {
-	  return {
-	    type: RECEIVE_PAGES,
-	    siteId: siteId,
-	    response: response
-	  };
-	};
-	
-	var createPage = exports.createPage = function createPage(siteId, page) {
-	  return {
-	    type: CREATE_PAGE,
-	    siteId: siteId,
-	    page: page
-	  };
-	};
-
-/***/ },
-/* 334 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57412,6 +57344,74 @@
 	  return {
 	    type: DESTROY_SITE,
 	    site: site
+	  };
+	};
+
+/***/ },
+/* 333 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _page_actions = __webpack_require__(334);
+	
+	var _site_actions = __webpack_require__(332);
+	
+	var _entity_actions = __webpack_require__(331);
+	
+	var _lodash = __webpack_require__(194);
+	
+	var PageReducer = function PageReducer() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _entity_actions.RECEIVE_ENTITY:
+	      return (0, _lodash.merge)({}, state, action.resp.entities.pages);
+	    default:
+	      return state;
+	  }
+	};
+	
+	exports.default = PageReducer;
+
+/***/ },
+/* 334 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var REQUEST_PAGES = exports.REQUEST_PAGES = 'REQUEST_PAGES';
+	var RECEIVE_PAGES = exports.RECEIVE_PAGES = 'RECEIVE_PAGES';
+	var CREATE_PAGE = exports.CREATE_PAGE = 'CREATE_PAGE';
+	
+	var requestPages = exports.requestPages = function requestPages(siteId) {
+	  return {
+	    type: REQUEST_PAGES,
+	    siteId: siteId
+	  };
+	};
+	
+	var receivePages = exports.receivePages = function receivePages(siteId, response) {
+	  return {
+	    type: RECEIVE_PAGES,
+	    siteId: siteId,
+	    response: response
+	  };
+	};
+	
+	var createPage = exports.createPage = function createPage(siteId, page) {
+	  return {
+	    type: CREATE_PAGE,
+	    siteId: siteId,
+	    page: page
 	  };
 	};
 
@@ -58189,7 +58189,7 @@
 	
 	var _entity_actions = __webpack_require__(331);
 	
-	var _site_actions = __webpack_require__(334);
+	var _site_actions = __webpack_require__(332);
 	
 	var ACTIONS = _interopRequireWildcard(_site_actions);
 	
@@ -61223,9 +61223,9 @@
 	  value: true
 	});
 	
-	var _page_actions = __webpack_require__(333);
+	var _page_actions = __webpack_require__(334);
 	
-	var _site_actions = __webpack_require__(334);
+	var _site_actions = __webpack_require__(332);
 	
 	var _page_api = __webpack_require__(435);
 	
@@ -61236,6 +61236,8 @@
 	var _loading_actions = __webpack_require__(341);
 	
 	var _schema = __webpack_require__(353);
+	
+	var _notification_actions = __webpack_require__(339);
 	
 	var PageMiddleware = function PageMiddleware(_ref) {
 	  var getState = _ref.getState;
@@ -61254,10 +61256,12 @@
 	            dispatch((0, _loading_actions.stopLoading)('create-page'));
 	            dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(resp, _schema.page)));
 	            dispatch((0, _site_actions.addPage)(action.siteId, resp.id));
-	            console.log(resp);
+	            dispatch((0, _notification_actions.createNotification)('success', 'Page successfully created'));
 	          }, function (err) {
 	            dispatch((0, _loading_actions.stopLoading)('create-page'));
-	            console.log(err);
+	            err.responseJSON.forEach(function (e) {
+	              dispatch((0, _notification_actions.createNotification)('error', e));
+	            });
 	          });
 	          return next(action);
 	        default:
@@ -67224,15 +67228,15 @@
 	
 	var _pages_main_container2 = _interopRequireDefault(_pages_main_container);
 	
-	var _settings_container = __webpack_require__(559);
+	var _settings_container = __webpack_require__(561);
 	
 	var _settings_container2 = _interopRequireDefault(_settings_container);
 	
-	var _notifications = __webpack_require__(562);
+	var _notifications = __webpack_require__(564);
 	
 	var _notifications2 = _interopRequireDefault(_notifications);
 	
-	var _templates_index_container = __webpack_require__(564);
+	var _templates_index_container = __webpack_require__(566);
 	
 	var _templates_index_container2 = _interopRequireDefault(_templates_index_container);
 	
@@ -68957,7 +68961,7 @@
 	
 	var _reactRedux = __webpack_require__(505);
 	
-	var _site_actions = __webpack_require__(334);
+	var _site_actions = __webpack_require__(332);
 	
 	var ACTIONS = _interopRequireWildcard(_site_actions);
 	
@@ -69479,7 +69483,7 @@
 	
 	var _new_site_form2 = _interopRequireDefault(_new_site_form);
 	
-	var _site_actions = __webpack_require__(334);
+	var _site_actions = __webpack_require__(332);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -70374,7 +70378,7 @@
 	});
 	exports.fetchTemplates = exports.fetchSite = exports.fetchSites = undefined;
 	
-	var _site_actions = __webpack_require__(334);
+	var _site_actions = __webpack_require__(332);
 	
 	var _template_actions = __webpack_require__(440);
 	
@@ -70537,7 +70541,7 @@
 	
 	var _tabs2 = _interopRequireDefault(_tabs);
 	
-	var _page_navigator_container = __webpack_require__(567);
+	var _page_navigator_container = __webpack_require__(557);
 	
 	var _page_navigator_container2 = _interopRequireDefault(_page_navigator_container);
 	
@@ -71055,11 +71059,57 @@
 	  value: true
 	});
 	
+	var _reactRedux = __webpack_require__(505);
+	
+	var _navigation = __webpack_require__(558);
+	
+	var _navigation2 = _interopRequireDefault(_navigation);
+	
+	var _page_actions = __webpack_require__(334);
+	
+	var _entity_utils = __webpack_require__(533);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
+	  var sites = _ref.sites;
+	  var pages = _ref.pages;
+	  var loading = _ref.loading;
+	  var params = _ref2.params;
+	  return {
+	    site: sites[params.sitedId] || {},
+	    pages: (0, _entity_utils.map)(sites[params.siteId], 'pages', pages),
+	    loading: loading['create-page'],
+	    location: '/sites/' + params.siteId + '/editor'
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, _ref3) {
+	  var params = _ref3.params;
+	  return {
+	    createPage: function createPage(page) {
+	      return dispatch((0, _page_actions.createPage)(params.siteId, page));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_navigation2.default);
+
+/***/ },
+/* 558 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _new_page_form = __webpack_require__(565);
+	var _new_page_form = __webpack_require__(559);
 	
 	var _new_page_form2 = _interopRequireDefault(_new_page_form);
 	
@@ -71108,7 +71158,6 @@
 	exports.default = PageNavigation;
 
 /***/ },
-/* 558 */,
 /* 559 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -71118,342 +71167,13 @@
 	  value: true
 	});
 	
-	var _reactRedux = __webpack_require__(505);
-	
-	var _settings = __webpack_require__(560);
-	
-	var _settings2 = _interopRequireDefault(_settings);
-	
-	var _site_actions = __webpack_require__(334);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var mapStateToProps = function mapStateToProps(state, ownProps) {
-	  return {
-	    site: state.sites[ownProps.params.siteId]
-	  };
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    update: function update(site) {
-	      return dispatch((0, _site_actions.updateSite)(site));
-	    },
-	    destroy: function destroy(site) {
-	      return dispatch((0, _site_actions.destroySite)(site));
-	    }
-	  };
-	};
-	
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_settings2.default);
-
-/***/ },
-/* 560 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _settings_form = __webpack_require__(561);
-	
-	var _settings_form2 = _interopRequireDefault(_settings_form);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var SiteSettings = function SiteSettings(_ref) {
-	  var children = _ref.children;
-	  var site = _ref.site;
-	  var update = _ref.update;
-	  var destroy = _ref.destroy;
-	  return _react2.default.createElement(
-	    'div',
-	    { className: 'site-settings-page' },
-	    _react2.default.createElement(
-	      'h1',
-	      null,
-	      'Site Settings'
-	    ),
-	    _react2.default.createElement(_settings_form2.default, { site: site, update: update, destroy: destroy })
-	  );
-	};
-	
-	exports.default = SiteSettings;
-
-/***/ },
-/* 561 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _lodash = __webpack_require__(194);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var SiteSettingsForm = function (_Component) {
-	  _inherits(SiteSettingsForm, _Component);
-	
-	  function SiteSettingsForm(props) {
-	    _classCallCheck(this, SiteSettingsForm);
-	
-	    var _this = _possibleConstructorReturn(this, (SiteSettingsForm.__proto__ || Object.getPrototypeOf(SiteSettingsForm)).call(this, props));
-	
-	    _this.updateState = function (name) {
-	      return function (e) {
-	        _this.setState(_defineProperty({}, name, e.target.value));
-	      };
-	    };
-	
-	    _this.destroy = function (e) {
-	      e.preventDefault();
-	      if (confirm("are you sure you want to delete this site?")) {
-	        _this.props.destroy(_this.state);
-	      }
-	    };
-	
-	    _this.update = function (e) {
-	      e.preventDefault();
-	      _this.props.update(_this.state);
-	    };
-	
-	    _this.state = (0, _lodash.merge)({}, props.site);
-	    return _this;
-	  }
-	
-	  _createClass(SiteSettingsForm, [{
-	    key: 'render',
-	    value: function render() {
-	      var site = this.props.site;
-	
-	      var unchanged = (0, _lodash.isEqual)(site, this.state);
-	
-	      return _react2.default.createElement(
-	        'form',
-	        { className: 'site-settings-form' },
-	        _react2.default.createElement('input', { type: 'text', onChange: this.updateState("name"), value: this.state.name }),
-	        _react2.default.createElement('textarea', {
-	          placeholder: 'Description',
-	          onChange: this.updateState("description"),
-	          value: this.state.description }),
-	        _react2.default.createElement('input', { type: 'text', onChange: this.updateState("identifier"), value: this.state.identifier }),
-	        _react2.default.createElement(
-	          'button',
-	          { type: 'submit', disabled: unchanged, onClick: this.update },
-	          'Update'
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          { className: 'destroy-button', onClick: this.destroy },
-	          'delete site'
-	        )
-	      );
-	    }
-	  }]);
-	
-	  return SiteSettingsForm;
-	}(_react.Component);
-	
-	exports.default = SiteSettingsForm;
-
-/***/ },
-/* 562 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRedux = __webpack_require__(505);
-	
-	var _notification_item = __webpack_require__(563);
-	
-	var _notification_item2 = _interopRequireDefault(_notification_item);
-	
-	var _reactAddonsCssTransitionGroup = __webpack_require__(513);
-	
-	var _reactAddonsCssTransitionGroup2 = _interopRequireDefault(_reactAddonsCssTransitionGroup);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Notifications = function Notifications(_ref) {
-	  var notifications = _ref.notifications;
-	  var children = _ref.children;
-	  return _react2.default.createElement(
-	    'div',
-	    { style: styles.wrapper },
-	    children,
-	    _react2.default.createElement(
-	      'div',
-	      { style: styles.tray },
-	      _react2.default.createElement(
-	        _reactAddonsCssTransitionGroup2.default,
-	        {
-	          transitionName: 'notifications',
-	          transitionEnterTimeout: 500,
-	          transitionLeaveTimeout: 300 },
-	        notifications.map(function (item) {
-	          return _react2.default.createElement(_notification_item2.default, { key: item.id, notification: item });
-	        })
-	      )
-	    )
-	  );
-	};
-	
-	var styles = {
-	  wrapper: {
-	    width: '100%',
-	    height: '100%'
-	  },
-	  tray: {
-	    position: 'fixed',
-	    bottom: 0,
-	    width: 300,
-	    zIndex: 3
-	  }
-	};
-	
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    notifications: state.notifications
-	  };
-	};
-	
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Notifications);
-
-/***/ },
-/* 563 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var getBG = function getBG(n) {
-	  switch (n.type) {
-	    case "success":
-	      return '#4CAF50';
-	    case "error":
-	      return '#f44336';
-	    default:
-	      return '#444';
-	  }
-	};
-	
-	var NotificationItem = function NotificationItem(_ref) {
-	  var notification = _ref.notification;
-	  return _react2.default.createElement(
-	    'div',
-	    { style: _extends({}, styles, { background: getBG(notification) }) },
-	    notification.message
-	  );
-	};
-	
-	var styles = {
-	  width: '100%',
-	  background: '#888',
-	  boxShadow: '0 1px 3px 0 rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 2px 1px -1px rgba(0,0,0,0.12)',
-	  borderRadius: 2,
-	  color: '#fff',
-	  padding: 15,
-	  margin: 15
-	};
-	
-	exports.default = NotificationItem;
-
-/***/ },
-/* 564 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _reactRedux = __webpack_require__(505);
-	
-	var _sites_index = __webpack_require__(521);
-	
-	var _sites_index2 = _interopRequireDefault(_sites_index);
-	
-	var _entity_utils = __webpack_require__(533);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var mapStateToProps = function mapStateToProps(_ref) {
-	  var templates = _ref.templates;
-	  var loading = _ref.loading;
-	  return {
-	    sites: (0, _entity_utils.toArray)(templates),
-	    loading: loading['templates'],
-	    title: 'Website Templates',
-	    form: false
-	  };
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {};
-	};
-	
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_sites_index2.default);
-
-/***/ },
-/* 565 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _plusCircle = __webpack_require__(566);
+	var _plusCircle = __webpack_require__(560);
 	
 	var _plusCircle2 = _interopRequireDefault(_plusCircle);
 	
@@ -71563,7 +71283,7 @@
 	exports.default = NewPageForm;
 
 /***/ },
-/* 566 */
+/* 560 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -71616,7 +71336,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 567 */
+/* 561 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -71627,39 +71347,322 @@
 	
 	var _reactRedux = __webpack_require__(505);
 	
-	var _navigation = __webpack_require__(557);
+	var _settings = __webpack_require__(562);
 	
-	var _navigation2 = _interopRequireDefault(_navigation);
+	var _settings2 = _interopRequireDefault(_settings);
 	
-	var _page_actions = __webpack_require__(333);
+	var _site_actions = __webpack_require__(332);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(state, ownProps) {
+	  return {
+	    site: state.sites[ownProps.params.siteId]
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    update: function update(site) {
+	      return dispatch((0, _site_actions.updateSite)(site));
+	    },
+	    destroy: function destroy(site) {
+	      return dispatch((0, _site_actions.destroySite)(site));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_settings2.default);
+
+/***/ },
+/* 562 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _settings_form = __webpack_require__(563);
+	
+	var _settings_form2 = _interopRequireDefault(_settings_form);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var SiteSettings = function SiteSettings(_ref) {
+	  var children = _ref.children;
+	  var site = _ref.site;
+	  var update = _ref.update;
+	  var destroy = _ref.destroy;
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'site-settings-page' },
+	    _react2.default.createElement(
+	      'h1',
+	      null,
+	      'Site Settings'
+	    ),
+	    _react2.default.createElement(_settings_form2.default, { site: site, update: update, destroy: destroy })
+	  );
+	};
+	
+	exports.default = SiteSettings;
+
+/***/ },
+/* 563 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _lodash = __webpack_require__(194);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var SiteSettingsForm = function (_Component) {
+	  _inherits(SiteSettingsForm, _Component);
+	
+	  function SiteSettingsForm(props) {
+	    _classCallCheck(this, SiteSettingsForm);
+	
+	    var _this = _possibleConstructorReturn(this, (SiteSettingsForm.__proto__ || Object.getPrototypeOf(SiteSettingsForm)).call(this, props));
+	
+	    _this.updateState = function (name) {
+	      return function (e) {
+	        _this.setState(_defineProperty({}, name, e.target.value));
+	      };
+	    };
+	
+	    _this.destroy = function (e) {
+	      e.preventDefault();
+	      if (confirm("are you sure you want to delete this site?")) {
+	        _this.props.destroy(_this.state);
+	      }
+	    };
+	
+	    _this.update = function (e) {
+	      e.preventDefault();
+	      _this.props.update(_this.state);
+	    };
+	
+	    _this.state = (0, _lodash.merge)({}, props.site);
+	    return _this;
+	  }
+	
+	  _createClass(SiteSettingsForm, [{
+	    key: 'render',
+	    value: function render() {
+	      var site = this.props.site;
+	
+	      var unchanged = (0, _lodash.isEqual)(site, this.state);
+	
+	      return _react2.default.createElement(
+	        'form',
+	        { className: 'site-settings-form' },
+	        _react2.default.createElement('input', { type: 'text', onChange: this.updateState("name"), value: this.state.name }),
+	        _react2.default.createElement('textarea', {
+	          placeholder: 'Description',
+	          onChange: this.updateState("description"),
+	          value: this.state.description }),
+	        _react2.default.createElement('input', { type: 'text', onChange: this.updateState("identifier"), value: this.state.identifier }),
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'submit', disabled: unchanged, onClick: this.update },
+	          'Update'
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { className: 'destroy-button', onClick: this.destroy },
+	          'delete site'
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return SiteSettingsForm;
+	}(_react.Component);
+	
+	exports.default = SiteSettingsForm;
+
+/***/ },
+/* 564 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(505);
+	
+	var _notification_item = __webpack_require__(565);
+	
+	var _notification_item2 = _interopRequireDefault(_notification_item);
+	
+	var _reactAddonsCssTransitionGroup = __webpack_require__(513);
+	
+	var _reactAddonsCssTransitionGroup2 = _interopRequireDefault(_reactAddonsCssTransitionGroup);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Notifications = function Notifications(_ref) {
+	  var notifications = _ref.notifications;
+	  var children = _ref.children;
+	  return _react2.default.createElement(
+	    'div',
+	    { style: styles.wrapper },
+	    children,
+	    _react2.default.createElement(
+	      'div',
+	      { style: styles.tray },
+	      _react2.default.createElement(
+	        _reactAddonsCssTransitionGroup2.default,
+	        {
+	          transitionName: 'notifications',
+	          transitionEnterTimeout: 500,
+	          transitionLeaveTimeout: 300 },
+	        notifications.map(function (item) {
+	          return _react2.default.createElement(_notification_item2.default, { key: item.id, notification: item });
+	        })
+	      )
+	    )
+	  );
+	};
+	
+	var styles = {
+	  wrapper: {
+	    width: '100%',
+	    height: '100%'
+	  },
+	  tray: {
+	    position: 'fixed',
+	    bottom: 0,
+	    width: 300,
+	    zIndex: 3
+	  }
+	};
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    notifications: state.notifications
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Notifications);
+
+/***/ },
+/* 565 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var getBG = function getBG(n) {
+	  switch (n.type) {
+	    case "success":
+	      return '#4CAF50';
+	    case "error":
+	      return '#f44336';
+	    default:
+	      return '#444';
+	  }
+	};
+	
+	var NotificationItem = function NotificationItem(_ref) {
+	  var notification = _ref.notification;
+	  return _react2.default.createElement(
+	    'div',
+	    { style: _extends({}, styles, { background: getBG(notification) }) },
+	    notification.message
+	  );
+	};
+	
+	var styles = {
+	  width: '100%',
+	  background: '#888',
+	  boxShadow: '0 1px 3px 0 rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 2px 1px -1px rgba(0,0,0,0.12)',
+	  borderRadius: 2,
+	  color: '#fff',
+	  padding: 15,
+	  margin: 15
+	};
+	
+	exports.default = NotificationItem;
+
+/***/ },
+/* 566 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(505);
+	
+	var _sites_index = __webpack_require__(521);
+	
+	var _sites_index2 = _interopRequireDefault(_sites_index);
 	
 	var _entity_utils = __webpack_require__(533);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
-	  var sites = _ref.sites;
-	  var pages = _ref.pages;
+	var mapStateToProps = function mapStateToProps(_ref) {
+	  var templates = _ref.templates;
 	  var loading = _ref.loading;
-	  var params = _ref2.params;
 	  return {
-	    site: sites[params.sitedId] || {},
-	    pages: (0, _entity_utils.map)(sites[params.siteId], 'pages', pages),
-	    loading: loading['create-page'],
-	    location: '/sites/' + params.siteId + '/editor'
+	    sites: (0, _entity_utils.toArray)(templates),
+	    loading: loading['templates'],
+	    title: 'Website Templates',
+	    form: false
 	  };
 	};
 	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch, _ref3) {
-	  var params = _ref3.params;
-	  return {
-	    createPage: function createPage(page) {
-	      return dispatch((0, _page_actions.createPage)(params.siteId, page));
-	    }
-	  };
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {};
 	};
 	
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_navigation2.default);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_sites_index2.default);
 
 /***/ }
 /******/ ]);

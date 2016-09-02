@@ -5,6 +5,7 @@ import { normalize } from 'normalizr';
 import { receiveEntity } from '../actions/entity_actions.js';
 import { startLoading, stopLoading } from '../actions/loading_actions.js';
 import { arrayOfPages, page } from '../actions/schema.js';
+import { createNotification } from '../actions/notification_actions.js'
 
 const PageMiddleware = ({ getState, dispatch }) => next => action => {
   switch (action.type) {
@@ -23,11 +24,13 @@ const PageMiddleware = ({ getState, dispatch }) => next => action => {
           dispatch(stopLoading('create-page'));
           dispatch(receiveEntity(normalize(resp, page)));
           dispatch(addPage(action.siteId, resp.id));
-          console.log(resp);
+          dispatch(createNotification('success', 'Page successfully created'));
         },
         err => {
           dispatch(stopLoading('create-page'));
-          console.log(err);
+          err.responseJSON.forEach(e => {
+            dispatch(createNotification('error', e))
+          })
         }
       )
       return next(action);
