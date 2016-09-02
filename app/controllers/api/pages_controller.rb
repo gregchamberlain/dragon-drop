@@ -20,6 +20,9 @@ class Api::PagesController < ApplicationController
 
   def update
     @page = Page.find(params[:id])
+    if @page.path == '/' && page_params[:path] != '/'
+      return render json: ["The root pages path cannot be changed"], status: 400
+    end
     if @page.update(page_params)
       render json: @page.to_json(include: :components)
     else

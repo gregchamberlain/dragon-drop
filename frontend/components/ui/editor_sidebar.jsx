@@ -8,6 +8,7 @@ import Wrench from 'react-icons/lib/fa/wrench';
 import { Link } from 'react-router';
 import Tabs, { Tab } from './tabs.jsx';
 import Navigator from '../sites/pages/navigation/page_navigator_container.js';
+import PageSettings from '../sites/pages/page_settings_container.js';
 
 const EditorSidebar = ({ children, site, pages, params }) => (
   <div className="editor-sidebar-container">
@@ -17,7 +18,7 @@ const EditorSidebar = ({ children, site, pages, params }) => (
           <Navigator params={params}>Navigator!</Navigator>
         </Tab>
         <Tab icon={<Wrench />}>
-          <div>Settings</div>
+          <PageSettings params={params} />
         </Tab>
         <Tab icon={<Plus />}>
           <div>Catalog</div>

@@ -13,6 +13,12 @@ export const createPage = (siteId, page) => ({
   data: {page}
 });
 
+export const updatePage = page => ({
+  method: 'PATCH',
+  url: `api/pages/${page.id}`,
+  data: {page}
+});
+
 // export const createPage = (siteId, page, success, error) => {
 //   $.ajax({
 //     method: 'POST',

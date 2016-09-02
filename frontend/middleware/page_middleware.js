@@ -1,6 +1,6 @@
-import { REQUEST_PAGES, receivePages, CREATE_PAGE } from '../actions/page_actions.js';
+import { REQUEST_PAGES, receivePages, CREATE_PAGE, UPDATE_PAGE } from '../actions/page_actions.js';
 import { addPage } from '../actions/site_actions.js';
-import { fetchPages, createPage } from '../util/page_api.js';
+import { fetchPages, createPage, updatePage } from '../util/page_api.js';
 import { normalize } from 'normalizr';
 import { receiveEntity } from '../actions/entity_actions.js';
 import { startLoading, stopLoading } from '../actions/loading_actions.js';
@@ -25,6 +25,17 @@ const PageMiddleware = ({ getState, dispatch }) => next => action => {
           dispatch(receiveEntity(normalize(resp, page)));
           dispatch(addPage(action.siteId, resp.id));
           return 'Page successfully created';
+        }
+      });
+      return next(action);
+    case UPDATE_PAGE:
+      API.call({
+        dispatch,
+        request: updatePage(action.page),
+        loading: ['update-page', 'Saving page...'],
+        success: resp => {
+          dispatch(receiveEntity(normalize(resp, page)))
+          return 'Page successfully updated';
         }
       });
       return next(action);

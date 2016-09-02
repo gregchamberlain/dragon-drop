@@ -61252,6 +61252,17 @@
 	            }
 	          });
 	          return next(action);
+	        case _page_actions.UPDATE_PAGE:
+	          API.call({
+	            dispatch: dispatch,
+	            request: (0, _page_api.updatePage)(action.page),
+	            loading: ['update-page', 'Saving page...'],
+	            success: function success(resp) {
+	              dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(resp, _schema.page)));
+	              return 'Page successfully updated';
+	            }
+	          });
+	          return next(action);
 	        default:
 	          return next(action);
 	      }
@@ -61271,8 +61282,8 @@
 	  value: true
 	});
 	var REQUEST_PAGES = exports.REQUEST_PAGES = 'REQUEST_PAGES';
-	var RECEIVE_PAGES = exports.RECEIVE_PAGES = 'RECEIVE_PAGES';
 	var CREATE_PAGE = exports.CREATE_PAGE = 'CREATE_PAGE';
+	var UPDATE_PAGE = exports.UPDATE_PAGE = 'UPDATE_PAGE';
 	
 	var requestPages = exports.requestPages = function requestPages(siteId) {
 	  return {
@@ -61281,18 +61292,17 @@
 	  };
 	};
 	
-	var receivePages = exports.receivePages = function receivePages(siteId, response) {
-	  return {
-	    type: RECEIVE_PAGES,
-	    siteId: siteId,
-	    response: response
-	  };
-	};
-	
 	var createPage = exports.createPage = function createPage(siteId, page) {
 	  return {
 	    type: CREATE_PAGE,
 	    siteId: siteId,
+	    page: page
+	  };
+	};
+	
+	var updatePage = exports.updatePage = function updatePage(page) {
+	  return {
+	    type: UPDATE_PAGE,
 	    page: page
 	  };
 	};
@@ -61319,6 +61329,14 @@
 	  return {
 	    method: 'POST',
 	    url: 'api/sites/' + siteId + '/pages',
+	    data: { page: page }
+	  };
+	};
+	
+	var updatePage = exports.updatePage = function updatePage(page) {
+	  return {
+	    method: 'PATCH',
+	    url: 'api/pages/' + page.id,
 	    data: { page: page }
 	  };
 	};
@@ -70573,6 +70591,10 @@
 	
 	var _page_navigator_container2 = _interopRequireDefault(_page_navigator_container);
 	
+	var _page_settings_container = __webpack_require__(568);
+	
+	var _page_settings_container2 = _interopRequireDefault(_page_settings_container);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var EditorSidebar = function EditorSidebar(_ref) {
@@ -70601,11 +70623,7 @@
 	        _react2.default.createElement(
 	          _tabs.Tab,
 	          { icon: _react2.default.createElement(_wrench2.default, null) },
-	          _react2.default.createElement(
-	            'div',
-	            null,
-	            'Settings'
-	          )
+	          _react2.default.createElement(_page_settings_container2.default, { params: params })
 	        ),
 	        _react2.default.createElement(
 	          _tabs.Tab,
@@ -71070,11 +71088,7 @@
 	var Tab = exports.Tab = function Tab(_ref) {
 	  var icon = _ref.icon;
 	  var children = _ref.children;
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    children
-	  );
+	  return children;
 	};
 
 /***/ },
@@ -71699,6 +71713,169 @@
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_sites_index2.default);
+
+/***/ },
+/* 568 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(506);
+	
+	var _page_settings = __webpack_require__(569);
+	
+	var _page_settings2 = _interopRequireDefault(_page_settings);
+	
+	var _reactRouter = __webpack_require__(442);
+	
+	var _page_actions = __webpack_require__(435);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
+	  var pages = _ref.pages;
+	  var loading = _ref.loading;
+	  var params = _ref2.params;
+	  return {
+	    page: pages[params.pageId],
+	    loading: loading['update-page']
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    updatePage: function updatePage(page) {
+	      return dispatch((0, _page_actions.updatePage)(page));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRouter.withRouter)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_page_settings2.default));
+
+/***/ },
+/* 569 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _loading_page = __webpack_require__(531);
+	
+	var _loading_page2 = _interopRequireDefault(_loading_page);
+	
+	var _lodash = __webpack_require__(194);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var PageSettings = function (_Component) {
+	  _inherits(PageSettings, _Component);
+	
+	  function PageSettings(props) {
+	    _classCallCheck(this, PageSettings);
+	
+	    var _this = _possibleConstructorReturn(this, (PageSettings.__proto__ || Object.getPrototypeOf(PageSettings)).call(this, props));
+	
+	    _this.componentWillReceiveProps = function (_ref) {
+	      var loading = _ref.loading;
+	      var page = _ref.page;
+	
+	      if (!loading && _this.props.loading) {
+	        _this.setState((0, _lodash.merge)({}, page));
+	      }
+	    };
+	
+	    _this.updateState = function (name) {
+	      return function (e) {
+	        _this.setState(_defineProperty({}, name, e.target.value));
+	      };
+	    };
+	
+	    _this.submit = function (e) {
+	      e.preventDefault();
+	      _this.props.updatePage(_this.state);
+	    };
+	
+	    _this.state = (0, _lodash.merge)({}, props.page);
+	    return _this;
+	  }
+	
+	  _createClass(PageSettings, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var page = _props.page;
+	      var loading = _props.loading;
+	
+	
+	      return _react2.default.createElement(
+	        _loading_page2.default,
+	        { loading: loading, small: true, light: true },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'page-settings' },
+	          _react2.default.createElement(
+	            'h3',
+	            null,
+	            page.name + ' Settings'
+	          ),
+	          _react2.default.createElement(
+	            'form',
+	            { onSubmit: this.submit },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              'Page Name',
+	              _react2.default.createElement('input', {
+	                type: 'text',
+	                value: this.state.name,
+	                onChange: this.updateState("name") })
+	            ),
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              'Page Path',
+	              _react2.default.createElement('input', {
+	                type: 'text',
+	                value: this.state.path,
+	                onChange: this.updateState("path"),
+	                disabled: this.state.path === '/' })
+	            ),
+	            _react2.default.createElement(
+	              'button',
+	              { type: 'submit' },
+	              'Update'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return PageSettings;
+	}(_react.Component);
+	
+	exports.default = PageSettings;
 
 /***/ }
 /******/ ]);

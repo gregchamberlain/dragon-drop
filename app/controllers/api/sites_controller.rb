@@ -4,7 +4,8 @@ class Api::SitesController < ApplicationController
 	before_action :authorize
 
 	def index
-		render json: current_user.sites
+		@sites = current_user.sites
+		render 'index'
 	end
 
 	def update

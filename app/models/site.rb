@@ -25,7 +25,7 @@ class Site < ActiveRecord::Base
 
 	def self.generateUniqueIdentifier(name)
 		if name
-			identifier = name.downcase.gsub(/[^0-9a-z ]/i, '').gsub(" ", "-");
+			identifier = name.downcase.gsub(/[^0-9a-z. ]/i, '').gsub(" ", "-").gsub(".", "-");
 		else
 			identifier = "#{adjs.sample}-#{nouns.sample}"
 		end

@@ -42,5 +42,5 @@ export default class Tabs extends Component {
 }
 
 export const Tab = ({ icon, children }) => (
-  <div>{children}</div>
+  children
 )
