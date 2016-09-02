@@ -74,7 +74,7 @@
 	
 	document.addEventListener('DOMContentLoaded', function () {
 	
-	  var defaultState = { session: { currentUser: window.currentUser, errors: [], loading: false } };
+	  var defaultState = { session: { currentUser: window.currentUser } };
 	  var store = window.store = (0, _store2.default)(defaultState);
 	  var history = (0, _reactRouterRedux.syncHistoryWithStore)(_reactRouter.hashHistory, store);
 	  var root = document.getElementById('root');
@@ -57203,15 +57203,9 @@
 	
 	var _entity_actions = __webpack_require__(331);
 	
-	var ACTIONS = _interopRequireWildcard(_entity_actions);
-	
 	var _site_actions = __webpack_require__(332);
 	
 	var _lodash = __webpack_require__(194);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	var initState = { loading: false };
 	
 	var SiteReducer = function SiteReducer() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -57219,27 +57213,27 @@
 	
 	  var _ret = function () {
 	    switch (action.type) {
-	      case ACTIONS.RECEIVE_ENTITY:
+	      case _entity_actions.RECEIVE_ENTITY:
 	        return {
-	          v: (0, _lodash.merge)(state, action.resp.entities.sites, { loading: false })
+	          v: (0, _lodash.merge)(state, action.resp.entities.sites)
 	        };
-	      case ACTIONS.REMOVE_ENTITY:
-	        var nextState = (0, _lodash.merge)(initState, state, { loading: false });
+	      case _entity_actions.REMOVE_ENTITY:
+	        var nextState = (0, _lodash.merge)(initState, state);
 	        Object.keys(action.resp.entities.sites).forEach(function (id) {
 	          delete nextState[id];
 	        });
 	        return {
 	          v: nextState
 	        };
+	      case _entity_actions.CLEAR_ENTITIES:
+	        return {
+	          v: {}
+	        };
 	      case _site_actions.ADD_PAGE:
 	        var newState = (0, _lodash.merge)({}, state);
 	        newState[action.siteId].pages.push(action.pageId);
 	        return {
 	          v: newState
-	        };
-	      case ACTIONS.LOADING_ENTITY:
-	        return {
-	          v: (0, _lodash.merge)({}, state, { loading: action.entity })
 	        };
 	      default:
 	        return {
@@ -57264,7 +57258,7 @@
 	});
 	var RECEIVE_ENTITY = exports.RECEIVE_ENTITY = 'RECEIVE_ENTITY';
 	var REMOVE_ENTITY = exports.REMOVE_ENTITY = 'REMOVE_ENTITY';
-	var LOADING_ENTITY = exports.LOADING_ENTITY = 'LOADING_ENTITY';
+	var CLEAR_ENTITIES = exports.CLEAR_ENTITIES = 'CLEAR_ENTITIES';
 	
 	var receiveEntity = exports.receiveEntity = function receiveEntity(resp) {
 	  return {
@@ -57280,10 +57274,9 @@
 	  };
 	};
 	
-	var loadingEntity = exports.loadingEntity = function loadingEntity(entity) {
+	var clearEntities = exports.clearEntities = function clearEntities() {
 	  return {
-	    type: LOADING_ENTITY,
-	    entity: entity
+	    type: CLEAR_ENTITIES
 	  };
 	};
 
@@ -57357,10 +57350,6 @@
 	  value: true
 	});
 	
-	var _page_actions = __webpack_require__(334);
-	
-	var _site_actions = __webpack_require__(332);
-	
 	var _entity_actions = __webpack_require__(331);
 	
 	var _lodash = __webpack_require__(194);
@@ -57372,6 +57361,8 @@
 	  switch (action.type) {
 	    case _entity_actions.RECEIVE_ENTITY:
 	      return (0, _lodash.merge)({}, state, action.resp.entities.pages);
+	    case _entity_actions.CLEAR_ENTITIES:
+	      return {};
 	    default:
 	      return state;
 	  }
@@ -57434,7 +57425,7 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	var SessionReducer = function SessionReducer() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? { currentUser: null, errors: [], loading: false } : arguments[0];
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? { currentUser: null } : arguments[0];
 	  var action = arguments[1];
 	
 	  switch (action.type) {
@@ -58327,13 +58318,11 @@
 	  };
 	};
 	
-	var fetchTemplates = exports.fetchTemplates = function fetchTemplates(success, error) {
-	  $.ajax({
+	var fetchTemplates = exports.fetchTemplates = function fetchTemplates() {
+	  return {
 	    method: 'GET',
-	    url: 'api/templates',
-	    success: success,
-	    error: error
-	  });
+	    url: 'api/templates'
+	  };
 	};
 
 /***/ },
@@ -61358,6 +61347,8 @@
 	
 	var ACTIONS = _interopRequireWildcard(_session_actions);
 	
+	var _entity_actions = __webpack_require__(331);
+	
 	var _user_api = __webpack_require__(438);
 	
 	var API = _interopRequireWildcard(_user_api);
@@ -61394,6 +61385,7 @@
 	            loading: ['logout', 'Logging Out...'],
 	            success: function success(resp) {
 	              dispatch(ACTIONS.receiveCurrentUser(null));
+	              dispatch((0, _entity_actions.clearEntities)());
 	              dispatch((0, _reactRouterRedux.push)('/'));
 	              return 'Successfully Logged Out';
 	            }
@@ -61498,6 +61490,8 @@
 	
 	var _site_api = __webpack_require__(352);
 	
+	var _api_utils = __webpack_require__(434);
+	
 	var _entity_actions = __webpack_require__(331);
 	
 	var _schema = __webpack_require__(353);
@@ -61515,15 +61509,14 @@
 	    return function (action) {
 	      switch (action.type) {
 	        case _template_actions.REQUEST_TEMPLATES:
-	          dispatch((0, _loading_actions.startLoading)('templates', 'Loading in Templates...'));
-	          (0, _site_api.fetchTemplates)(function (t) {
-	            dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(t, _schema.arrayOfTemplates)));
-	            dispatch((0, _loading_actions.stopLoading)('templates'));
-	          }, function (err) {
-	            return err.responseJSON.forEach(function (e) {
-	              (0, _notification_actions.createNotification)('error', e);
-	              dispatch((0, _loading_actions.stopLoading)('templates'));
-	            });
+	          (0, _api_utils.call)({
+	            dispatch: dispatch,
+	            prev: getState().templates,
+	            request: (0, _site_api.fetchTemplates)(),
+	            loading: ['templates', 'Loading in Templates...'],
+	            success: function success(resp) {
+	              dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(resp, _schema.arrayOfTemplates)));
+	            }
 	          });
 	          return next(action);
 	        default:

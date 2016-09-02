@@ -1,7 +1,7 @@
 import * as ACTIONS from '../actions/session_actions.js';
 import { merge } from 'lodash';
 
-const SessionReducer = (state = {currentUser: null, errors: [], loading: false}, action) => {
+const SessionReducer = (state = {currentUser: null}, action) => {
   switch (action.type) {
     case ACTIONS.RECEIVE_CURRENT_USER:
       return {currentUser: action.user, errors: [], loading: false};

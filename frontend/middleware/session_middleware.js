@@ -1,4 +1,5 @@
 import * as ACTIONS from '../actions/session_actions.js';
+import { clearEntities } from '../actions/entity_actions.js';
 import * as API from '../util/user_api.js';
 import { push } from 'react-router-redux';
 import { call } from '../util/api_utils.js';
@@ -25,6 +26,7 @@ const SessionMiddleware = ({getState, dispatch}) => next => action => {
         loading: ['logout', 'Logging Out...'],
         success: resp => {
           dispatch(ACTIONS.receiveCurrentUser(null));
+          dispatch(clearEntities());
           dispatch(push('/'));
           return 'Successfully Logged Out';
         }

@@ -25,11 +25,7 @@ export const createSite = site => ({
     data: {site}
 });
 
-export const fetchTemplates = (success, error) => {
-  $.ajax({
+export const fetchTemplates = () => ({
     method: 'GET',
-    url: 'api/templates',
-    success,
-    error
-  });
-};
+    url: 'api/templates'
+});

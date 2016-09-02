@@ -9,7 +9,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  let defaultState = {session: {currentUser: window.currentUser, errors: [], loading: false}};
+  let defaultState = {session: {currentUser: window.currentUser}};
   const store = window.store = configureStore(defaultState);
   const history = syncHistoryWithStore(hashHistory, store);
   const root = document.getElementById('root');
