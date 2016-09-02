@@ -1,5 +1,6 @@
-import { requestSites, requestSite } from '../actions/site_actions.js';
-import { requestTemplates } from '../actions/template_actions.js';
+import { requestSites, requestSite } from '../actions/site_actions';
+import { requestTemplates } from '../actions/template_actions';
+import { requestPage } from '../actions/page_actions'
 
 export const fetchSites = store => {
   return () => store.dispatch(requestSites());
@@ -11,4 +12,8 @@ export const fetchSite = (store) => {
 
 export const fetchTemplates = store => () => {
   store.dispatch(requestTemplates());
+};
+
+export const fetchPage = (store) => state => {
+  store.dispatch(requestPage(state.params.pageId))
 };

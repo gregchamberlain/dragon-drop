@@ -11,10 +11,10 @@ class Wrapper extends Component {
     return (
       <div style={styles.container}>
         {children}
-        <div style={styles.overlay}>
+        <div style={styles.overlay} className="component-wrapper-overlay">
           <div style={styles.header}>
             <Arrows style={{...styles.icon, ...{cursor: 'move'}}} className='draggable-handle'/>
-            <Gear style={styles.icon} onClick={openEditor} />
+            <Gear style={styles.icon} onClick={openEditor} className="draggable-cancel"/>
             <div style={{flex: 1, marginLeft: 5}}>{name}</div>
             <Close style={styles.icon} onClick={onRemove}/>
           </div>

@@ -7,12 +7,13 @@ import SitesIndex from './sites/sites_index_container.js';
 import SiteDetail from './sites/site_detail_container.js';
 import Home from './home.jsx';
 import RegistrationLayout from './registration/registration_layout.jsx';
-import { fetchSites, fetchSite, fetchTemplates } from '../util/router_utils.js';
+import { fetchSites, fetchSite, fetchTemplates, fetchPage } from '../util/router_utils.js';
 import PageEditor from './sites/pages/page_editor.jsx';
 import PagesMain from './sites/pages/pages_main_container.jsx';
 import SiteSettings from './sites/settings/settings_container.jsx';
 import Notifications from './ui/notifications.jsx';
 import TemplatesIndex from './templates/templates_index_container.jsx';
+import LayoutEditor from './sites/editor/layout_editor_container.js';
 
 const validateUser = (store) => {
   return (nextState, replace) => {
@@ -48,7 +49,10 @@ const Root = ({ store, history }) => (
             <IndexRedirect to='editor' />
             <Route path="editor" component={PagesMain}>
               <IndexRoute component={PageEditor} />
-              <Route path=":pageId" component={props => <div>{props.params.pageId}</div>}/>
+              <Route
+                path=":pageId"
+                onEnter={fetchPage(store)}
+                component={LayoutEditor}/>
             </Route>
             <Route path="store" component={() => <div>Store</div>}/>
             <Route path="analytics" component={() => <div>Analytics</div>}/>

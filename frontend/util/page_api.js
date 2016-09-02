@@ -19,6 +19,11 @@ export const updatePage = page => ({
   data: {page}
 });
 
+export const fetchPage = pageId => ({
+  method: 'GET',
+  url: `api/pages/${pageId}`
+});
+
 // export const createPage = (siteId, page, success, error) => {
 //   $.ajax({
 //     method: 'POST',
