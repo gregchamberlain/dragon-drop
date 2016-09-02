@@ -5,7 +5,7 @@ import File from 'react-icons/lib/fa/file-o';
 
 const PageNavigation = ({ site, pages, createPage, loading, location }) => (
   <div className="page-navigation">
-    <h1>{site.name}</h1>
+    <h3>Pages</h3>
     <ul className="page-list">
       {pages.map(page => (
         <li key={page.id} className="page-list-item">

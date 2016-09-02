@@ -6,6 +6,10 @@ class Api::PagesController < ApplicationController
 
   def create
     site = Site.find(params[:site_id])
+    if site.pages.length >= 5
+      render json: ["Max of 5 pages per site!"], status: 400
+      return
+    end
     @page = site.pages.new(page_params);
     if @page.save
       render json: @page.to_json(include: :components)

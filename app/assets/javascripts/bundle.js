@@ -67317,8 +67317,12 @@
 	              _reactRouter.Route,
 	              { path: 'editor', component: _pages_main_container2.default },
 	              _react2.default.createElement(_reactRouter.IndexRoute, { component: _page_editor2.default }),
-	              _react2.default.createElement(_reactRouter.Route, { path: ':pageId', component: function component() {
-	                  return _react2.default.createElement('div', null);
+	              _react2.default.createElement(_reactRouter.Route, { path: ':pageId', component: function component(props) {
+	                  return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    props.params.pageId
+	                  );
 	                } })
 	            ),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'store', component: function component() {
@@ -71101,7 +71105,7 @@
 	  var loading = _ref.loading;
 	  var params = _ref2.params;
 	  return {
-	    site: sites[params.sitedId] || {},
+	    site: sites[params.siteId] || {},
 	    pages: (0, _entity_utils.map)(sites[params.siteId], 'pages', pages),
 	    loading: loading['create-page'],
 	    location: '/sites/' + params.siteId + '/editor'
@@ -71155,9 +71159,9 @@
 	    'div',
 	    { className: 'page-navigation' },
 	    _react2.default.createElement(
-	      'h1',
+	      'h3',
 	      null,
-	      site.name
+	      'Pages'
 	    ),
 	    _react2.default.createElement(
 	      'ul',

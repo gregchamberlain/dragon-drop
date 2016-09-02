@@ -1,8 +1,15 @@
 .page-navigation {
 
+  h3 {
+    text-align: center;
+    color: #eee;
+    margin: 5px 0;
+  }
+
   .page-list {
     padding: 0;
     list-style: none;
+    padding-left: 10px;
 
     .page-list-item {
 
@@ -22,6 +29,7 @@
 
       svg {
         margin-right: 10px;
+        min-width: 16px;
       }
 
       a {
