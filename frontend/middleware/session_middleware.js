@@ -1,64 +1,46 @@
 import * as ACTIONS from '../actions/session_actions.js';
 import * as API from '../util/user_api.js';
 import { push } from 'react-router-redux';
-import { startLoading, stopLoading } from '../actions/loading_actions.js'
-import { createNotification } from '../actions/notification_actions.js';
+import { call } from '../util/api_utils.js';
 
 const SessionMiddleware = ({getState, dispatch}) => next => action => {
   switch (action.type) {
     case ACTIONS.LOGIN:
-      dispatch(startLoading('currentUser', 'Logging in...'))
-      API.login(
-        action.user,
-        user => {
-          dispatch(createNotification('success', 'Successfully Logged In'));
-          dispatch(ACTIONS.receiveCurrentUser(user));
-          dispatch(stopLoading('currentUser'));
+      call({
+        dispatch,
+        request: API.login(action.user),
+        loading: ['currentUser', 'Logging in...'],
+        success: resp => {
+          dispatch(ACTIONS.receiveCurrentUser(resp));
           dispatch(push('/sites'));
-        },
-        err => {
-          dispatch(ACTIONS.receiveCurrentUser(null));
-          err.responseJSON.forEach(m => {
-            dispatch(createNotification('error', m));
-            dispatch(stopLoading('currentUser'));
-          });
+          return 'Successfully Logged In';
         }
-      );
+      })
+      // May need dispatch(ACTIONS.receiveCurrentUser(null)); in error handler
       return next(action);
     case ACTIONS.LOGOUT:
-      dispatch(startLoading('logout', 'Logging Out...'));
-      API.logout(
-        user => {
-          dispatch(stopLoading('logout'));
+      call({
+        dispatch,
+        request: API.logout(),
+        loading: ['logout', 'Logging Out...'],
+        success: resp => {
           dispatch(ACTIONS.receiveCurrentUser(null));
           dispatch(push('/'));
-          dispatch(createNotification('success', 'Successfully Logged Out'));
-        },
-        err => err.responseJSON.forEach(m => {
-          dispatch(stopLoading('logout'));
-          dispatch(ACTIONS.receiveCurrentUser(null));
-          dispatch(createNotification('error', m));
-        })
-      );
+          return 'Successfully Logged Out';
+        }
+      });
       return next(action);
     case ACTIONS.SIGNUP:
-      dispatch(startLoading('currentUser', 'Signing Up...'));
-      API.signup(
-        action.user,
-        user => {
-          dispatch(ACTIONS.receiveCurrentUser(user));
-          dispatch(stopLoading('currentUser'));
+      call({
+        dispatch,
+        request: API.signup(action.user),
+        loading: ['currentUser', 'Signing Up...'],
+        success: resp => {
+          dispatch(ACTIONS.receiveCurrentUser(resp));
           dispatch(push('/sites'));
-          dispatch(createNotification('success', 'Successfully Signed Up'));
-        },
-        err => {
-          dispatch(ACTIONS.receiveCurrentUser(null));
-          err.responseJSON.forEach(m => {
-            dispatch(createNotification('error', m));
-            dispatch(stopLoading('currentUser'));
-          });
+          return 'Successfully Signed Up'
         }
-      );
+      });
       return next(action);
     default:
       next(action);

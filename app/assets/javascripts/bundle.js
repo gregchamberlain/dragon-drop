@@ -61364,9 +61364,7 @@
 	
 	var _reactRouterRedux = __webpack_require__(342);
 	
-	var _loading_actions = __webpack_require__(341);
-	
-	var _notification_actions = __webpack_require__(339);
+	var _api_utils = __webpack_require__(434);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -61377,48 +61375,40 @@
 	    return function (action) {
 	      switch (action.type) {
 	        case ACTIONS.LOGIN:
-	          dispatch((0, _loading_actions.startLoading)('currentUser', 'Logging in...'));
-	          API.login(action.user, function (user) {
-	            dispatch((0, _notification_actions.createNotification)('success', 'Successfully Logged In'));
-	            dispatch(ACTIONS.receiveCurrentUser(user));
-	            dispatch((0, _loading_actions.stopLoading)('currentUser'));
-	            dispatch((0, _reactRouterRedux.push)('/sites'));
-	          }, function (err) {
-	            dispatch(ACTIONS.receiveCurrentUser(null));
-	            err.responseJSON.forEach(function (m) {
-	              dispatch((0, _notification_actions.createNotification)('error', m));
-	              dispatch((0, _loading_actions.stopLoading)('currentUser'));
-	            });
+	          (0, _api_utils.call)({
+	            dispatch: dispatch,
+	            request: API.login(action.user),
+	            loading: ['currentUser', 'Logging in...'],
+	            success: function success(resp) {
+	              dispatch(ACTIONS.receiveCurrentUser(resp));
+	              dispatch((0, _reactRouterRedux.push)('/sites'));
+	              return 'Successfully Logged In';
+	            }
 	          });
+	          // May need dispatch(ACTIONS.receiveCurrentUser(null)); in error handler
 	          return next(action);
 	        case ACTIONS.LOGOUT:
-	          dispatch((0, _loading_actions.startLoading)('logout', 'Logging Out...'));
-	          API.logout(function (user) {
-	            dispatch((0, _loading_actions.stopLoading)('logout'));
-	            dispatch(ACTIONS.receiveCurrentUser(null));
-	            dispatch((0, _reactRouterRedux.push)('/'));
-	            dispatch((0, _notification_actions.createNotification)('success', 'Successfully Logged Out'));
-	          }, function (err) {
-	            return err.responseJSON.forEach(function (m) {
-	              dispatch((0, _loading_actions.stopLoading)('logout'));
+	          (0, _api_utils.call)({
+	            dispatch: dispatch,
+	            request: API.logout(),
+	            loading: ['logout', 'Logging Out...'],
+	            success: function success(resp) {
 	              dispatch(ACTIONS.receiveCurrentUser(null));
-	              dispatch((0, _notification_actions.createNotification)('error', m));
-	            });
+	              dispatch((0, _reactRouterRedux.push)('/'));
+	              return 'Successfully Logged Out';
+	            }
 	          });
 	          return next(action);
 	        case ACTIONS.SIGNUP:
-	          dispatch((0, _loading_actions.startLoading)('currentUser', 'Signing Up...'));
-	          API.signup(action.user, function (user) {
-	            dispatch(ACTIONS.receiveCurrentUser(user));
-	            dispatch((0, _loading_actions.stopLoading)('currentUser'));
-	            dispatch((0, _reactRouterRedux.push)('/sites'));
-	            dispatch((0, _notification_actions.createNotification)('success', 'Successfully Signed Up'));
-	          }, function (err) {
-	            dispatch(ACTIONS.receiveCurrentUser(null));
-	            err.responseJSON.forEach(function (m) {
-	              dispatch((0, _notification_actions.createNotification)('error', m));
-	              dispatch((0, _loading_actions.stopLoading)('currentUser'));
-	            });
+	          (0, _api_utils.call)({
+	            dispatch: dispatch,
+	            request: API.signup(action.user),
+	            loading: ['currentUser', 'Signing Up...'],
+	            success: function success(resp) {
+	              dispatch(ACTIONS.receiveCurrentUser(resp));
+	              dispatch((0, _reactRouterRedux.push)('/sites'));
+	              return 'Successfully Signed Up';
+	            }
 	          });
 	          return next(action);
 	        default:
@@ -61437,35 +61427,29 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	var login = exports.login = function login(user, success, error) {
-	  $.ajax({
-	    method: 'POST',
-	    url: 'api/session',
-	    data: { user: user },
-	    success: success,
-	    error: error
-	  });
+	    return {
+	        method: 'POST',
+	        url: 'api/session',
+	        data: { user: user }
+	    };
 	};
 	
 	var signup = exports.signup = function signup(user, success, error) {
-	  $.ajax({
-	    method: 'POST',
-	    url: 'api/users',
-	    data: { user: user },
-	    success: success,
-	    error: error
-	  });
+	    return {
+	        method: 'POST',
+	        url: 'api/users',
+	        data: { user: user }
+	    };
 	};
 	
 	var logout = exports.logout = function logout(success, error) {
-	  $.ajax({
-	    method: 'DELETE',
-	    url: 'api/session',
-	    success: success,
-	    error: error
-	  });
+	    return {
+	        method: 'DELETE',
+	        url: 'api/session'
+	    };
 	};
 
 /***/ },
@@ -70125,9 +70109,10 @@
 	  );
 	};
 	
-	var mapStateToProps = function mapStateToProps(state) {
+	var mapStateToProps = function mapStateToProps(_ref2) {
+	  var loading = _ref2.loading;
 	  return {
-	    loading: state.session.loading
+	    loading: loading['currentUser']
 	  };
 	};
 	

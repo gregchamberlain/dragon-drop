@@ -32,8 +32,8 @@ const Home = ({ children, loading, loginAsGuest  }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  loading: state.session.loading
+const mapStateToProps = ({ loading }) => ({
+  loading: loading['currentUser']
 });
 
 const mapDispatchToProps = dispatch => ({
