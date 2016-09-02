@@ -48,6 +48,7 @@ const Root = ({ store, history }) => (
             <IndexRedirect to='editor' />
             <Route path="editor" component={PagesMain}>
               <IndexRoute component={PageEditor} />
+              <Route path=":pageId" component={() => <div></div>}/>
             </Route>
             <Route path="store" component={() => <div>Store</div>}/>
             <Route path="analytics" component={() => <div>Analytics</div>}/>

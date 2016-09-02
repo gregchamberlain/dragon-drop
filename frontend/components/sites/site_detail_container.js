@@ -2,10 +2,8 @@ import { connect } from 'react-redux';
 import SiteDetail from './site_detail.jsx';
 import { mergePages } from '../../util';
 
-const mapStateToProps = ({ sites, pages }, { params }) => ({
-  site: sites[params.siteId] || {},
-  loading: sites.loading,
-  pages: sites[params.siteId] && sites[params.siteId].pages ? mergePages(pages, sites[params.siteId].pages) : [],
+const mapStateToProps = ({ sites, pages, loading }, { params }) => ({
+  loading: loading['site'],
 });
 
 export default connect(mapStateToProps)(SiteDetail);

@@ -7,7 +7,8 @@
 @import "sidebar";
 @import "loading";
 @import "notifications";
-
+@import "tabs";
+@import "navigation";
 
  * {
    box-sizing: border-box;
@@ -56,11 +57,12 @@ button {
     background-repeat: no-repeat;
     display: flex;
     align-items: flex-end;
-    padding: 40px;
+    padding: 10px;
     justify-content: center;
 
     h1 {
       color: #fff;
+      font-size: 40px;
       text-shadow: 0 0 10px #444;
       cursor: default;
     }
@@ -266,8 +268,6 @@ button {
 .editor-content {
   margin-left: 200px;
 }
-
-
 .sidebar-tabs {
   display: flex;
   align-items: center;

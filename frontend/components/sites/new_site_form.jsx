@@ -10,6 +10,12 @@ export default class NewSiteForm extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.loading && !nextProps.loading) {
+      this.setState({name: "", description: ""})
+    }
+  }
+
   update = name => e => {
     this.setState({[name]: e.target.value});
   }

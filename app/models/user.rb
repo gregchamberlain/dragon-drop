@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 8, allow_nil: true }
   after_initialize :ensure_session_token
 
-  has_many :sites
+  has_many :sites, dependent: :destroy
 
   def self.find_by_credentials(email, pass)
     user = User.find_by_email(email)

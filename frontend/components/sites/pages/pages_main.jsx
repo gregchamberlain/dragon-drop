@@ -2,7 +2,7 @@ import React from 'react';
 import EditorSidebar from '../../ui/editor_sidebar.jsx';
 
 const PagesMain = ({ site, pages, params, children }) => (
-  <EditorSidebar site={site} pages={pages} params={params}>
+  <EditorSidebar params={params}>
     {children}
   </EditorSidebar>
 );

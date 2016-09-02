@@ -6,3 +6,13 @@ export const fetchPages = (siteId, success, error) => {
     error
   });
 };
+
+export const createPage = (siteId, page, success, error) => {
+  $.ajax({
+    method: 'POST',
+    url: `api/sites/${siteId}/pages`,
+    data: {page},
+    success,
+    error
+  });
+};

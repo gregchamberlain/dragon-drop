@@ -1,5 +1,5 @@
 class Site < ActiveRecord::Base
-	has_many :pages
+	has_many :pages, dependent: :destroy
 	belongs_to :user
 
 	validates :name, :user_id, presence: true

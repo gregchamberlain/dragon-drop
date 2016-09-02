@@ -5,6 +5,13 @@ export const RECEIVE_SITE = 'RECEIVE_SITE';
 export const CREATE_SITE = 'CREATE_SITE';
 export const UPDATE_SITE = 'UPDATE_SITE';
 export const DESTROY_SITE = 'DESTROY_SITE';
+export const ADD_PAGE = 'ADD_PAGE';
+
+export const addPage = (siteId, pageId) => ({
+  type: ADD_PAGE,
+  siteId,
+  pageId
+});
 
 export const createSite = site => ({
   type: CREATE_SITE,

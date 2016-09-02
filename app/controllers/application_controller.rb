@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :wait
 
   def wait
-    sleep(1)
+    sleep(0.5)
   end
 
   def current_user

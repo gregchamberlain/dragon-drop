@@ -57205,6 +57205,8 @@
 	
 	var ACTIONS = _interopRequireWildcard(_entity_actions);
 	
+	var _site_actions = __webpack_require__(334);
+	
 	var _lodash = __webpack_require__(194);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
@@ -57228,6 +57230,12 @@
 	        });
 	        return {
 	          v: nextState
+	        };
+	      case _site_actions.ADD_PAGE:
+	        var newState = (0, _lodash.merge)({}, state);
+	        newState[action.siteId].pages.push(action.pageId);
+	        return {
+	          v: newState
 	        };
 	      case ACTIONS.LOADING_ENTITY:
 	        return {
@@ -57322,6 +57330,7 @@
 	});
 	var REQUEST_PAGES = exports.REQUEST_PAGES = 'REQUEST_PAGES';
 	var RECEIVE_PAGES = exports.RECEIVE_PAGES = 'RECEIVE_PAGES';
+	var CREATE_PAGE = exports.CREATE_PAGE = 'CREATE_PAGE';
 	
 	var requestPages = exports.requestPages = function requestPages(siteId) {
 	  return {
@@ -57335,6 +57344,14 @@
 	    type: RECEIVE_PAGES,
 	    siteId: siteId,
 	    response: response
+	  };
+	};
+	
+	var createPage = exports.createPage = function createPage(siteId, page) {
+	  return {
+	    type: CREATE_PAGE,
+	    siteId: siteId,
+	    page: page
 	  };
 	};
 
@@ -57354,6 +57371,15 @@
 	var CREATE_SITE = exports.CREATE_SITE = 'CREATE_SITE';
 	var UPDATE_SITE = exports.UPDATE_SITE = 'UPDATE_SITE';
 	var DESTROY_SITE = exports.DESTROY_SITE = 'DESTROY_SITE';
+	var ADD_PAGE = exports.ADD_PAGE = 'ADD_PAGE';
+	
+	var addPage = exports.addPage = function addPage(siteId, pageId) {
+	  return {
+	    type: ADD_PAGE,
+	    siteId: siteId,
+	    pageId: pageId
+	  };
+	};
 	
 	var createSite = exports.createSite = function createSite(site) {
 	  return {
@@ -58203,15 +58229,16 @@
 	          });
 	          return next(action);
 	        case ACTIONS.REQUEST_SITE:
-	          dispatch((0, _entity_actions.loadingEntity)(action.siteId));
+	          dispatch((0, _loading_actions.startLoading)('site', 'Fetching your website...'));
 	          API.fetchSite(action.siteId, function (response) {
 	            dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(response, _schema.site)));
+	            dispatch((0, _loading_actions.stopLoading)('site'));
 	          }, function (err) {
 	            dispatch((0, _reactRouterRedux.push)('/sites'));
 	            err.responseJSON.forEach(function (m) {
 	              return dispatch((0, _notification_actions.createNotification)('error', m));
 	            });
-	            dispatch((0, _entity_actions.loadingEntity)(false));
+	            dispatch((0, _loading_actions.stopLoading)('site'));
 	          });
 	          return next(action);
 	        case ACTIONS.CREATE_SITE:
@@ -61198,9 +61225,15 @@
 	
 	var _page_actions = __webpack_require__(333);
 	
+	var _site_actions = __webpack_require__(334);
+	
 	var _page_api = __webpack_require__(435);
 	
 	var _normalizr = __webpack_require__(354);
+	
+	var _entity_actions = __webpack_require__(331);
+	
+	var _loading_actions = __webpack_require__(341);
 	
 	var _schema = __webpack_require__(353);
 	
@@ -61213,6 +61246,18 @@
 	        case _page_actions.REQUEST_PAGES:
 	          (0, _page_api.fetchPages)(action.siteId, function (response) {
 	            return dispatch((0, _page_actions.receivePages)(action.siteId, (0, _normalizr.normalize)(response, _schema.arrayOfPages)));
+	          });
+	          return next(action);
+	        case _page_actions.CREATE_PAGE:
+	          dispatch((0, _loading_actions.startLoading)('create-page', 'Creating your page...'));
+	          (0, _page_api.createPage)(action.siteId, action.page, function (resp) {
+	            dispatch((0, _loading_actions.stopLoading)('create-page'));
+	            dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(resp, _schema.page)));
+	            dispatch((0, _site_actions.addPage)(action.siteId, resp.id));
+	            console.log(resp);
+	          }, function (err) {
+	            dispatch((0, _loading_actions.stopLoading)('create-page'));
+	            console.log(err);
 	          });
 	          return next(action);
 	        default:
@@ -61237,6 +61282,16 @@
 	  $.ajax({
 	    method: 'get',
 	    url: 'api/sites/' + siteId + '/pages',
+	    success: success,
+	    error: error
+	  });
+	};
+	
+	var createPage = exports.createPage = function createPage(siteId, page, success, error) {
+	  $.ajax({
+	    method: 'POST',
+	    url: 'api/sites/' + siteId + '/pages',
+	    data: { page: page },
 	    success: success,
 	    error: error
 	  });
@@ -67169,15 +67224,15 @@
 	
 	var _pages_main_container2 = _interopRequireDefault(_pages_main_container);
 	
-	var _settings_container = __webpack_require__(556);
+	var _settings_container = __webpack_require__(559);
 	
 	var _settings_container2 = _interopRequireDefault(_settings_container);
 	
-	var _notifications = __webpack_require__(559);
+	var _notifications = __webpack_require__(562);
 	
 	var _notifications2 = _interopRequireDefault(_notifications);
 	
-	var _templates_index_container = __webpack_require__(561);
+	var _templates_index_container = __webpack_require__(564);
 	
 	var _templates_index_container2 = _interopRequireDefault(_templates_index_container);
 	
@@ -67232,7 +67287,10 @@
 	            _react2.default.createElement(
 	              _reactRouter.Route,
 	              { path: 'editor', component: _pages_main_container2.default },
-	              _react2.default.createElement(_reactRouter.IndexRoute, { component: _page_editor2.default })
+	              _react2.default.createElement(_reactRouter.IndexRoute, { component: _page_editor2.default }),
+	              _react2.default.createElement(_reactRouter.Route, { path: ':pageId', component: function component() {
+	                  return _react2.default.createElement('div', null);
+	                } })
 	            ),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'store', component: function component() {
 	                return _react2.default.createElement(
@@ -69263,7 +69321,6 @@
 	  return _react2.default.createElement(
 	    'header',
 	    { className: 'home-header' },
-	    console.log(loading),
 	    _react2.default.createElement(
 	      'nav',
 	      { className: 'content' },
@@ -69500,6 +69557,13 @@
 	  }
 	
 	  _createClass(NewSiteForm, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (this.props.loading && !nextProps.loading) {
+	        this.setState({ name: "", description: "" });
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -69552,6 +69616,16 @@
 	    return entity.id;
 	  });
 	};
+	
+	var map = exports.map = function map(obj, relation, state) {
+	  if (!obj || !obj[relation]) {
+	    return [];
+	  } else {
+	    return obj[relation].map(function (id) {
+	      return state[id];
+	    });
+	  }
+	};
 
 /***/ },
 /* 534 */
@@ -69576,11 +69650,10 @@
 	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
 	  var sites = _ref.sites;
 	  var pages = _ref.pages;
+	  var loading = _ref.loading;
 	  var params = _ref2.params;
 	  return {
-	    site: sites[params.siteId] || {},
-	    loading: sites.loading,
-	    pages: sites[params.siteId] && sites[params.siteId].pages ? (0, _util.mergePages)(pages, sites[params.siteId].pages) : []
+	    loading: loading['site']
 	  };
 	};
 	
@@ -70381,10 +70454,7 @@
 	  var sites = _ref.sites;
 	  var pages = _ref.pages;
 	  var params = _ref2.params;
-	  return {
-	    site: sites[params.siteId] || {},
-	    pages: sites[params.siteId] && sites[params.siteId].pages ? (0, _util.mergePages)(pages, sites[params.siteId].pages) : []
-	  };
+	  return {};
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_pages_main2.default);
@@ -70416,7 +70486,7 @@
 	  var children = _ref.children;
 	  return _react2.default.createElement(
 	    _editor_sidebar2.default,
-	    { site: site, pages: pages, params: params },
+	    { params: params },
 	    children
 	  );
 	};
@@ -70463,6 +70533,14 @@
 	
 	var _reactRouter = __webpack_require__(441);
 	
+	var _tabs = __webpack_require__(556);
+	
+	var _tabs2 = _interopRequireDefault(_tabs);
+	
+	var _page_navigator_container = __webpack_require__(567);
+	
+	var _page_navigator_container2 = _interopRequireDefault(_page_navigator_container);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var EditorSidebar = function EditorSidebar(_ref) {
@@ -70477,85 +70555,33 @@
 	      'div',
 	      { className: 'editor-sidebar' },
 	      _react2.default.createElement(
-	        'div',
-	        { className: 'sidebar-tabs' },
+	        _tabs2.default,
+	        null,
 	        _react2.default.createElement(
-	          'div',
-	          { className: 'tab' },
-	          _react2.default.createElement(_compass2.default, null)
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'tab' },
-	          _react2.default.createElement(_wrench2.default, null)
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'tab' },
-	          _react2.default.createElement(_plus2.default, null)
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'sidebar-header' },
-	        site.name
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'sidebar-group' },
-	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          'Pages'
-	        ),
-	        _react2.default.createElement(
-	          'ul',
-	          null,
-	          pages.map(function (page) {
-	            return _react2.default.createElement(
-	              _reactRouter.Link,
-	              { key: page.id, to: '/sites/' + params.siteId + '/editor/' + page.id },
-	              _react2.default.createElement(_fileO2.default, null),
-	              ' ',
-	              page.name,
-	              ' - ',
-	              _react2.default.createElement(
-	                'small',
-	                null,
-	                page.path
-	              )
-	            );
-	          }),
+	          _tabs.Tab,
+	          { icon: _react2.default.createElement(_compass2.default, null) },
 	          _react2.default.createElement(
-	            'li',
-	            null,
-	            _react2.default.createElement(_plus2.default, null),
-	            ' New Page'
+	            _page_navigator_container2.default,
+	            { params: params },
+	            'Navigator!'
 	          )
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'sidebar-group' },
-	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          'Assets'
 	        ),
 	        _react2.default.createElement(
-	          'ul',
-	          null,
+	          _tabs.Tab,
+	          { icon: _react2.default.createElement(_wrench2.default, null) },
 	          _react2.default.createElement(
-	            'li',
+	            'div',
 	            null,
-	            _react2.default.createElement(_image2.default, null),
-	            ' Images'
-	          ),
+	            'Settings'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          _tabs.Tab,
+	          { icon: _react2.default.createElement(_plus2.default, null) },
 	          _react2.default.createElement(
-	            'li',
+	            'div',
 	            null,
-	            _react2.default.createElement(_paintBrush2.default, null),
-	            ' Theme'
+	            'Catalog'
 	          )
 	        )
 	      )
@@ -70569,6 +70595,33 @@
 	};
 	
 	exports.default = EditorSidebar;
+	
+	/*
+	<div className="sidebar-tabs">
+	  <div className="tab"><Compass /></div>
+	  <div className="tab"><Wrench /></div>
+	  <div className="tab"><Plus /></div>
+	</div>
+	<div className='sidebar-header'>{site.name}</div>
+	<div className='sidebar-group'>
+	  <h1>Pages</h1>
+	  <ul>
+	    {pages.map(page =>  (
+	      <Link key={page.id} to={`/sites/${params.siteId}/editor/${page.id}`}>
+	        <File /> {page.name} - <small>{page.path}</small>
+	      </Link>
+	    ))}
+	    <li><Plus /> New Page</li>
+	  </ul>
+	</div>
+	<div className='sidebar-group'>
+	  <h1>Assets</h1>
+	  <ul>
+	    <li><Image /> Images</li>
+	    <li><Brush /> Theme</li>
+	  </ul>
+	</div>
+	*/
 
 /***/ },
 /* 550 */
@@ -70897,10 +70950,177 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.Tab = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _compass = __webpack_require__(554);
+	
+	var _compass2 = _interopRequireDefault(_compass);
+	
+	var _wrench = __webpack_require__(555);
+	
+	var _wrench2 = _interopRequireDefault(_wrench);
+	
+	var _plus = __webpack_require__(551);
+	
+	var _plus2 = _interopRequireDefault(_plus);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Tabs = function (_Component) {
+	  _inherits(Tabs, _Component);
+	
+	  function Tabs(props) {
+	    _classCallCheck(this, Tabs);
+	
+	    var _this = _possibleConstructorReturn(this, (Tabs.__proto__ || Object.getPrototypeOf(Tabs)).call(this, props));
+	
+	    _this.changeCurrentTab = function (idx) {
+	      return function (e) {
+	        _this.setState({ currentTab: idx });
+	      };
+	    };
+	
+	    _this.state = {
+	      currentTab: 0
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(Tabs, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+	
+	      var tabs = this.props.children.map(function (child, idx) {
+	        return _react2.default.createElement(
+	          'div',
+	          {
+	            key: Math.random() * 100,
+	            className: 'tab' + (_this2.state.currentTab === idx ? " active" : ""),
+	            onClick: _this2.changeCurrentTab(idx) },
+	          child.props.icon
+	        );
+	      });
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'tabs-wrapper' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'tabs' },
+	          tabs
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'tabs-content' },
+	          this.props.children[this.state.currentTab]
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Tabs;
+	}(_react.Component);
+	
+	exports.default = Tabs;
+	var Tab = exports.Tab = function Tab(_ref) {
+	  var icon = _ref.icon;
+	  var children = _ref.children;
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    children
+	  );
+	};
+
+/***/ },
+/* 557 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _new_page_form = __webpack_require__(565);
+	
+	var _new_page_form2 = _interopRequireDefault(_new_page_form);
+	
+	var _reactRouter = __webpack_require__(441);
+	
+	var _fileO = __webpack_require__(550);
+	
+	var _fileO2 = _interopRequireDefault(_fileO);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var PageNavigation = function PageNavigation(_ref) {
+	  var site = _ref.site;
+	  var pages = _ref.pages;
+	  var createPage = _ref.createPage;
+	  var loading = _ref.loading;
+	  var location = _ref.location;
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'page-navigation' },
+	    _react2.default.createElement(
+	      'h1',
+	      null,
+	      site.name
+	    ),
+	    _react2.default.createElement(
+	      'ul',
+	      { className: 'page-list' },
+	      pages.map(function (page) {
+	        return _react2.default.createElement(
+	          'li',
+	          { key: page.id, className: 'page-list-item' },
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { to: location + '/' + page.id, activeClassName: 'active' },
+	            _react2.default.createElement(_fileO2.default, null),
+	            page.name
+	          )
+	        );
+	      }),
+	      _react2.default.createElement(_new_page_form2.default, { createPage: createPage, loading: loading })
+	    )
+	  );
+	};
+	
+	exports.default = PageNavigation;
+
+/***/ },
+/* 558 */,
+/* 559 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
 	var _reactRedux = __webpack_require__(505);
 	
-	var _settings = __webpack_require__(557);
+	var _settings = __webpack_require__(560);
 	
 	var _settings2 = _interopRequireDefault(_settings);
 	
@@ -70928,7 +71148,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_settings2.default);
 
 /***/ },
-/* 557 */
+/* 560 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -70941,7 +71161,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _settings_form = __webpack_require__(558);
+	var _settings_form = __webpack_require__(561);
 	
 	var _settings_form2 = _interopRequireDefault(_settings_form);
 	
@@ -70967,7 +71187,7 @@
 	exports.default = SiteSettings;
 
 /***/ },
-/* 558 */
+/* 561 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -71060,7 +71280,7 @@
 	exports.default = SiteSettingsForm;
 
 /***/ },
-/* 559 */
+/* 562 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -71075,7 +71295,7 @@
 	
 	var _reactRedux = __webpack_require__(505);
 	
-	var _notification_item = __webpack_require__(560);
+	var _notification_item = __webpack_require__(563);
 	
 	var _notification_item2 = _interopRequireDefault(_notification_item);
 	
@@ -71131,7 +71351,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Notifications);
 
 /***/ },
-/* 560 */
+/* 563 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -71181,7 +71401,7 @@
 	exports.default = NotificationItem;
 
 /***/ },
-/* 561 */
+/* 564 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -71216,6 +71436,230 @@
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_sites_index2.default);
+
+/***/ },
+/* 565 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _plusCircle = __webpack_require__(566);
+	
+	var _plusCircle2 = _interopRequireDefault(_plusCircle);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var NewPageForm = function (_Component) {
+	  _inherits(NewPageForm, _Component);
+	
+	  function NewPageForm(props) {
+	    _classCallCheck(this, NewPageForm);
+	
+	    var _this = _possibleConstructorReturn(this, (NewPageForm.__proto__ || Object.getPrototypeOf(NewPageForm)).call(this, props));
+	
+	    _this.handleKeyPress = function (e) {
+	      if (e.keyCode === 27 && _this.state.showForm) {
+	        _this.setState({ showForm: false });
+	      }
+	    };
+	
+	    _this.componentDidMount = function () {
+	      document.addEventListener('keydown', _this.handleKeyPress);
+	    };
+	
+	    _this.componentWillUnmount = function () {
+	      document.removeEventListener('keydown', _this.handleKeyPress);
+	    };
+	
+	    _this.updateName = function (e) {
+	      _this.setState({ name: e.target.value });
+	    };
+	
+	    _this.onSubmit = function (e) {
+	      e.preventDefault();
+	      _this.props.createPage({ name: _this.state.name });
+	    };
+	
+	    _this.toggleForm = function (e) {
+	      if (_this.state.showForm && _this.state.name !== "") return;
+	      _this.setState({ showForm: !_this.state.showForm });
+	    };
+	
+	    _this.closeForm = function (e) {
+	      if (_this.state.name !== "") return;
+	      _this.setState({ showForm: !_this.state.showForm });
+	    };
+	
+	    _this.state = {
+	      name: "",
+	      showForm: false
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(NewPageForm, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(props) {
+	      if (this.props.loading && !props.loading) {
+	        this.setState({ showForm: false, name: "" });
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      if (this.state.showForm) {
+	        return _react2.default.createElement(
+	          'li',
+	          { className: 'page-list-item' + (this.props.loading ? "" : " active") },
+	          _react2.default.createElement(_plusCircle2.default, null),
+	          _react2.default.createElement(
+	            'form',
+	            { onSubmit: this.onSubmit, className: 'new-page-form' },
+	            _react2.default.createElement('input', {
+	              ref: 'name',
+	              disabled: this.props.loading,
+	              onBlur: this.closeForm,
+	              autoFocus: true,
+	              type: 'text',
+	              value: this.state.change,
+	              onChange: this.updateName })
+	          )
+	        );
+	      } else {
+	        return _react2.default.createElement(
+	          'li',
+	          { className: 'page-list-item' },
+	          _react2.default.createElement(_plusCircle2.default, null),
+	          _react2.default.createElement(
+	            'a',
+	            { onClick: this.toggleForm },
+	            'New Page'
+	          )
+	        );
+	      }
+	    }
+	  }]);
+	
+	  return NewPageForm;
+	}(_react.Component);
+	
+	exports.default = NewPageForm;
+
+/***/ },
+/* 566 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(1);
+	var IconBase = __webpack_require__(525);
+	
+	var FaPlusCircle = function (_React$Component) {
+	    _inherits(FaPlusCircle, _React$Component);
+	
+	    function FaPlusCircle() {
+	        _classCallCheck(this, FaPlusCircle);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(FaPlusCircle).apply(this, arguments));
+	    }
+	
+	    _createClass(FaPlusCircle, [{
+	        key: 'render',
+	        value: function render() {
+	            return React.createElement(
+	                IconBase,
+	                _extends({ viewBox: '0 0 40 40' }, this.props),
+	                React.createElement(
+	                    'g',
+	                    null,
+	                    React.createElement('path', { d: 'm30.1 21.4v-2.8q0-0.6-0.4-1t-1-0.5h-5.7v-5.7q0-0.6-0.4-1t-1-0.4h-2.9q-0.6 0-1 0.4t-0.4 1v5.7h-5.7q-0.6 0-1 0.5t-0.5 1v2.8q0 0.6 0.5 1t1 0.5h5.7v5.7q0 0.5 0.4 1t1 0.4h2.9q0.6 0 1-0.4t0.4-1v-5.7h5.7q0.6 0 1-0.5t0.4-1z m7.2-1.4q0 4.7-2.3 8.6t-6.3 6.2-8.6 2.3-8.6-2.3-6.2-6.2-2.3-8.6 2.3-8.6 6.2-6.2 8.6-2.3 8.6 2.3 6.3 6.2 2.3 8.6z' })
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return FaPlusCircle;
+	}(React.Component);
+	
+	exports.default = FaPlusCircle;
+	module.exports = exports['default'];
+
+/***/ },
+/* 567 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(505);
+	
+	var _navigation = __webpack_require__(557);
+	
+	var _navigation2 = _interopRequireDefault(_navigation);
+	
+	var _page_actions = __webpack_require__(333);
+	
+	var _entity_utils = __webpack_require__(533);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
+	  var sites = _ref.sites;
+	  var pages = _ref.pages;
+	  var loading = _ref.loading;
+	  var params = _ref2.params;
+	  return {
+	    site: sites[params.sitedId] || {},
+	    pages: (0, _entity_utils.map)(sites[params.siteId], 'pages', pages),
+	    loading: loading['create-page'],
+	    location: '/sites/' + params.siteId + '/editor'
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, _ref3) {
+	  var params = _ref3.params;
+	  return {
+	    createPage: function createPage(page) {
+	      return dispatch((0, _page_actions.createPage)(params.siteId, page));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_navigation2.default);
 
 /***/ }
 /******/ ]);

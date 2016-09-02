@@ -23,16 +23,17 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
       );
       return next(action);
     case ACTIONS.REQUEST_SITE:
-    dispatch(loadingEntity(action.siteId));
+      dispatch(startLoading('site', 'Fetching your website...'))
       API.fetchSite(
         action.siteId,
         response => {
           dispatch(receiveEntity(normalize(response, site)));
+          dispatch(stopLoading('site'))
         },
         err => {
           dispatch(push('/sites'))
           err.responseJSON.forEach(m => dispatch(createNotification('error', m)));
-          dispatch(loadingEntity(false));
+          dispatch(stopLoading('site'))
         }
       );
       return next(action);

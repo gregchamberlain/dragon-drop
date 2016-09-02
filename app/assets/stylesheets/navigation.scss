@@ -1,0 +1,61 @@
+.page-navigation {
+
+  .page-list {
+    padding: 0;
+    list-style: none;
+
+    .page-list-item {
+
+      display: flex;
+      align-items: center;
+      color: #ccc;
+      height: 30px;
+
+      &:hover {
+        color: #eee;
+      }
+
+      &.active {
+        color: #eee;
+      }
+
+      svg {
+        margin-right: 10px;
+      }
+
+      a {
+        display: flex;
+        align-items: center;
+        height: 30px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: inherit;
+        line-height: 26px;
+        cursor: pointer;
+        text-decoration: none;
+
+        &.active {
+          color: #eee;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
+  .new-page-form {
+    flex: 5;
+    input {
+      width: 100%;
+      padding: 5px;
+      border-radius: 2px;
+      background: #888;
+      color: #eee;
+      border: none;
+      outline: none;
+
+      &:disabled {
+        background: #666;
+      }
+    }
+  }
+}

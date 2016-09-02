@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 
 const HeaderBar = ({ currentUser, logout, loading }) => (
   <header className="home-header">
-    {console.log(loading)}
     <nav className="content">
       <Link to="/" className="brand">DRAGONDROP</Link>
       { currentUser ? <Link to="/sites" className="nav">My Websites</Link> : "" }

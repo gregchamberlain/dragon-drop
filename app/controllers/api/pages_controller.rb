@@ -10,20 +10,16 @@ class Api::PagesController < ApplicationController
     if @page.save
       render json: @page.to_json(include: :components)
     else
-      render json: @page.errors
+      render json: @page.errors.full_messages, status: 400
     end
   end
 
   def update
     @page = Page.find(params[:id])
-    p "ASDKJLSADASD"
-    p page_params
-    par = page_params
-    par[:components_attributes] ||= []
     if @page.update(page_params)
       render json: @page.to_json(include: :components)
     else
-      render json: @page.errors
+      render json: @page.errors.full_messages, status: 400
     end
   end
 
