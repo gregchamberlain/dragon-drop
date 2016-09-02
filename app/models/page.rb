@@ -4,7 +4,7 @@ class Page < ActiveRecord::Base
 
 	accepts_nested_attributes_for :components, allow_destroy: true
 	validates :name, :path, presence: true
-	validates_uniqueness_of :name, :path, case_sensitive: false
+	validates_uniqueness_of :name, :path, case_sensitive: false, scope: :site_id
 
 	after_initialize :ensure_path
 
