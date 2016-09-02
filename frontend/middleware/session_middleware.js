@@ -1,5 +1,7 @@
 import * as ACTIONS from '../actions/session_actions.js';
-import { clearEntities } from '../actions/entity_actions.js';
+import { clearEntities, receiveEntity } from '../actions/entity_actions.js';
+import { arrayOfSites } from '../actions/schema.js';
+import { normalize } from 'normalizr';
 import * as API from '../util/user_api.js';
 import { push } from 'react-router-redux';
 import { call } from '../util/api_utils.js';
@@ -12,6 +14,7 @@ const SessionMiddleware = ({getState, dispatch}) => next => action => {
         request: API.login(action.user),
         loading: ['currentUser', 'Logging in...'],
         success: resp => {
+          dispatch(receiveEntity(normalize(resp.sites, arrayOfSites)))
           dispatch(ACTIONS.receiveCurrentUser(resp));
           dispatch(push('/sites'));
           return 'Successfully Logged In';
