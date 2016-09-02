@@ -1,9 +1,10 @@
-import LayoutMiddleware from './layout_middleware.js';
-import SiteMiddleware from './site_middleware.js';
-import PageMiddleware from './page_middleware.js';
-import SessionMiddleware from './session_middleware.js';
-import NotificationMiddleware from './notification_middleware.js';
-import TemplateMiddleware from './template_middleware.js';
+import LayoutMiddleware from './layout_middleware';
+import SiteMiddleware from './site_middleware';
+import PageMiddleware from './page_middleware';
+import SessionMiddleware from './session_middleware';
+import NotificationMiddleware from './notification_middleware';
+import TemplateMiddleware from './template_middleware';
+import ComponentMiddleware from './component_middleware';
 import { routerMiddleware } from 'react-router-redux';
 import { hashHistory } from 'react-router';
 
@@ -16,5 +17,6 @@ export default applyMiddleware(
   SessionMiddleware,
   NotificationMiddleware,
   TemplateMiddleware,
+  ComponentMiddleware,
   routerMiddleware(hashHistory)
 );

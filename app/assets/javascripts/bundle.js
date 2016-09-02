@@ -22359,6 +22359,10 @@
 	
 	var _loading_reducer2 = _interopRequireDefault(_loading_reducer);
 	
+	var _component_reducer = __webpack_require__(570);
+	
+	var _component_reducer2 = _interopRequireDefault(_component_reducer);
+	
 	var _reactRouterRedux = __webpack_require__(341);
 	
 	var _redux = __webpack_require__(173);
@@ -22374,6 +22378,7 @@
 	  session: _session_reducer2.default,
 	  routing: _reactRouterRedux.routerReducer,
 	  templates: _template_reducer2.default,
+	  components: _component_reducer2.default,
 	  loading: _loading_reducer2.default,
 	  notifications: _notification_reducer2.default
 	});
@@ -57218,6 +57223,9 @@
 	          v: (0, _lodash.merge)(state, action.resp.entities.sites)
 	        };
 	      case _entity_actions.REMOVE_ENTITY:
+	        if (!action.resp.entities.sites) return {
+	            v: state
+	          };
 	        var nextState = (0, _lodash.merge)({}, state);
 	        Object.keys(action.resp.entities.sites).forEach(function (id) {
 	          delete nextState[id];
@@ -57352,6 +57360,8 @@
 	
 	var _entity_actions = __webpack_require__(331);
 	
+	var _page_actions = __webpack_require__(435);
+	
 	var _lodash = __webpack_require__(194);
 	
 	var PageReducer = function PageReducer() {
@@ -57363,6 +57373,16 @@
 	      return (0, _lodash.merge)({}, state, action.resp.entities.pages);
 	    case _entity_actions.CLEAR_ENTITIES:
 	      return {};
+	    case _page_actions.ADD_COMPONENT:
+	      var newState = (0, _lodash.merge)({}, state);
+	      newState[action.pageId].components.push(action.componentId);
+	      return newState;
+	    case _page_actions.REMOVE_COMPONENT:
+	      var nextState = (0, _lodash.merge)({}, state);
+	      nextState[action.pageId].components = nextState[action.pageId].components.filter(function (c) {
+	        return c !== action.componentId;
+	      });
+	      return nextState;
 	    default:
 	      return state;
 	  }
@@ -57999,6 +58019,10 @@
 	
 	var _template_middleware2 = _interopRequireDefault(_template_middleware);
 	
+	var _component_middleware = __webpack_require__(571);
+	
+	var _component_middleware2 = _interopRequireDefault(_component_middleware);
+	
 	var _reactRouterRedux = __webpack_require__(341);
 	
 	var _reactRouter = __webpack_require__(442);
@@ -58007,7 +58031,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	exports.default = (0, _redux.applyMiddleware)(_layout_middleware2.default, _site_middleware2.default, _page_middleware2.default, _session_middleware2.default, _notification_middleware2.default, _template_middleware2.default, (0, _reactRouterRedux.routerMiddleware)(_reactRouter.hashHistory));
+	exports.default = (0, _redux.applyMiddleware)(_layout_middleware2.default, _site_middleware2.default, _page_middleware2.default, _session_middleware2.default, _notification_middleware2.default, _template_middleware2.default, _component_middleware2.default, (0, _reactRouterRedux.routerMiddleware)(_reactRouter.hashHistory));
 
 /***/ },
 /* 347 */
@@ -61284,6 +61308,8 @@
 	var REQUEST_PAGES = exports.REQUEST_PAGES = 'REQUEST_PAGES';
 	var CREATE_PAGE = exports.CREATE_PAGE = 'CREATE_PAGE';
 	var UPDATE_PAGE = exports.UPDATE_PAGE = 'UPDATE_PAGE';
+	var ADD_COMPONENT = exports.ADD_COMPONENT = 'ADD_COMPONENT';
+	var REMOVE_COMPONENT = exports.REMOVE_COMPONENT = 'REMOVE_COMPONENT';
 	
 	var requestPages = exports.requestPages = function requestPages(siteId) {
 	  return {
@@ -61304,6 +61330,22 @@
 	  return {
 	    type: UPDATE_PAGE,
 	    page: page
+	  };
+	};
+	
+	var addComponent = exports.addComponent = function addComponent(pageId, componentId) {
+	  return {
+	    type: ADD_COMPONENT,
+	    pageId: pageId,
+	    componentId: componentId
+	  };
+	};
+	
+	var removeComponent = exports.removeComponent = function removeComponent(pageId, componentId) {
+	  return {
+	    type: REMOVE_COMPONENT,
+	    pageId: pageId,
+	    componentId: componentId
 	  };
 	};
 
@@ -61393,6 +61435,7 @@
 	            request: API.login(action.user),
 	            loading: ['currentUser', 'Logging in...'],
 	            success: function success(resp) {
+	              console.log(resp);
 	              dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(resp.sites, _schema.arrayOfSites)));
 	              dispatch(ACTIONS.receiveCurrentUser(resp));
 	              dispatch((0, _reactRouterRedux.push)('/sites'));
@@ -71859,7 +71902,7 @@
 	                type: 'text',
 	                value: this.state.path,
 	                onChange: this.updateState("path"),
-	                disabled: this.state.path === '/' })
+	                disabled: page.path === '/' })
 	            ),
 	            _react2.default.createElement(
 	              'button',
@@ -71876,6 +71919,174 @@
 	}(_react.Component);
 	
 	exports.default = PageSettings;
+
+/***/ },
+/* 570 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
+	var _entity_actions = __webpack_require__(331);
+	
+	var _lodash = __webpack_require__(194);
+	
+	var ComponentReducer = function ComponentReducer() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	  var _ret = function () {
+	    switch (action.type) {
+	      case _entity_actions.RECEIVE_ENTITY:
+	        return {
+	          v: (0, _lodash.merge)({}, state, action.resp.entities.components)
+	        };
+	      case _entity_actions.REMOVE_ENTITY:
+	        if (!action.resp.entities.components) return {
+	            v: state
+	          };
+	        var nextState = (0, _lodash.merge)({}, state);
+	        Object.keys(action.resp.entities.components).forEach(function (id) {
+	          delete nextState[id];
+	        });
+	        return {
+	          v: nextState
+	        };
+	      case _entity_actions.CLEAR_ENTITIES:
+	        return {
+	          v: {}
+	        };
+	      default:
+	        return {
+	          v: state
+	        };
+	    }
+	  }();
+	
+	  if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+	};
+	
+	exports.default = ComponentReducer;
+
+/***/ },
+/* 571 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _component_actions = __webpack_require__(572);
+	
+	var _api_utils = __webpack_require__(433);
+	
+	var _entity_actions = __webpack_require__(331);
+	
+	var _page_actions = __webpack_require__(435);
+	
+	var _component_api = __webpack_require__(573);
+	
+	var _normalizr = __webpack_require__(353);
+	
+	var _schema = __webpack_require__(352);
+	
+	var ComponentMiddleware = function ComponentMiddleware(_ref) {
+	  var getState = _ref.getState;
+	  var dispatch = _ref.dispatch;
+	  return function (next) {
+	    return function (action) {
+	      switch (action.type) {
+	        case _component_actions.CREATE_COMPONENT:
+	          (0, _api_utils.call)({
+	            dispatch: dispatch,
+	            request: (0, _component_api.createComponent)(action.pageId, action.component),
+	            loading: ['component', 'Creating component...'],
+	            success: function success(resp) {
+	              dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(resp, _schema.component)));
+	              dispatch((0, _page_actions.addComponent)(resp.page_id, resp.id));
+	            }
+	          });
+	          return next(action);
+	        case _component_actions.DESTROY_COMPONENT:
+	          (0, _api_utils.call)({
+	            dispatch: dispatch,
+	            request: (0, _component_api.destroyComponent)(action.component),
+	            loading: ['component', 'Destroying component...'],
+	            success: function success(resp) {
+	              dispatch((0, _entity_actions.removeEntity)((0, _normalizr.normalize)(resp, _schema.component)));
+	              dispatch((0, _page_actions.removeComponent)(resp.page_id, resp.id));
+	            }
+	          });
+	          return next(action);
+	        default:
+	          return next(action);
+	      }
+	    };
+	  };
+	};
+	
+	exports.default = ComponentMiddleware;
+
+/***/ },
+/* 572 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var CREATE_COMPONENT = exports.CREATE_COMPONENT = 'CREATE_COMPONENT';
+	var DESTROY_COMPONENT = exports.DESTROY_COMPONENT = 'DESTROY_COMPONENT';
+	
+	var createComponent = exports.createComponent = function createComponent(pageId, component) {
+	  return {
+	    type: CREATE_COMPONENT,
+	    pageId: pageId,
+	    component: component
+	  };
+	};
+	
+	var destroyComponent = exports.destroyComponent = function destroyComponent(component) {
+	  return {
+	    type: DESTROY_COMPONENT,
+	    component: component
+	  };
+	};
+	
+	window.createComponent = createComponent;
+	window.destroyComponent = destroyComponent;
+
+/***/ },
+/* 573 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var createComponent = exports.createComponent = function createComponent(pageId, component) {
+	  return {
+	    method: 'POST',
+	    url: 'api/pages/' + pageId + '/components',
+	    data: { component: component }
+	  };
+	};
+	
+	var destroyComponent = exports.destroyComponent = function destroyComponent(component) {
+	  return {
+	    method: 'DELETE',
+	    url: 'api/components/' + component.id
+	  };
+	};
 
 /***/ }
 /******/ ]);

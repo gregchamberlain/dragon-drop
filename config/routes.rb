@@ -8,7 +8,10 @@ Rails.application.routes.draw do
       resources :pages, only: [:index, :create]
     end
     resources :templates, only: [:index]
-    resources :pages, only: [:update, :destroy, :show]
+    resources :pages, only: [:update, :destroy, :show] do
+      resources :components, only: [:create]
+    end
+    resources :components, only: [:destroy]
     resources :users, only: [:create, :destroy]
     resource :session, only: [:create, :destroy]
   end

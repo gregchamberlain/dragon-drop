@@ -7,6 +7,7 @@ const SiteReducer = (state = {}, action) => {
     case RECEIVE_ENTITY:
       return merge(state, action.resp.entities.sites);
     case REMOVE_ENTITY:
+      if (!action.resp.entities.sites) return state;
       let nextState = merge({}, state);
       Object.keys(action.resp.entities.sites).forEach(id => {
         delete nextState[id];

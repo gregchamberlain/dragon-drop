@@ -45,7 +45,7 @@ export default class PageSettings extends Component {
                 type="text"
                 value={this.state.path}
                 onChange={this.updateState("path")}
-                disabled={this.state.path === '/'}/>
+                disabled={page.path === '/'}/>
             </label>
             <button type="submit">Update</button>
           </form>
