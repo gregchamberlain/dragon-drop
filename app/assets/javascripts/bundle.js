@@ -66,7 +66,7 @@
 	
 	var ACTIONS = _interopRequireWildcard(_session_actions);
 	
-	var _reactRouterRedux = __webpack_require__(344);
+	var _reactRouterRedux = __webpack_require__(345);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -21449,7 +21449,7 @@
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
-	var _middleware = __webpack_require__(349);
+	var _middleware = __webpack_require__(350);
 	
 	var _middleware2 = _interopRequireDefault(_middleware);
 	
@@ -22363,7 +22363,7 @@
 	
 	var _component_reducer2 = _interopRequireDefault(_component_reducer);
 	
-	var _reactRouterRedux = __webpack_require__(344);
+	var _reactRouterRedux = __webpack_require__(345);
 	
 	var _redux = __webpack_require__(173);
 	
@@ -57777,6 +57777,47 @@
 
 /***/ },
 /* 344 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var parseLayout = exports.parseLayout = function parseLayout(layout) {
+	  return Object.assign({}, layout, { data: JSON.parse(layout.data) });
+	};
+	
+	var mergePages = exports.mergePages = function mergePages(state, pages) {
+	  return pages.map(function (id) {
+	    return state[id];
+	  });
+	};
+	
+	var mergeComponents = exports.mergeComponents = function mergeComponents(state, components) {
+	  return components.map(function (id) {
+	    return state[id];
+	  });
+	};
+	
+	var stringify = exports.stringify = function stringify(components) {
+	  return components.map(function (c) {
+	    c.layout = JSON.stringify(c.layout);
+	    c.props = JSON.stringify(c.props);
+	    return c;
+	  });
+	};
+	
+	var parse = exports.parse = function parse(components) {
+	  return components.map(function (c) {
+	    c.layout = JSON.parse(c.layout);
+	    c.props = JSON.parse(c.props);
+	    return c;
+	  });
+	};
+
+/***/ },
+/* 345 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57786,7 +57827,7 @@
 	});
 	exports.routerMiddleware = exports.routerActions = exports.goForward = exports.goBack = exports.go = exports.replace = exports.push = exports.CALL_HISTORY_METHOD = exports.routerReducer = exports.LOCATION_CHANGE = exports.syncHistoryWithStore = undefined;
 	
-	var _reducer = __webpack_require__(345);
+	var _reducer = __webpack_require__(346);
 	
 	Object.defineProperty(exports, 'LOCATION_CHANGE', {
 	  enumerable: true,
@@ -57801,7 +57842,7 @@
 	  }
 	});
 	
-	var _actions = __webpack_require__(346);
+	var _actions = __webpack_require__(347);
 	
 	Object.defineProperty(exports, 'CALL_HISTORY_METHOD', {
 	  enumerable: true,
@@ -57846,11 +57887,11 @@
 	  }
 	});
 	
-	var _sync = __webpack_require__(347);
+	var _sync = __webpack_require__(348);
 	
 	var _sync2 = _interopRequireDefault(_sync);
 	
-	var _middleware = __webpack_require__(348);
+	var _middleware = __webpack_require__(349);
 	
 	var _middleware2 = _interopRequireDefault(_middleware);
 	
@@ -57860,7 +57901,7 @@
 	exports.routerMiddleware = _middleware2['default'];
 
 /***/ },
-/* 345 */
+/* 346 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57904,7 +57945,7 @@
 	}
 
 /***/ },
-/* 346 */
+/* 347 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57946,7 +57987,7 @@
 	var routerActions = exports.routerActions = { push: push, replace: replace, go: go, goBack: goBack, goForward: goForward };
 
 /***/ },
-/* 347 */
+/* 348 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57959,7 +58000,7 @@
 	
 	exports['default'] = syncHistoryWithStore;
 	
-	var _reducer = __webpack_require__(345);
+	var _reducer = __webpack_require__(346);
 	
 	var defaultSelectLocationState = function defaultSelectLocationState(state) {
 	  return state.routing;
@@ -58100,7 +58141,7 @@
 	}
 
 /***/ },
-/* 348 */
+/* 349 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58110,7 +58151,7 @@
 	});
 	exports['default'] = routerMiddleware;
 	
-	var _actions = __webpack_require__(346);
+	var _actions = __webpack_require__(347);
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
@@ -58138,7 +58179,7 @@
 	}
 
 /***/ },
-/* 349 */
+/* 350 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58147,7 +58188,7 @@
 	  value: true
 	});
 	
-	var _layout_middleware = __webpack_require__(350);
+	var _layout_middleware = __webpack_require__(351);
 	
 	var _layout_middleware2 = _interopRequireDefault(_layout_middleware);
 	
@@ -58175,7 +58216,7 @@
 	
 	var _component_middleware2 = _interopRequireDefault(_component_middleware);
 	
-	var _reactRouterRedux = __webpack_require__(344);
+	var _reactRouterRedux = __webpack_require__(345);
 	
 	var _reactRouter = __webpack_require__(446);
 	
@@ -58186,7 +58227,7 @@
 	exports.default = (0, _redux.applyMiddleware)(_layout_middleware2.default, _site_middleware2.default, _page_middleware2.default, _session_middleware2.default, _notification_middleware2.default, _template_middleware2.default, _component_middleware2.default, (0, _reactRouterRedux.routerMiddleware)(_reactRouter.hashHistory));
 
 /***/ },
-/* 350 */
+/* 351 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58201,11 +58242,11 @@
 	
 	var ACTIONS = _interopRequireWildcard(_layout_actions);
 	
-	var _layout_api = __webpack_require__(351);
+	var _layout_api = __webpack_require__(352);
 	
 	var API = _interopRequireWildcard(_layout_api);
 	
-	var _util = __webpack_require__(352);
+	var _util = __webpack_require__(344);
 	
 	var UTILS = _interopRequireWildcard(_util);
 	
@@ -58256,7 +58297,7 @@
 	exports.default = LayoutMiddleware;
 
 /***/ },
-/* 351 */
+/* 352 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -58284,47 +58325,6 @@
 	};
 
 /***/ },
-/* 352 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var parseLayout = exports.parseLayout = function parseLayout(layout) {
-	  return Object.assign({}, layout, { data: JSON.parse(layout.data) });
-	};
-	
-	var mergePages = exports.mergePages = function mergePages(state, pages) {
-	  return pages.map(function (id) {
-	    return state[id];
-	  });
-	};
-	
-	var mergeComponents = exports.mergeComponents = function mergeComponents(state, components) {
-	  return components.map(function (id) {
-	    return state[id];
-	  });
-	};
-	
-	var stringify = exports.stringify = function stringify(components) {
-	  return components.map(function (c) {
-	    c.layout = JSON.stringify(c.layout);
-	    c.props = JSON.stringify(c.props);
-	    return c;
-	  });
-	};
-	
-	var parse = exports.parse = function parse(components) {
-	  return components.map(function (c) {
-	    c.layout = JSON.parse(c.layout);
-	    c.props = JSON.parse(c.props);
-	    return c;
-	  });
-	};
-
-/***/ },
 /* 353 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -58348,7 +58348,7 @@
 	
 	var _normalizr = __webpack_require__(356);
 	
-	var _reactRouterRedux = __webpack_require__(344);
+	var _reactRouterRedux = __webpack_require__(345);
 	
 	var _api_utils = __webpack_require__(436);
 	
@@ -61567,7 +61567,7 @@
 	
 	var API = _interopRequireWildcard(_user_api);
 	
-	var _reactRouterRedux = __webpack_require__(344);
+	var _reactRouterRedux = __webpack_require__(345);
 	
 	var _api_utils = __webpack_require__(436);
 	
@@ -69973,7 +69973,7 @@
 	
 	var _site_detail2 = _interopRequireDefault(_site_detail);
 	
-	var _util = __webpack_require__(352);
+	var _util = __webpack_require__(344);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -70785,7 +70785,7 @@
 	
 	var _pages_main2 = _interopRequireDefault(_pages_main);
 	
-	var _util = __webpack_require__(352);
+	var _util = __webpack_require__(344);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
