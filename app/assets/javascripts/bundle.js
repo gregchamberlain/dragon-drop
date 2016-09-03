@@ -39512,7 +39512,7 @@
 /* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -39522,18 +39522,26 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _lodash = __webpack_require__(194);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var string = function string(value, onChange) {
-	  return _react2.default.createElement("input", { type: "text", onChange: onChange, value: value });
+	var string = function string(value, _onChange) {
+	  return _react2.default.createElement('input', { type: 'text', onChange: function onChange(e) {
+	      return _onChange(e.target.value);
+	    }, value: value });
 	};
 	
-	var text = function text(value, onChange) {
-	  return _react2.default.createElement("textarea", { onChange: onChange, value: value });
+	var text = function text(value, _onChange2) {
+	  return _react2.default.createElement('textarea', { onChange: function onChange(e) {
+	      return _onChange2(e.target.value);
+	    }, value: value });
 	};
 	
-	var number = function number(value, onChange) {
-	  return _react2.default.createElement("input", { type: "number", onChange: onChange, value: value });
+	var number = function number(value, _onChange3) {
+	  return _react2.default.createElement('input', { type: 'number', onChange: function onChange(e) {
+	      return _onChange3(parseInt(e.target.value));
+	    }, value: value });
 	};
 	
 	var select = function select() {
@@ -39541,13 +39549,15 @@
 	    options[_key] = arguments[_key];
 	  }
 	
-	  return function (value, onChange) {
+	  return function (value, _onChange4) {
 	    return _react2.default.createElement(
-	      "select",
-	      { value: value, onChange: onChange },
+	      'select',
+	      { value: value, onChange: function onChange(e) {
+	          return _onChange4(e.target.value);
+	        } },
 	      options.map(function (option) {
 	        return _react2.default.createElement(
-	          "option",
+	          'option',
 	          { value: option, key: option },
 	          option
 	        );
@@ -39635,9 +39645,10 @@
 	  var title = _ref.title;
 	  var content = _ref.content;
 	  var textAlign = _ref.textAlign;
+	  var padding = _ref.padding;
 	  return _react2.default.createElement(
 	    'div',
-	    { style: { textAlign: textAlign, overflow: 'hidden' } },
+	    { style: { textAlign: textAlign, overflow: 'hidden', padding: padding } },
 	    _react2.default.createElement(
 	      'h1',
 	      null,
@@ -39654,19 +39665,22 @@
 	Article.propTypes = {
 	  title: _react.PropTypes.string,
 	  content: _react.PropTypes.string,
-	  textAlign: _react.PropTypes.string
+	  textAlign: _react.PropTypes.string,
+	  padding: _react.PropTypes.number
 	};
 	
 	Article.defaultProps = {
 	  title: "Sample Title",
 	  content: "Content goes here...",
-	  textAlign: "left"
+	  textAlign: "left",
+	  padding: 0
 	};
 	
 	Article.inputTypes = {
 	  title: _inputs2.default.string,
 	  content: _inputs2.default.text,
-	  textAlign: _inputs2.default.select("left", "center", "right")
+	  textAlign: _inputs2.default.select("left", "center", "right"),
+	  padding: _inputs2.default.number
 	};
 	
 	exports.default = Article;
@@ -39696,7 +39710,7 @@
 	  var padding = _ref.padding;
 	  return _react2.default.createElement(
 	    'div',
-	    { style: { padding: parseInt(padding), width: '100%', height: '100%', position: 'absolute' } },
+	    { style: { padding: padding, width: '100%', height: '100%', position: 'absolute' } },
 	    _react2.default.createElement('div', { style: { backgroundRepeat: 'no-repeat', background: 'url(' + url + ')', width: '100%', height: '100%', backgroundSize: 'cover', backgroundPosition: 'center' } })
 	  );
 	};
@@ -39714,12 +39728,12 @@
 	
 	Image.propTypes = {
 	  url: _react.PropTypes.string,
-	  padding: _react.PropTypes.string
+	  padding: _react.PropTypes.number
 	};
 	
 	Image.defaultProps = {
 	  url: 'https://newevolutiondesigns.com/images/freebies/cool-wallpaper-1.jpg',
-	  padding: "0"
+	  padding: 0
 	};
 
 /***/ },
@@ -67600,6 +67614,10 @@
 	
 	var _layout_editor_container2 = _interopRequireDefault(_layout_editor_container);
 	
+	var _preview_container = __webpack_require__(654);
+	
+	var _preview_container2 = _interopRequireDefault(_preview_container);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var validateUser = function validateUser(store) {
@@ -67638,6 +67656,11 @@
 	          { path: '/', component: _home2.default },
 	          _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _registration_layout2.default }),
 	          _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _registration_layout2.default })
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Route,
+	          { path: 'preview/:siteId', onEnter: (0, _router_utils.fetchSite)(store) },
+	          _react2.default.createElement(_reactRouter.Route, { path: ':pageId', component: _preview_container2.default })
 	        ),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/templates', component: _templates_index_container2.default, onEnter: (0, _router_utils.fetchTemplates)(store) }),
 	        _react2.default.createElement(
@@ -72313,6 +72336,7 @@
 	  return {
 	    loading: loading['page'],
 	    components: (0, _entity_utils.map)(pages[params.pageId], 'components', components),
+	    params: params,
 	    locked: false,
 	    editor: editor
 	  };
@@ -72378,6 +72402,8 @@
 	
 	var _Editor2 = _interopRequireDefault(_Editor);
 	
+	var _reactRouter = __webpack_require__(446);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -72428,7 +72454,6 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      console.log(this.props.loading);
 	      return _react2.default.createElement(
 	        _loading_page2.default,
 	        { loading: this.props.loading },
@@ -72436,6 +72461,11 @@
 	          'button',
 	          { onClick: this.props.savePage },
 	          'Save'
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/preview/' + this.props.params.siteId + '/' + this.props.params.pageId },
+	          'Preview'
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -72446,8 +72476,11 @@
 	              margin: [0, 0],
 	              isDraggable: !this.props.locked,
 	              isResizable: !this.props.locked,
-	              className: 'layout',
+	              className: 'layout-editor',
 	              verticalCompact: false,
+	              onDrag: function onDrag(l, o, n, p) {
+	                return console.log(n);
+	              },
 	              draggableCancel: '.draggable-cancel',
 	              onResizeStop: this.itemLayoutChange,
 	              onDragStop: this.itemLayoutChange,
@@ -78103,7 +78136,8 @@
 	var styles = {
 	  container: {
 	    boxSizing: 'border-box',
-	    // border: '1px solid #eee',
+	    border: '1px solid rgba(0, 0, 0, 0.3)',
+	    position: 'absolute',
 	    width: '100%',
 	    height: '100%'
 	  },
@@ -82251,24 +82285,11 @@
 	    var _this = _possibleConstructorReturn(this, (Editor.__proto__ || Object.getPrototypeOf(Editor)).call(this, props));
 	
 	    _this.update = function (name) {
-	      return function (e) {
-	        _this.setState(_defineProperty({}, name, e.target.value), function () {
+	      return function (val) {
+	        _this.setState(_defineProperty({}, name, val), function () {
 	          _this.props.update(_this.props.id, _this.state);
 	        });
 	      };
-	    };
-	
-	    _this.getInput = function (label) {
-	      switch (_this.props.inputTypes[label]) {
-	        case "string":
-	          return _react2.default.createElement('input', { type: 'text', value: _this.state[label], onChange: _this.update(label) });
-	        case "text":
-	          return _react2.default.createElement('textarea', { value: _this.state[label], onChange: _this.update(label) });
-	        case "number":
-	          return _react2.default.createElement('input', { type: 'number', value: _this.state[label], onChange: _this.update(label) });
-	        default:
-	
-	      }
 	    };
 	
 	    _this.state = props.props;
@@ -82313,7 +82334,7 @@
 	        _react2.default.createElement(
 	          'h3',
 	          null,
-	          this.props.item && this.props.item.component
+	          this.props.item && this.props.item.name
 	        ),
 	        inputs
 	      );
@@ -82368,6 +82389,115 @@
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Editor);
+
+/***/ },
+/* 654 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(510);
+	
+	var _preview = __webpack_require__(655);
+	
+	var _preview2 = _interopRequireDefault(_preview);
+	
+	var _entity_utils = __webpack_require__(538);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
+	  var loading = _ref.loading;
+	  var pages = _ref.pages;
+	  var components = _ref.components;
+	  var params = _ref2.params;
+	  return {
+	    loading: loading['site'],
+	    components: (0, _entity_utils.map)(pages[params.pageId], 'components', components)
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {};
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_preview2.default);
+
+/***/ },
+/* 655 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactGridLayout = __webpack_require__(577);
+	
+	var _reactGridLayout2 = _interopRequireDefault(_reactGridLayout);
+	
+	var _loading_page = __webpack_require__(535);
+	
+	var _loading_page2 = _interopRequireDefault(_loading_page);
+	
+	var _lodash = __webpack_require__(194);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	var _catalog = __webpack_require__(196);
+	
+	var _catalog2 = _interopRequireDefault(_catalog);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Grid = (0, _reactGridLayout.WidthProvider)(_reactGridLayout2.default);
+	
+	var createElement = function createElement(el) {
+	  var i = '' + el.id;
+	  var Comp = _catalog2.default[el.name];
+	  return _react2.default.createElement(
+	    'div',
+	    { key: i, 'data-grid': _lodash2.default.merge({}, el.layout) },
+	    _react2.default.createElement(Comp, el.props)
+	  );
+	};
+	
+	var SitePreview = function SitePreview(_ref) {
+	  var loading = _ref.loading;
+	  var components = _ref.components;
+	  return _react2.default.createElement(
+	    _loading_page2.default,
+	    { loading: loading },
+	    _react2.default.createElement(
+	      'div',
+	      { style: { width: '100%', height: '100%', background: '#fff' } },
+	      _react2.default.createElement(
+	        Grid,
+	        {
+	          margin: [0, 0],
+	          isDraggable: false,
+	          isResizable: false,
+	          className: 'site-preview',
+	          verticalCompact: false,
+	          cols: 12,
+	          rowHeight: 30,
+	          width: 1200 },
+	        _lodash2.default.map(components, createElement)
+	      )
+	    )
+	  );
+	};
+	
+	exports.default = SitePreview;
 
 /***/ }
 /******/ ]);

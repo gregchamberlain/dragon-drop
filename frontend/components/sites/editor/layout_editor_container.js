@@ -8,6 +8,7 @@ import { openEditor } from '../../../actions/editor_actions';
 const mapStateToProps = ({ components, loading, pages, editor }, { params }) => ({
   loading: loading['page'],
   components: map(pages[params.pageId], 'components', components),
+  params: params,
   locked: false,
   editor
 });

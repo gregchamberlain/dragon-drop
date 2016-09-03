@@ -26,7 +26,8 @@ class Wrapper extends Component {
 const styles = {
   container: {
     boxSizing: 'border-box',
-    // border: '1px solid #eee',
+    border: '1px solid rgba(0, 0, 0, 0.3)',
+    position: 'absolute',
     width: '100%',
     height: '100%',
   },

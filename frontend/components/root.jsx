@@ -14,6 +14,7 @@ import SiteSettings from './sites/settings/settings_container.jsx';
 import Notifications from './ui/notifications.jsx';
 import TemplatesIndex from './templates/templates_index_container.jsx';
 import LayoutEditor from './sites/editor/layout_editor_container.js';
+import SitePreview from './sites/preview_container.jsx';
 
 const validateUser = (store) => {
   return (nextState, replace) => {
@@ -42,6 +43,10 @@ const Root = ({ store, history }) => (
           <Route path="login" component={RegistrationLayout}/>
           <Route path="signup" component={RegistrationLayout}/>
         </Route>
+        <Route path="preview/:siteId" onEnter={fetchSite(store)} >
+          <Route path=":pageId" component={SitePreview} />
+        </Route>
+
         <Route path="/templates" component={TemplatesIndex} onEnter={fetchTemplates(store)}/>
         <Route path="/sites" onEnter={validateUser(store)}>
           <IndexRoute component={SitesIndex} onEnter={fetchSites(store)}/>

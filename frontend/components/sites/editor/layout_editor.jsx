@@ -6,6 +6,7 @@ import Wrapper from './Wrapper';
 import Catalog from '../../../catalog';
 import LoadingPage from '../../ui/loading_page.jsx';
 import PropsEditor from '../../Editor/Editor';
+import { Link } from 'react-router';
 
 class GridLayout extends Component {
 
@@ -29,17 +30,18 @@ class GridLayout extends Component {
   }
 
   render() {
-    console.log(this.props.loading)
     return (
       <LoadingPage loading={this.props.loading}>
         <button onClick={this.props.savePage}>Save</button>
+        <Link to={`/preview/${this.props.params.siteId}/${this.props.params.pageId}`}>Preview</Link>
         <div className="grid-wrapper">
           <Grid
             margin={[0,0]}
             isDraggable={!this.props.locked}
             isResizable={!this.props.locked}
-            className="layout"
+            className="layout-editor"
             verticalCompact={false}
+            onDrag={(l, o, n, p) => console.log(n)}
             draggableCancel=".draggable-cancel"
             onResizeStop={this.itemLayoutChange}
             onDragStop={this.itemLayoutChange}

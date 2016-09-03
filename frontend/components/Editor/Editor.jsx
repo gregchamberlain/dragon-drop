@@ -19,23 +19,10 @@ class Editor extends Component {
   }
 
   update = (name) => {
-    return (e) => {
-      this.setState({[name]: e.target.value}, () => {
+    return (val) => {
+      this.setState({[name]: val}, () => {
         this.props.update(this.props.id, this.state);
       });
-    }
-  }
-
-  getInput = label => {
-    switch (this.props.inputTypes[label]) {
-      case "string":
-         return <input type="text" value={this.state[label]} onChange={this.update(label)}/>
-      case "text":
-        return <textarea value={this.state[label]} onChange={this.update(label)} />
-      case "number":
-        return <input type="number" value={this.state[label]} onChange={this.update(label)}/>
-      default:
-
     }
   }
 
@@ -54,7 +41,7 @@ class Editor extends Component {
           <div style={{flex: 1, textAlign: 'center'}}>Editor</div>
           <Close onClick={this.props.close} style={{cursor: 'pointer'}}/>
         </div>
-        <h3>{this.props.item && this.props.item.component}</h3>
+        <h3>{this.props.item && this.props.item.name}</h3>
         {inputs}
       </div>
     );
