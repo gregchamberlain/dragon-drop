@@ -16,7 +16,7 @@ class Wrapper extends Component {
             <Arrows style={{...styles.icon, ...{cursor: 'move'}}} className='draggable-handle'/>
             <Gear style={styles.icon} onClick={openEditor} className="draggable-cancel"/>
             <div style={{flex: 1, marginLeft: 5}}>{name}</div>
-            <Close style={styles.icon} onClick={onRemove}/>
+            <Close style={styles.icon} onClick={onRemove} className="draggable-cancel"/>
           </div>
           <span className="react-resizable-handle" />
         </div>
@@ -26,6 +26,12 @@ class Wrapper extends Component {
 }
 
 const styles = {
+  container: {
+    boxSizing: 'border-box',
+    border: '1px solid #eee',
+    width: '100%',
+    height: '100%',
+  },
   overlay: {
     position: "absolute",
     top: 0,

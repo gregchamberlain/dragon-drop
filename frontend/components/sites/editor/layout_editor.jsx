@@ -10,32 +10,23 @@ import Wrapper from './Wrapper';
 import Catalog from '../../../catalog';
 import LoadingPage from '../../ui/loading_page.jsx';
 
+const nonNums = ["i", "isDraggable", "isResizable", "moved", "static"];
+
 class GridLayout extends Component {
 
-  constructor(props) {
-    super(props);
-    console.log(props);
-    this.state = {
-      items: [0, 1, 2, 3, 4].map(function(i, key, list) {
-        return {i: i.toString(), x: i * 2, y: 0, w: 2, h: 2, add: i === (list.length - 1).toString()};
-      }),
-      counter: 0,
-    };
-  }
-
   createElement(el) {
-    let i = `n${el.id}`;
+    let i = `${el.id}`;
     Object.keys(el.layout).forEach(e => {
-      if (e === "i") return;
+      if (nonNums.includes(e)) return;
       el.layout[e] = parseInt(el.layout[e])
     })
     let Comp = Catalog[el.name];
     return (
-      <div key={i} data-grid={el.layout}>
+      <div key={i} data-grid={_.merge({}, el.layout)}>
         <Wrapper
           name={el.name}
           openEditor={this.props.openEditor.bind(null, i, Comp.inputTypes)}
-          onRemove={this.props.removeItem.bind(this, i)}>
+          onRemove={this.props.destroyComponent.bind(this, el)}>
           <Comp {...el.props}/>
         </Wrapper>
       </div>
@@ -43,13 +34,17 @@ class GridLayout extends Component {
   }
 
   itemLayoutChange = (_l, _o, newItem) => {
-    console.log(newItem);
+    let item = _.merge({}, newItem);
+    delete item['isDraggable']
+    delete item['isResizable']
+    delete item['moved']
+    this.props.updateLayout(item);
   }
 
   render() {
-    console.log(this.props.components);
     return (
       <LoadingPage loading={this.props.loading}>
+        <button onClick={this.props.savePage}>Save</button>
         <div className="grid-wrapper">
           <Grid
             margin={[0,0]}

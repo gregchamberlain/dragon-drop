@@ -19,6 +19,8 @@ class Api::PagesController < ApplicationController
   end
 
   def update
+    p 'asdajsdkahdlASKJDHASLDKJlasdhLAD'
+    p page_params
     @page = Page.find(params[:id])
     if @page.path == '/' && page_params[:path] != '/'
       return render json: ["The root pages path cannot be changed"], status: 400
@@ -42,8 +44,8 @@ class Api::PagesController < ApplicationController
         wl[:components_attributes] = []
       else
         params[:page][:components_attributes].each_with_index do |comp,idx|
-          wl[:components_attributes][idx][:layout] = params[:page][:components_attributes][idx][:layout]
-          wl[:components_attributes][idx][:props] = params[:page][:components_attributes][idx][:props]
+          wl[:components_attributes][idx.to_s][:layout] = comp[1][:layout]
+          wl[:components_attributes][idx.to_s][:props] = comp[1][:props]
         end
       end
     end

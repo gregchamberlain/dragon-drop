@@ -25,8 +25,8 @@ const ComponentMiddleware = ({ getState, dispatch }) => next => action => {
         request: destroyComponent(action.component),
         loading: ['component', 'Destroying component...'],
         success: resp => {
-          dispatch(removeEntity(normalize(resp, component)));
           dispatch(removeComponent(resp.page_id, resp.id));
+          dispatch(removeEntity(normalize(resp, component)));
         }
       });
       return next(action);

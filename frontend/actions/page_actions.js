@@ -4,6 +4,12 @@ export const CREATE_PAGE = 'CREATE_PAGE';
 export const UPDATE_PAGE = 'UPDATE_PAGE';
 export const ADD_COMPONENT = 'ADD_COMPONENT';
 export const REMOVE_COMPONENT = 'REMOVE_COMPONENT';
+export const SAVE_PAGE = 'SAVE_PAGE';
+
+export const savePage = pageId => ({
+  type: SAVE_PAGE,
+  pageId
+});
 
 export const requestPages = siteId => ({
   type: REQUEST_PAGES,
