@@ -72428,6 +72428,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      console.log(this.props.loading);
 	      return _react2.default.createElement(
 	        _loading_page2.default,
 	        { loading: this.props.loading },

@@ -29,6 +29,7 @@ class GridLayout extends Component {
   }
 
   render() {
+    console.log(this.props.loading)
     return (
       <LoadingPage loading={this.props.loading}>
         <button onClick={this.props.savePage}>Save</button>
