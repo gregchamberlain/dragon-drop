@@ -1,6 +1,7 @@
 export const CREATE_COMPONENT = 'CREATE_COMPONENT';
 export const DESTROY_COMPONENT = 'DESTROY_COMPONENT';
 export const UPDATE_LAYOUT = 'UPDATE_LAYOUT';
+export const UPDATE_PROPS = 'UPDATE_PROPS';
 
 export const createComponent = (pageId, component) => ({
   type: CREATE_COMPONENT,
@@ -18,5 +19,8 @@ export const updateLayout = layout => ({
   layout
 });
 
-window.createComponent = createComponent;
-window.destroyComponent = destroyComponent;
+export const updateProps = (id, props) => ({
+  type: UPDATE_PROPS,
+  id,
+  props
+})

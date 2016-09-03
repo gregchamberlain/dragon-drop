@@ -1,5 +1,5 @@
 import { RECEIVE_ENTITY, CLEAR_ENTITIES, REMOVE_ENTITY } from '../actions/entity_actions';
-import { UPDATE_LAYOUT } from '../actions/component_actions';
+import { UPDATE_LAYOUT, UPDATE_PROPS } from '../actions/component_actions';
 import { merge } from 'lodash';
 import { parse } from '../util';
 
@@ -18,6 +18,10 @@ const ComponentReducer = (state = {}, action) => {
     case UPDATE_LAYOUT:
       nextState = merge({}, state);
       nextState[parseInt(action.layout.i)].layout = action.layout
+      return nextState;
+    case UPDATE_PROPS:
+      nextState = merge({}, state);
+      nextState[parseInt(action.id)].props = action.props
       return nextState;
     case CLEAR_ENTITIES:
       return {};

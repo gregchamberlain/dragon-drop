@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Catalog from '../../catalog';
-import { updateProps } from '../../actions/item_actions.js';
+import { updateProps } from '../../actions/component_actions';
 import { closeEditor } from '../../actions/editor_actions.js';
 import Close from 'react-icons/lib/fa/close';
 
@@ -86,10 +86,10 @@ const styles = {
 };
 
 const mapStateToProps = state => ({
-  item: state.items[state.editor],
+  item: state.components[state.editor],
   id: state.editor,
-  props: state.items[state.editor] && state.items[state.editor].props,
-  inputTypes: state.items[state.editor] && Catalog[state.items[state.editor].component].inputTypes || {},
+  props: state.components[state.editor] && state.components[state.editor].props,
+  inputTypes: state.components[state.editor] && Catalog[state.components[state.editor].name].inputTypes || {},
 });
 
 const mapDispatchToProps = dispatch => ({
