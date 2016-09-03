@@ -58307,6 +58307,22 @@
 	    return state[id];
 	  });
 	};
+	
+	var stringify = exports.stringify = function stringify(components) {
+	  return components.map(function (c) {
+	    c.layout = JSON.stringify(c.layout);
+	    c.props = JSON.stringify(c.props);
+	    return c;
+	  });
+	};
+	
+	var parse = exports.parse = function parse(components) {
+	  return components.map(function (c) {
+	    c.layout = JSON.parse(c.layout);
+	    c.props = JSON.parse(c.props);
+	    return c;
+	  });
+	};
 
 /***/ },
 /* 353 */
