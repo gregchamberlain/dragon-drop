@@ -8,6 +8,7 @@ import { startLoading, stopLoading } from '../actions/loading_actions.js';
 import { arrayOfPages, page } from '../actions/schema.js';
 import { createNotification } from '../actions/notification_actions.js'
 import { call } from '../util/api_utils.js';
+import { stringify } from '../util';
 
 const PageMiddleware = ({ getState, dispatch }) => next => action => {
   switch (action.type) {
@@ -54,14 +55,13 @@ const PageMiddleware = ({ getState, dispatch }) => next => action => {
       return next(action);
     case SAVE_PAGE:
       let p = getState().pages[action.pageId];
-      p.components_attributes = p.components.map(id => getState().components[id])
+      p.components_attributes = stringify(p.components.map(id => getState().components[id]))
       delete p.components
       call({
         dispatch,
         request: updatePage(p),
         loading: ['page', 'Saving Page...'],
         success: resp => {
-          console.log(resp)
           dispatch(receiveEntity(normalize(resp, page)))
           return 'Page saved!'
         }

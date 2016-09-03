@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Gear from 'react-icons/lib/fa/cog';
 import Close from 'react-icons/lib/fa/close';
-import Arrows from 'react-icons/lib/fa/arrows';
 import Radium from 'radium';
 
 class Wrapper extends Component {
@@ -13,7 +12,6 @@ class Wrapper extends Component {
         {children}
         <div style={styles.overlay} className="component-wrapper-overlay">
           <div style={styles.header}>
-            <Arrows style={{...styles.icon, ...{cursor: 'move'}}} className='draggable-handle'/>
             <Gear style={styles.icon} onClick={openEditor} className="draggable-cancel"/>
             <div style={{flex: 1, marginLeft: 5}}>{name}</div>
             <Close style={styles.icon} onClick={onRemove} className="draggable-cancel"/>

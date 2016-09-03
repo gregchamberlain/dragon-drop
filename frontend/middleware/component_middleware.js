@@ -5,13 +5,14 @@ import { addComponent, removeComponent } from '../actions/page_actions';
 import { createComponent, destroyComponent } from '../util/component_api';
 import { normalize } from 'normalizr';
 import { component } from '../actions/schema';
+import { stringify } from '../util';
 
 const ComponentMiddleware = ({ getState, dispatch }) => next => action => {
   switch(action.type) {
     case CREATE_COMPONENT:
       call({
         dispatch,
-        request: createComponent(action.pageId, action.component),
+        request: createComponent(action.pageId, stringify(action.component)),
         loading: ['component', 'Creating component...'],
         success: resp => {
           dispatch(receiveEntity(normalize(resp, component)));
