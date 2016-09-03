@@ -1,12 +1,13 @@
 import { RECEIVE_ENTITY, CLEAR_ENTITIES, REMOVE_ENTITY } from '../actions/entity_actions';
 import { UPDATE_LAYOUT } from '../actions/component_actions';
 import { merge } from 'lodash';
+import { parse } from '../util';
 
 let nextState;
 const ComponentReducer = (state = {}, action) => {
   switch(action.type) {
     case RECEIVE_ENTITY:
-      return merge({}, state, action.resp.entities.components);
+      return merge({}, state, parse(action.resp.entities.components));
     case REMOVE_ENTITY:
       if (!action.resp.entities.components) return state;
       nextState = merge({}, state);

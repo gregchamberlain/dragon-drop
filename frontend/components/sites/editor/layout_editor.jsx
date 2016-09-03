@@ -1,25 +1,15 @@
 import React, { Component } from 'react';
 import ReactGridLayout, { WidthProvider } from 'react-grid-layout';
-// import { connect } from 'react-redux';
-// import { changeLayout } from '../actions/LayoutActions';
-// import { removeItem } from '../actions/ItemsActions';
-// import { openEditor } from '../actions/EditorActions';
 import _ from 'lodash';
 const Grid = WidthProvider(ReactGridLayout);
 import Wrapper from './Wrapper';
 import Catalog from '../../../catalog';
 import LoadingPage from '../../ui/loading_page.jsx';
 
-const nonNums = ["i", "isDraggable", "isResizable", "moved", "static"];
-
 class GridLayout extends Component {
 
   createElement(el) {
     let i = `${el.id}`;
-    Object.keys(el.layout).forEach(e => {
-      if (nonNums.includes(e)) return;
-      el.layout[e] = parseInt(el.layout[e])
-    })
     let Comp = Catalog[el.name];
     return (
       <div key={i} data-grid={_.merge({}, el.layout)}>
@@ -34,11 +24,7 @@ class GridLayout extends Component {
   }
 
   itemLayoutChange = (_l, _o, newItem) => {
-    let item = _.merge({}, newItem);
-    delete item['isDraggable']
-    delete item['isResizable']
-    delete item['moved']
-    this.props.updateLayout(item);
+    this.props.updateLayout(_.merge({}, newItem));
   }
 
   render() {
@@ -51,6 +37,7 @@ class GridLayout extends Component {
             isDraggable={!this.props.locked}
             isResizable={!this.props.locked}
             className="layout"
+            verticalCompact={false}
             draggableCancel=".draggable-cancel"
             onResizeStop={this.itemLayoutChange}
             onDragStop={this.itemLayoutChange}
@@ -66,21 +53,4 @@ class GridLayout extends Component {
 }
 
 
-  // draggableHandle='.draggable-handle'
-
 export default GridLayout
-//
-// const mapSateToProps = state => ({
-//   items: Object.keys(state.items).map(key => state.items[key]),
-// });
-//
-// const mapDispatchToProps = dispatch => ({
-//   changeLayout: layout => dispatch(changeLayout(layout)),
-//   removeItem: i => dispatch(removeItem(i)),
-//   openEditor: (i, inputTypes) => dispatch(openEditor(i, inputTypes)),
-// });
-//
-// export default connect(
-//   mapSateToProps,
-//   mapDispatchToProps
-// )(GridLayout);

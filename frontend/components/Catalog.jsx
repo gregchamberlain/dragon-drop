@@ -32,7 +32,7 @@ const makeComponent = name => ({
   name: name,
   layout: {
     x: 0,
-    y: 10000, // puts it at the bottom
+    y: 0, // puts it at the bottom
     w: 4,
     h: 6,
   },

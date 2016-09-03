@@ -39,16 +39,7 @@ class Api::PagesController < ApplicationController
 
   private
   def page_params
-    params.require(:page).permit(:name, :path, components_attributes: [:id, :name, :layout, :props, :_destroy]).tap do |wl|
-      unless params[:page][:components_attributes]
-        wl[:components_attributes] = []
-      else
-        params[:page][:components_attributes].each_with_index do |comp,idx|
-          wl[:components_attributes][idx.to_s][:layout] = comp[1][:layout]
-          wl[:components_attributes][idx.to_s][:props] = comp[1][:props]
-        end
-      end
-    end
+    params.require(:page).permit(:name, :path, components_attributes: [:id, :name, :layout, :props, :_destroy])
   end
 
 end
