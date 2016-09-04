@@ -19,7 +19,7 @@ const height = Math.max(document.documentElement.clientHeight, window.innerHeigh
 
 const SitePreview = ({ loading, components }) => (
   <LoadingPage loading={loading}>
-    <div style={{width: '100%', height: '100%', background: '#fff', fontSize: '1.43vw'}}>
+    <div style={{width: '100%', height: '100%', background: '#fff', fontSize: '1.43vw', overflowX: 'hidden'}}>
       <Grid
         margin={[0,0]}
         isDraggable={false}
