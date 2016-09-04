@@ -17,3 +17,7 @@ export const fetchTemplates = store => () => {
 export const fetchPage = (store) => state => {
   store.dispatch(requestPage(state.params.pageId))
 };
+
+export const parsePageId = params => (
+  `${params.siteId}/${params.pageId === undefined ? "" : params.pageId}`
+);

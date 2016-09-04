@@ -37,7 +37,7 @@ const PageMiddleware = ({ getState, dispatch }) => next => action => {
         loading: ['create-page', 'Creating your page...'],
         success: resp => {
           dispatch(receiveEntity(normalize(resp, page)));
-          dispatch(addPage(action.siteId, resp.id));
+          dispatch(addPage(action.siteId, `${action.siteId}${resp.path}`));
           return 'Page successfully created';
         }
       });

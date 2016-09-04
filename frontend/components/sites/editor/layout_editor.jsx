@@ -7,6 +7,7 @@ import Catalog from '../../../catalog';
 import LoadingPage from '../../ui/loading_page.jsx';
 import PropsEditor from '../../Editor/Editor';
 import { Link } from 'react-router';
+import { parsePageId } from '../../../util/router_utils';
 
 class GridLayout extends Component {
 
@@ -30,25 +31,33 @@ class GridLayout extends Component {
   toggleComponentLock = layout => {
     let newLayout = _.merge({}, layout);
     newLayout.static = !newLayout.static
-    console.log(newLayout);
     this.props.updateLayout(newLayout);
     this.forceUpdate();
   }
 
-  itemLayoutChange = (_l, _o, newItem) => {
-    this.props.updateLayout(_.merge({}, newItem));
+  itemLayoutChange = (_l, oldItem, newItem) => {
+    if (!_.isEqual(oldItem, newItem)) {
+      this.props.updateLayout(_.merge({}, newItem));
+      console.log('item moved, saving...');
+    }
   }
 
   render() {
 
-    let components = _.map(_.map(this.props.components, this.createElement));
-    let layout = this.props.components.map(c => _.merge({}, c.layout));
+    const components = _.map(_.map(this.props.components, this.createElement));
+    const layout = this.props.components.map(c => _.merge({}, c.layout));
+
+    const height = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+    const width = Math.max(document.documentElement.width || 0, window.innerWidth || 0);
+    const ratio = width / height;
+    const contentWidth = width - 264 - 50;
+    const contentHeight = contentWidth / ratio;
 
     return (
       <LoadingPage loading={this.props.loading}>
         <button onClick={this.props.savePage}>Save</button>
-        <Link to={`/preview/${this.props.params.siteId}/${this.props.params.pageId === undefined ? "" : this.props.params.pageId}`}>Preview</Link>
-        <div className="grid-wrapper">
+        <Link to={`preview/${parsePageId(this.props.params)}`}>Preview</Link>
+        <div className="grid-wrapper" style={{fontSize: .0143 * contentWidth}}>
           <Grid
             margin={[0,0]}
             isDraggable={!this.props.locked}
@@ -60,8 +69,7 @@ class GridLayout extends Component {
             onResizeStop={this.itemLayoutChange}
             onDragStop={this.itemLayoutChange}
             cols={12}
-            rowHeight={30}
-            width={1200}>
+            rowHeight={Math.floor(contentHeight / 25)} >
             {components}
           </Grid>
         </div>

@@ -4,10 +4,11 @@ import { updateLayout, destroyComponent } from '../../../actions/component_actio
 import { savePage } from '../../../actions/page_actions';
 import { map } from '../../../util/entity_utils';
 import { openEditor } from '../../../actions/editor_actions';
+import { parsePageId } from '../../../util/router_utils.js';
 
 const mapStateToProps = ({ components, loading, pages, editor, sites }, { params }) => ({
   loading: loading['page'],
-  components: map(pages[`${params.siteId}/${params.pageId === undefined ? "" : params.pageId}`], 'components', components),
+  components: map(pages[parsePageId(params)], 'components', components),
   params: params,
   locked: false,
   editor
@@ -15,8 +16,8 @@ const mapStateToProps = ({ components, loading, pages, editor, sites }, { params
 
 const mapDispatchToProps = (dispatch, { params }) => ({
   updateLayout: layout => dispatch(updateLayout(layout)),
-  destroyComponent: component => dispatch(destroyComponent(`${params.siteId}/${params.pageId === undefined ? "" : params.pageId}`, component)),
-  savePage: () => dispatch(savePage(`${params.siteId}/${params.pageId === undefined ? "" : params.pageId}`)),
+  destroyComponent: component => dispatch(destroyComponent(parsePageId(params), component)),
+  savePage: () => dispatch(savePage(parsePageId(params))),
   openEditor: (i, inputs) => dispatch(openEditor(i, inputs)),
 });
 

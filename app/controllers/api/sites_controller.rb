@@ -1,6 +1,6 @@
 class Api::SitesController < ApplicationController
 
-	before_action :find_site, only: [:show, :destroy, :update]
+	before_action :find_site, only: [:destroy, :update]
 	before_action :authorize
 
 	def index

@@ -5,7 +5,7 @@ class Api::PagesController < ApplicationController
   end
 
   def create
-    site = Site.find(params[:site_id])
+    site = Site.find_by_identifier(params[:site_id])
     if site.pages.length >= 5
       render json: ["Max of 5 pages per site!"], status: 400
       return

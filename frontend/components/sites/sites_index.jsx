@@ -22,7 +22,7 @@ const SitesIndex = ({ loading, sites, title, form }) => (
     <div className='sites-index'>
     <LoadingPage loading={loading}>
       <div className="sites-index-items">
-        {sites.map(site => <SitesIndexItem key={site.id} site={site} />)}
+        {sites.map(site => <SitesIndexItem key={site.id} site={site} template={form}/>)}
         { form ? (
           <div className="site-wrapper">
             <NewSiteForm />

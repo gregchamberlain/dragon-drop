@@ -61503,7 +61503,7 @@
 	            loading: ['create-page', 'Creating your page...'],
 	            success: function success(resp) {
 	              dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(resp, _schema.page)));
-	              dispatch((0, _site_actions.addPage)(action.siteId, resp.id));
+	              dispatch((0, _site_actions.addPage)(action.siteId, '' + action.siteId + resp.path));
 	              return 'Page successfully created';
 	            }
 	          });
@@ -69314,7 +69314,7 @@
 	          'div',
 	          { className: 'sites-index-items' },
 	          sites.map(function (site) {
-	            return _react2.default.createElement(_sites_index_item2.default, { key: site.id, site: site });
+	            return _react2.default.createElement(_sites_index_item2.default, { key: site.id, site: site, template: form });
 	          }),
 	          form ? _react2.default.createElement(
 	            'div',
@@ -69780,16 +69780,21 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	var getUrl = function getUrl(site, template) {
+	  return template ? '/sites/' + site.identifier + '/editor' : '/preview/' + site.identifier;
+	};
+	
 	var SitesIndexItem = function SitesIndexItem(_ref) {
 	  var site = _ref.site;
 	  var router = _ref.router;
+	  var template = _ref.template;
 	  return _react2.default.createElement(
 	    'div',
 	    { className: 'site-wrapper' },
 	    _react2.default.createElement(
 	      'div',
 	      { className: 'sites-index-item', onClick: function onClick() {
-	          return router.push('/sites/' + site.identifier + '/editor');
+	          return router.push(getUrl(site, template));
 	        } },
 	      _react2.default.createElement(
 	        'h1',
@@ -70768,7 +70773,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.fetchPage = exports.fetchTemplates = exports.fetchSite = exports.fetchSites = undefined;
+	exports.parsePageId = exports.fetchPage = exports.fetchTemplates = exports.fetchSite = exports.fetchSites = undefined;
 	
 	var _site_actions = __webpack_require__(332);
 	
@@ -70798,6 +70803,10 @@
 	  return function (state) {
 	    store.dispatch((0, _page_actions.requestPage)(state.params.pageId));
 	  };
+	};
+	
+	var parsePageId = exports.parsePageId = function parsePageId(params) {
+	  return params.siteId + '/' + (params.pageId === undefined ? "" : params.pageId);
 	};
 
 /***/ },
@@ -71749,6 +71758,8 @@
 	
 	var _page_actions = __webpack_require__(334);
 	
+	var _router_utils = __webpack_require__(550);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
@@ -71756,7 +71767,7 @@
 	  var loading = _ref.loading;
 	  var params = _ref2.params;
 	  return {
-	    page: pages[params.pageId],
+	    page: pages[(0, _router_utils.parsePageId)(params)],
 	    loading: loading['update-page']
 	  };
 	};
@@ -71914,6 +71925,8 @@
 	
 	var _component_actions = __webpack_require__(343);
 	
+	var _router_utils = __webpack_require__(550);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var CatalogContainerr = function CatalogContainerr(_ref) {
@@ -71965,7 +71978,7 @@
 	  var params = _ref2.params;
 	  return {
 	    create: function create(name) {
-	      return dispatch((0, _component_actions.createComponent)(params.siteId + '/' + (params.pageId === undefined ? "" : params.pageId), makeComponent(name)));
+	      return dispatch((0, _component_actions.createComponent)((0, _router_utils.parsePageId)(params), makeComponent(name)));
 	    }
 	  };
 	};
@@ -72332,6 +72345,8 @@
 	
 	var _editor_actions = __webpack_require__(189);
 	
+	var _router_utils = __webpack_require__(550);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
@@ -72343,7 +72358,7 @@
 	  var params = _ref2.params;
 	  return {
 	    loading: loading['page'],
-	    components: (0, _entity_utils.map)(pages[params.siteId + '/' + (params.pageId === undefined ? "" : params.pageId)], 'components', components),
+	    components: (0, _entity_utils.map)(pages[(0, _router_utils.parsePageId)(params)], 'components', components),
 	    params: params,
 	    locked: false,
 	    editor: editor
@@ -72357,10 +72372,10 @@
 	      return dispatch((0, _component_actions.updateLayout)(layout));
 	    },
 	    destroyComponent: function destroyComponent(component) {
-	      return dispatch((0, _component_actions.destroyComponent)(params.siteId + '/' + (params.pageId === undefined ? "" : params.pageId), component));
+	      return dispatch((0, _component_actions.destroyComponent)((0, _router_utils.parsePageId)(params), component));
 	    },
 	    savePage: function savePage() {
-	      return dispatch((0, _page_actions.savePage)(params.siteId + '/' + (params.pageId === undefined ? "" : params.pageId)));
+	      return dispatch((0, _page_actions.savePage)((0, _router_utils.parsePageId)(params)));
 	    },
 	    openEditor: function openEditor(i, inputs) {
 	      return dispatch((0, _editor_actions.openEditor)(i, inputs));
@@ -72412,6 +72427,8 @@
 	
 	var _reactRouter = __webpack_require__(446);
 	
+	var _router_utils = __webpack_require__(550);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -72456,11 +72473,13 @@
 	    }, _this.toggleComponentLock = function (layout) {
 	      var newLayout = _lodash2.default.merge({}, layout);
 	      newLayout.static = !newLayout.static;
-	      console.log(newLayout);
 	      _this.props.updateLayout(newLayout);
 	      _this.forceUpdate();
-	    }, _this.itemLayoutChange = function (_l, _o, newItem) {
-	      _this.props.updateLayout(_lodash2.default.merge({}, newItem));
+	    }, _this.itemLayoutChange = function (_l, oldItem, newItem) {
+	      if (!_lodash2.default.isEqual(oldItem, newItem)) {
+	        _this.props.updateLayout(_lodash2.default.merge({}, newItem));
+	        console.log('item moved, saving...');
+	      }
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 	
@@ -72473,6 +72492,12 @@
 	        return _lodash2.default.merge({}, c.layout);
 	      });
 	
+	      var height = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+	      var width = Math.max(document.documentElement.width || 0, window.innerWidth || 0);
+	      var ratio = width / height;
+	      var contentWidth = width - 264 - 50;
+	      var contentHeight = contentWidth / ratio;
+	
 	      return _react2.default.createElement(
 	        _loading_page2.default,
 	        { loading: this.props.loading },
@@ -72483,12 +72508,12 @@
 	        ),
 	        _react2.default.createElement(
 	          _reactRouter.Link,
-	          { to: '/preview/' + this.props.params.siteId + '/' + (this.props.params.pageId === undefined ? "" : this.props.params.pageId) },
+	          { to: 'preview/' + (0, _router_utils.parsePageId)(this.props.params) },
 	          'Preview'
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'grid-wrapper' },
+	          { className: 'grid-wrapper', style: { fontSize: .0143 * contentWidth } },
 	          _react2.default.createElement(
 	            Grid,
 	            {
@@ -72502,8 +72527,7 @@
 	              onResizeStop: this.itemLayoutChange,
 	              onDragStop: this.itemLayoutChange,
 	              cols: 12,
-	              rowHeight: 30,
-	              width: 1200 },
+	              rowHeight: Math.floor(contentHeight / 25) },
 	            components
 	          )
 	        ),
@@ -78135,7 +78159,7 @@
 	
 	      return _react2.default.createElement(
 	        'div',
-	        { style: styles.container },
+	        { style: styles.container, onDoubleClick: openEditor },
 	        children,
 	        _react2.default.createElement(
 	          'div',
@@ -82542,6 +82566,8 @@
 	
 	var _entity_utils = __webpack_require__(538);
 	
+	var _router_utils = __webpack_require__(550);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
@@ -82551,7 +82577,7 @@
 	  var params = _ref2.params;
 	  return {
 	    loading: loading['site'],
-	    components: (0, _entity_utils.map)(pages[params.siteId + '/' + (params.pageId === undefined ? "" : params.pageId)], 'components', components)
+	    components: (0, _entity_utils.map)(pages[(0, _router_utils.parsePageId)(params)], 'components', components)
 	  };
 	};
 	
@@ -82605,6 +82631,8 @@
 	  );
 	};
 	
+	var height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+	
 	var SitePreview = function SitePreview(_ref) {
 	  var loading = _ref.loading;
 	  var components = _ref.components;
@@ -82613,7 +82641,7 @@
 	    { loading: loading },
 	    _react2.default.createElement(
 	      'div',
-	      { style: { width: '100%', height: '100%', background: '#fff' } },
+	      { style: { width: '100%', height: '100%', background: '#fff', fontSize: '1.43vw' } },
 	      _react2.default.createElement(
 	        Grid,
 	        {
@@ -82623,7 +82651,7 @@
 	          className: 'site-preview',
 	          verticalCompact: false,
 	          cols: 12,
-	          rowHeight: 30,
+	          rowHeight: height / 25,
 	          width: 1200 },
 	        _lodash2.default.map(components, createElement)
 	      )

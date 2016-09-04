@@ -15,9 +15,11 @@ const createElement = el => {
   );
 }
 
+const height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
 const SitePreview = ({ loading, components }) => (
   <LoadingPage loading={loading}>
-    <div style={{width: '100%', height: '100%', background: '#fff'}}>
+    <div style={{width: '100%', height: '100%', background: '#fff', fontSize: '1.43vw'}}>
       <Grid
         margin={[0,0]}
         isDraggable={false}
@@ -25,7 +27,7 @@ const SitePreview = ({ loading, components }) => (
         className="site-preview"
         verticalCompact={false}
         cols={12}
-        rowHeight={30}
+        rowHeight={height / 25}
         width={1200}>
         {_.map(components, createElement)}
       </Grid>

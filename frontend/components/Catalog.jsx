@@ -2,6 +2,7 @@ import React from 'react';
 import Catalog from '../catalog';
 import { connect } from 'react-redux';
 import { createComponent } from '../actions/component_actions';
+import { parsePageId } from '../util/router_utils';
 
 const CatalogContainerr = ({ create }) => (
   <div style={styles.container}>
@@ -40,6 +41,6 @@ const makeComponent = name => ({
 });
 
 const mapDispatchToProps = (dispatch, { params }) => ({
-  create: (name) => dispatch(createComponent(`${params.siteId}/${params.pageId === undefined ? "" : params.pageId}`, makeComponent(name))),
+  create: (name) => dispatch(createComponent(parsePageId(params), makeComponent(name))),
 });
 export default connect(null, mapDispatchToProps)(CatalogContainerr);
