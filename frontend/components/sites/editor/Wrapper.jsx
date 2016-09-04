@@ -10,7 +10,7 @@ class Wrapper extends Component {
   render() {
     const { onRemove, openEditor, children, name, onToggleLock, locked } = this.props;
     return (
-      <div style={styles.container} onDoubleClick={openEditor}>
+      <div style={styles.container} onDoubleClick={openEditor} ref="wrapper">
         {children}
         <div style={styles.overlay} className="component-wrapper-overlay">
           <div style={styles.header}>

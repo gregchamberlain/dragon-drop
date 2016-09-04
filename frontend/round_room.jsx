@@ -6,6 +6,10 @@ import { hashHistory } from 'react-router';
 import * as ACTIONS from './actions/session_actions.js';
 import { syncHistoryWithStore } from 'react-router-redux';
 
+let wing = new Audio('/assets/wing.mp3');
+let dragon = new Audio('/assets/dragon.mp3');
+document.addEventListener('click', () => dragon.play());
+document.addEventListener('mousemove', () => wing.play());
 
 document.addEventListener('DOMContentLoaded', () => {
 

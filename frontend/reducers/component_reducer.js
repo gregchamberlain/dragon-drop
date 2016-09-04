@@ -1,5 +1,6 @@
 import { RECEIVE_ENTITY, CLEAR_ENTITIES, REMOVE_ENTITY } from '../actions/entity_actions';
-import { UPDATE_LAYOUT, UPDATE_PROPS } from '../actions/component_actions';
+import { UPDATE_LAYOUT, UPDATE_PROPS,
+  CREATE_COMPONENT, DESTROY_COMPONENT } from '../actions/component_actions';
 import { merge } from 'lodash';
 import { parse } from '../util';
 
@@ -17,11 +18,21 @@ const ComponentReducer = (state = {}, action) => {
       return nextState;
     case UPDATE_LAYOUT:
       nextState = merge({}, state);
-      nextState[parseInt(action.layout.i)].layout = action.layout
+      action.layout.forEach(l => { nextState[l.i].layout = l });
       return nextState;
     case UPDATE_PROPS:
       nextState = merge({}, state);
       nextState[parseInt(action.id)].props = action.props
+      return nextState;
+    case CREATE_COMPONENT:
+      return merge({}, state, {[action.component.tempId]: action.component});
+    case DESTROY_COMPONENT:
+      nextState = merge({}, state);
+      if (action.component.id) {
+        nextState[action.component.id]._destroy = true;
+      } else {
+        delete nextState[action.component.tempId]
+      }
       return nextState;
     case CLEAR_ENTITIES:
       return {};

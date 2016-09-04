@@ -10,6 +10,7 @@ import { stringify } from '../util';
 const ComponentMiddleware = ({ getState, dispatch }) => next => action => {
   switch(action.type) {
     case CREATE_COMPONENT:
+      return next(action);
       let pId = getState().pages[action.pageId].id
       call({
         dispatch,
@@ -22,6 +23,7 @@ const ComponentMiddleware = ({ getState, dispatch }) => next => action => {
       });
       return next(action);
     case DESTROY_COMPONENT:
+      return next(action);
       call({
         dispatch,
         request: destroyComponent(action.component),

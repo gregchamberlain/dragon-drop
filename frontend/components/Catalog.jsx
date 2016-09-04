@@ -29,9 +29,15 @@ const styles = {
   }
 };
 
+let nextId = 0;
+
 const makeComponent = name => ({
+  tempId: `new${nextId++}`,
   name: name,
   layout: {
+    i: `new${nextId++}`,
+    moved: false,
+    static: false,
     x: 0,
     y: 0, // puts it at the bottom
     w: 4,

@@ -62,7 +62,7 @@
 	
 	var _reactRouter = __webpack_require__(446);
 	
-	var _session_actions = __webpack_require__(336);
+	var _session_actions = __webpack_require__(337);
 	
 	var ACTIONS = _interopRequireWildcard(_session_actions);
 	
@@ -71,6 +71,15 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var wing = new Audio('/assets/wing.mp3');
+	var dragon = new Audio('/assets/dragon.mp3');
+	document.addEventListener('click', function () {
+	  return dragon.play();
+	});
+	document.addEventListener('mousemove', function () {
+	  return wing.play();
+	});
 	
 	document.addEventListener('DOMContentLoaded', function () {
 	
@@ -22343,23 +22352,23 @@
 	
 	var _page_reducer2 = _interopRequireDefault(_page_reducer);
 	
-	var _session_reducer = __webpack_require__(335);
+	var _session_reducer = __webpack_require__(336);
 	
 	var _session_reducer2 = _interopRequireDefault(_session_reducer);
 	
-	var _template_reducer = __webpack_require__(337);
+	var _template_reducer = __webpack_require__(338);
 	
 	var _template_reducer2 = _interopRequireDefault(_template_reducer);
 	
-	var _notification_reducer = __webpack_require__(338);
+	var _notification_reducer = __webpack_require__(339);
 	
 	var _notification_reducer2 = _interopRequireDefault(_notification_reducer);
 	
-	var _loading_reducer = __webpack_require__(340);
+	var _loading_reducer = __webpack_require__(341);
 	
 	var _loading_reducer2 = _interopRequireDefault(_loading_reducer);
 	
-	var _component_reducer = __webpack_require__(342);
+	var _component_reducer = __webpack_require__(343);
 	
 	var _component_reducer2 = _interopRequireDefault(_component_reducer);
 	
@@ -57376,6 +57385,8 @@
 	
 	var _page_actions = __webpack_require__(334);
 	
+	var _component_actions = __webpack_require__(335);
+	
 	var _lodash = __webpack_require__(194);
 	
 	var nextState = void 0;
@@ -57388,14 +57399,14 @@
 	      return (0, _lodash.merge)({}, state, action.resp.entities.pages);
 	    case _entity_actions.CLEAR_ENTITIES:
 	      return {};
-	    case _page_actions.ADD_COMPONENT:
+	    case _component_actions.CREATE_COMPONENT:
 	      nextState = (0, _lodash.merge)({}, state);
-	      nextState[action.pageId].components.push(action.componentId);
+	      nextState[action.pageId].components.push(action.component.tempId);
 	      return nextState;
-	    case _page_actions.REMOVE_COMPONENT:
+	    case _component_actions.DESTROY_COMPONENT:
 	      nextState = (0, _lodash.merge)({}, state);
 	      nextState[action.pageId].components = nextState[action.pageId].components.filter(function (id) {
-	        return id !== parseInt(action.componentId);
+	        return id !== action.component.tempId;
 	      });
 	      return nextState;
 	    default:
@@ -57476,6 +57487,51 @@
 
 /***/ },
 /* 335 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var CREATE_COMPONENT = exports.CREATE_COMPONENT = 'CREATE_COMPONENT';
+	var DESTROY_COMPONENT = exports.DESTROY_COMPONENT = 'DESTROY_COMPONENT';
+	var UPDATE_LAYOUT = exports.UPDATE_LAYOUT = 'UPDATE_LAYOUT';
+	var UPDATE_PROPS = exports.UPDATE_PROPS = 'UPDATE_PROPS';
+	
+	var createComponent = exports.createComponent = function createComponent(pageId, component) {
+	  return {
+	    type: CREATE_COMPONENT,
+	    pageId: pageId,
+	    component: component
+	  };
+	};
+	
+	var destroyComponent = exports.destroyComponent = function destroyComponent(pageId, component, id) {
+	  return {
+	    type: DESTROY_COMPONENT,
+	    pageId: pageId,
+	    component: component
+	  };
+	};
+	
+	var updateLayout = exports.updateLayout = function updateLayout(layout) {
+	  return {
+	    type: UPDATE_LAYOUT,
+	    layout: layout
+	  };
+	};
+	
+	var updateProps = exports.updateProps = function updateProps(id, props) {
+	  return {
+	    type: UPDATE_PROPS,
+	    id: id,
+	    props: props
+	  };
+	};
+
+/***/ },
+/* 336 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57484,7 +57540,7 @@
 	  value: true
 	});
 	
-	var _session_actions = __webpack_require__(336);
+	var _session_actions = __webpack_require__(337);
 	
 	var ACTIONS = _interopRequireWildcard(_session_actions);
 	
@@ -57515,7 +57571,7 @@
 	exports.default = SessionReducer;
 
 /***/ },
-/* 336 */
+/* 337 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57564,7 +57620,7 @@
 	};
 
 /***/ },
-/* 337 */
+/* 338 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57592,7 +57648,7 @@
 	exports.default = TemplateReducer;
 
 /***/ },
-/* 338 */
+/* 339 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57601,7 +57657,7 @@
 	  value: true
 	});
 	
-	var _notification_actions = __webpack_require__(339);
+	var _notification_actions = __webpack_require__(340);
 	
 	var count = 0;
 	var NotificationReducer = function NotificationReducer() {
@@ -57621,7 +57677,7 @@
 	exports.default = NotificationReducer;
 
 /***/ },
-/* 339 */
+/* 340 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57647,7 +57703,7 @@
 	};
 
 /***/ },
-/* 340 */
+/* 341 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57656,7 +57712,7 @@
 	  value: true
 	});
 	
-	var _loading_actions = __webpack_require__(341);
+	var _loading_actions = __webpack_require__(342);
 	
 	var _lodash = __webpack_require__(194);
 	
@@ -57681,7 +57737,7 @@
 	exports.default = LoadingReducer;
 
 /***/ },
-/* 341 */
+/* 342 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57708,7 +57764,7 @@
 	};
 
 /***/ },
-/* 342 */
+/* 343 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57719,11 +57775,13 @@
 	
 	var _entity_actions = __webpack_require__(331);
 	
-	var _component_actions = __webpack_require__(343);
+	var _component_actions = __webpack_require__(335);
 	
 	var _lodash = __webpack_require__(194);
 	
 	var _util = __webpack_require__(344);
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	var nextState = void 0;
 	var ComponentReducer = function ComponentReducer() {
@@ -57742,11 +57800,23 @@
 	      return nextState;
 	    case _component_actions.UPDATE_LAYOUT:
 	      nextState = (0, _lodash.merge)({}, state);
-	      nextState[parseInt(action.layout.i)].layout = action.layout;
+	      action.layout.forEach(function (l) {
+	        nextState[l.i].layout = l;
+	      });
 	      return nextState;
 	    case _component_actions.UPDATE_PROPS:
 	      nextState = (0, _lodash.merge)({}, state);
 	      nextState[parseInt(action.id)].props = action.props;
+	      return nextState;
+	    case _component_actions.CREATE_COMPONENT:
+	      return (0, _lodash.merge)({}, state, _defineProperty({}, action.component.tempId, action.component));
+	    case _component_actions.DESTROY_COMPONENT:
+	      nextState = (0, _lodash.merge)({}, state);
+	      if (action.component.id) {
+	        nextState[action.component.id]._destroy = true;
+	      } else {
+	        delete nextState[action.component.tempId];
+	      }
 	      return nextState;
 	    case _entity_actions.CLEAR_ENTITIES:
 	      return {};
@@ -57756,51 +57826,6 @@
 	};
 	
 	exports.default = ComponentReducer;
-
-/***/ },
-/* 343 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var CREATE_COMPONENT = exports.CREATE_COMPONENT = 'CREATE_COMPONENT';
-	var DESTROY_COMPONENT = exports.DESTROY_COMPONENT = 'DESTROY_COMPONENT';
-	var UPDATE_LAYOUT = exports.UPDATE_LAYOUT = 'UPDATE_LAYOUT';
-	var UPDATE_PROPS = exports.UPDATE_PROPS = 'UPDATE_PROPS';
-	
-	var createComponent = exports.createComponent = function createComponent(pageId, component) {
-	  return {
-	    type: CREATE_COMPONENT,
-	    pageId: pageId,
-	    component: component
-	  };
-	};
-	
-	var destroyComponent = exports.destroyComponent = function destroyComponent(pageId, component) {
-	  return {
-	    type: DESTROY_COMPONENT,
-	    pageId: pageId,
-	    component: component
-	  };
-	};
-	
-	var updateLayout = exports.updateLayout = function updateLayout(layout) {
-	  return {
-	    type: UPDATE_LAYOUT,
-	    layout: layout
-	  };
-	};
-	
-	var updateProps = exports.updateProps = function updateProps(id, props) {
-	  return {
-	    type: UPDATE_PROPS,
-	    id: id,
-	    props: props
-	  };
-	};
 
 /***/ },
 /* 344 */
@@ -58271,7 +58296,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	exports.default = (0, _redux.applyMiddleware)(_layout_middleware2.default, _site_middleware2.default, _page_middleware2.default, _session_middleware2.default, _notification_middleware2.default, _template_middleware2.default, _component_middleware2.default, (0, _reactRouterRedux.routerMiddleware)(_reactRouter.hashHistory));
+	exports.default = (0, _redux.applyMiddleware)(_layout_middleware2.default, _site_middleware2.default, _page_middleware2.default, _session_middleware2.default, _notification_middleware2.default, _template_middleware2.default, (0, _reactRouterRedux.routerMiddleware)(_reactRouter.hashHistory));
 
 /***/ },
 /* 351 */
@@ -61405,9 +61430,9 @@
 	
 	var _lodash = __webpack_require__(194);
 	
-	var _notification_actions = __webpack_require__(339);
+	var _notification_actions = __webpack_require__(340);
 	
-	var _loading_actions = __webpack_require__(341);
+	var _loading_actions = __webpack_require__(342);
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
@@ -61463,11 +61488,11 @@
 	
 	var _entity_actions = __webpack_require__(331);
 	
-	var _loading_actions = __webpack_require__(341);
+	var _loading_actions = __webpack_require__(342);
 	
 	var _schema = __webpack_require__(355);
 	
-	var _notification_actions = __webpack_require__(339);
+	var _notification_actions = __webpack_require__(340);
 	
 	var _api_utils = __webpack_require__(436);
 	
@@ -61605,7 +61630,7 @@
 	  value: true
 	});
 	
-	var _session_actions = __webpack_require__(336);
+	var _session_actions = __webpack_require__(337);
 	
 	var ACTIONS = _interopRequireWildcard(_session_actions);
 	
@@ -61722,7 +61747,7 @@
 	  value: true
 	});
 	
-	var _notification_actions = __webpack_require__(339);
+	var _notification_actions = __webpack_require__(340);
 	
 	var NotificationMiddleware = function NotificationMiddleware(_ref) {
 	  var getState = _ref.getState;
@@ -61764,9 +61789,9 @@
 	
 	var _schema = __webpack_require__(355);
 	
-	var _loading_actions = __webpack_require__(341);
+	var _loading_actions = __webpack_require__(342);
 	
-	var _notification_actions = __webpack_require__(339);
+	var _notification_actions = __webpack_require__(340);
 	
 	var _normalizr = __webpack_require__(356);
 	
@@ -61823,7 +61848,7 @@
 	  value: true
 	});
 	
-	var _component_actions = __webpack_require__(343);
+	var _component_actions = __webpack_require__(335);
 	
 	var _api_utils = __webpack_require__(436);
 	
@@ -61846,6 +61871,7 @@
 	    return function (action) {
 	      switch (action.type) {
 	        case _component_actions.CREATE_COMPONENT:
+	          return next(action);
 	          var pId = getState().pages[action.pageId].id;
 	          (0, _api_utils.call)({
 	            dispatch: dispatch,
@@ -61858,6 +61884,7 @@
 	          });
 	          return next(action);
 	        case _component_actions.DESTROY_COMPONENT:
+	          return next(action);
 	          (0, _api_utils.call)({
 	            dispatch: dispatch,
 	            request: (0, _component_api.destroyComponent)(action.component),
@@ -69202,7 +69229,7 @@
 	
 	var _sites_index2 = _interopRequireDefault(_sites_index);
 	
-	var _session_actions = __webpack_require__(336);
+	var _session_actions = __webpack_require__(337);
 	
 	var _entity_utils = __webpack_require__(538);
 	
@@ -69668,7 +69695,7 @@
 	
 	var _header_bar2 = _interopRequireDefault(_header_bar);
 	
-	var _session_actions = __webpack_require__(336);
+	var _session_actions = __webpack_require__(337);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -70427,7 +70454,7 @@
 	
 	var _reactRedux = __webpack_require__(510);
 	
-	var _session_actions = __webpack_require__(336);
+	var _session_actions = __webpack_require__(337);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -70596,7 +70623,7 @@
 	
 	var _registration_form2 = _interopRequireDefault(_registration_form);
 	
-	var _session_actions = __webpack_require__(336);
+	var _session_actions = __webpack_require__(337);
 	
 	var ACTIONS = _interopRequireWildcard(_session_actions);
 	
@@ -71923,7 +71950,7 @@
 	
 	var _reactRedux = __webpack_require__(510);
 	
-	var _component_actions = __webpack_require__(343);
+	var _component_actions = __webpack_require__(335);
 	
 	var _router_utils = __webpack_require__(550);
 	
@@ -71961,10 +71988,16 @@
 	  }
 	};
 	
+	var nextId = 0;
+	
 	var makeComponent = function makeComponent(name) {
 	  return {
+	    tempId: 'new' + nextId++,
 	    name: name,
 	    layout: {
+	      i: 'new' + nextId++,
+	      moved: false,
+	      static: false,
 	      x: 0,
 	      y: 0, // puts it at the bottom
 	      w: 4,
@@ -72337,7 +72370,7 @@
 	
 	var _layout_editor2 = _interopRequireDefault(_layout_editor);
 	
-	var _component_actions = __webpack_require__(343);
+	var _component_actions = __webpack_require__(335);
 	
 	var _page_actions = __webpack_require__(334);
 	
@@ -72358,7 +72391,9 @@
 	  var params = _ref2.params;
 	  return {
 	    loading: loading['page'],
-	    components: (0, _entity_utils.map)(pages[(0, _router_utils.parsePageId)(params)], 'components', components),
+	    components: (0, _entity_utils.map)(pages[(0, _router_utils.parsePageId)(params)], 'components', components).filter(function (c) {
+	      return !c._destroy;
+	    }),
 	    params: params,
 	    locked: false,
 	    editor: editor
@@ -72439,48 +72474,84 @@
 	
 	var Grid = (0, _reactGridLayout.WidthProvider)(_reactGridLayout2.default);
 	
+	
+	var viewHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+	var viewWidth = Math.max(document.documentElement.width || 0, window.innerWidth || 0);
+	var ratio = viewWidth / viewHeight;
+	var contentWidth = viewWidth - 264 - 50;
+	var contentHeight = contentWidth / ratio;
+	
 	var GridLayout = function (_Component) {
 	  _inherits(GridLayout, _Component);
 	
-	  function GridLayout() {
-	    var _ref;
-	
-	    var _temp, _this, _ret;
-	
+	  function GridLayout(props) {
 	    _classCallCheck(this, GridLayout);
 	
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
+	    var _this = _possibleConstructorReturn(this, (GridLayout.__proto__ || Object.getPrototypeOf(GridLayout)).call(this, props));
 	
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = GridLayout.__proto__ || Object.getPrototypeOf(GridLayout)).call.apply(_ref, [this].concat(args))), _this), _this.createElement = function (el) {
-	      var i = '' + el.id;
+	    _this.createElement = function (el) {
+	      var i = '' + (el.id || el.tempId);
+	      var layout = _lodash2.default.merge({}, el.layout);
+	      layout.i = i;
 	      var Comp = _catalog2.default[el.name];
 	      return _react2.default.createElement(
 	        'div',
-	        { key: i, 'data-grid': _lodash2.default.merge({}, el.layout) },
+	        { key: i, 'data-grid': layout },
 	        _react2.default.createElement(
 	          _Wrapper2.default,
 	          {
 	            name: el.name,
 	            locked: el.layout.static,
-	            onToggleLock: _this.toggleComponentLock.bind(_this, el.layout),
-	            openEditor: _this.props.openEditor.bind(null, el.id, Comp.inputTypes),
-	            onRemove: _this.props.destroyComponent.bind(_this, el) },
+	            onToggleLock: _this.toggleComponentLock.bind(_this, layout),
+	            openEditor: _this.props.openEditor.bind(null, i, Comp.inputTypes),
+	            onRemove: _this.removeComponent.bind(_this, el) },
 	          _react2.default.createElement(Comp, el.props)
 	        )
 	      );
-	    }, _this.toggleComponentLock = function (layout) {
+	    };
+	
+	    _this.removeComponent = function (el, event) {
+	      var gifStyle = {};
+	      var width = gifStyle.width = el.layout.w * contentWidth / 12;
+	      var height = el.layout.h * contentHeight / 25;
+	      gifStyle.right = viewWidth - event.clientX + width / 2 - 50;
+	      gifStyle.top = event.clientY + height / 4;
+	      gifStyle.width = contentWidth;
+	      gifStyle.display = 'block';
+	      gifStyle.position = 'fixed';
+	      gifStyle.transform = 'translateX(50%) translateY(-50%)';
+	      _this.setState({ gifStyle: gifStyle });
+	      setTimeout(_this.destroyComponent(el), 675);
+	      setTimeout(_this.removeImage, 1000);
+	    };
+	
+	    _this.destroyComponent = function (el) {
+	      return function () {
+	        _this.props.destroyComponent(el);
+	      };
+	    };
+	
+	    _this.removeImage = function () {
+	      _this.setState({ gifStyle: { display: 'none' } });
+	    };
+	
+	    _this.toggleComponentLock = function (layout) {
 	      var newLayout = _lodash2.default.merge({}, layout);
 	      newLayout.static = !newLayout.static;
-	      _this.props.updateLayout(newLayout);
-	      _this.forceUpdate();
-	    }, _this.itemLayoutChange = function (_l, oldItem, newItem) {
-	      if (!_lodash2.default.isEqual(oldItem, newItem)) {
-	        _this.props.updateLayout(_lodash2.default.merge({}, newItem));
-	        console.log('item moved, saving...');
+	      _this.props.updateLayout([newLayout]);
+	    };
+	
+	    _this.layoutChange = function (layout) {
+	      _this.props.updateLayout(layout);
+	    };
+	
+	    _this.state = {
+	      gifStyle: {
+	        display: 'none',
+	        position: 'fixed'
 	      }
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	    };
+	    return _this;
 	  }
 	
 	  _createClass(GridLayout, [{
@@ -72491,12 +72562,6 @@
 	      var layout = this.props.components.map(function (c) {
 	        return _lodash2.default.merge({}, c.layout);
 	      });
-	
-	      var height = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-	      var width = Math.max(document.documentElement.width || 0, window.innerWidth || 0);
-	      var ratio = width / height;
-	      var contentWidth = width - 264 - 50;
-	      var contentHeight = contentWidth / ratio;
 	
 	      return _react2.default.createElement(
 	        _loading_page2.default,
@@ -72523,15 +72588,15 @@
 	              className: 'layout-editor',
 	              verticalCompact: false,
 	              layout: layout,
+	              onLayoutChange: this.layoutChange,
 	              draggableCancel: '.draggable-cancel',
-	              onResizeStop: this.itemLayoutChange,
-	              onDragStop: this.itemLayoutChange,
 	              cols: 12,
 	              rowHeight: Math.floor(contentHeight / 25) },
 	            components
 	          )
 	        ),
-	        this.props.editor ? _react2.default.createElement(_Editor2.default, null) : ""
+	        this.props.editor ? _react2.default.createElement(_Editor2.default, null) : "",
+	        _react2.default.createElement('img', { style: this.state.gifStyle, src: this.state.gifStyle.display !== 'none' ? "http://www.animatedimages.org/data/media/188/animated-dragon-image-0010.gif" : "", alt: 'animated-dragon-image-0010' })
 	      );
 	    }
 	  }]);
@@ -78159,7 +78224,7 @@
 	
 	      return _react2.default.createElement(
 	        'div',
-	        { style: styles.container, onDoubleClick: openEditor },
+	        { style: styles.container, onDoubleClick: openEditor, ref: 'wrapper' },
 	        children,
 	        _react2.default.createElement(
 	          'div',
@@ -82416,7 +82481,7 @@
 	
 	var _catalog2 = _interopRequireDefault(_catalog);
 	
-	var _component_actions = __webpack_require__(343);
+	var _component_actions = __webpack_require__(335);
 	
 	var _editor_actions = __webpack_require__(189);
 	

@@ -8,7 +8,7 @@ import { parsePageId } from '../../../util/router_utils.js';
 
 const mapStateToProps = ({ components, loading, pages, editor, sites }, { params }) => ({
   loading: loading['page'],
-  components: map(pages[parsePageId(params)], 'components', components),
+  components: map(pages[parsePageId(params)], 'components', components).filter(c => !c._destroy),
   params: params,
   locked: false,
   editor

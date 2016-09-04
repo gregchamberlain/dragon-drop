@@ -17,6 +17,5 @@ export default applyMiddleware(
   SessionMiddleware,
   NotificationMiddleware,
   TemplateMiddleware,
-  ComponentMiddleware,
   routerMiddleware(hashHistory)
 );
