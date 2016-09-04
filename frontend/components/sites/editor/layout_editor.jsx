@@ -10,13 +10,15 @@ import { Link } from 'react-router';
 
 class GridLayout extends Component {
 
-  createElement(el) {
+  createElement = (el) => {
     let i = `${el.id}`;
     let Comp = Catalog[el.name];
     return (
       <div key={i} data-grid={_.merge({}, el.layout)}>
         <Wrapper
           name={el.name}
+          locked={el.layout.static}
+          onToggleLock={this.toggleComponentLock.bind(this, el.layout)}
           openEditor={this.props.openEditor.bind(null, el.id, Comp.inputTypes)}
           onRemove={this.props.destroyComponent.bind(this, el)}>
           <Comp {...el.props}/>
@@ -25,11 +27,23 @@ class GridLayout extends Component {
     );
   }
 
+  toggleComponentLock = layout => {
+    let newLayout = _.merge({}, layout);
+    newLayout.static = !newLayout.static
+    console.log(newLayout);
+    this.props.updateLayout(newLayout);
+    this.forceUpdate();
+  }
+
   itemLayoutChange = (_l, _o, newItem) => {
     this.props.updateLayout(_.merge({}, newItem));
   }
 
   render() {
+
+    let components = _.map(_.map(this.props.components, this.createElement));
+    let layout = this.props.components.map(c => _.merge({}, c.layout));
+
     return (
       <LoadingPage loading={this.props.loading}>
         <button onClick={this.props.savePage}>Save</button>
@@ -41,14 +55,14 @@ class GridLayout extends Component {
             isResizable={!this.props.locked}
             className="layout-editor"
             verticalCompact={false}
-            onDrag={(l, o, n, p) => console.log(n)}
+            layout={layout}
             draggableCancel=".draggable-cancel"
             onResizeStop={this.itemLayoutChange}
             onDragStop={this.itemLayoutChange}
             cols={12}
             rowHeight={30}
             width={1200}>
-            {_.map(this.props.components, this.createElement.bind(this))}
+            {components}
           </Grid>
         </div>
         { this.props.editor ? <PropsEditor /> : ""}

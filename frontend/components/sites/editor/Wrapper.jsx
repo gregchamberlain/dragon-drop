@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import Gear from 'react-icons/lib/fa/cog';
 import Close from 'react-icons/lib/fa/close';
+import Lock from 'react-icons/lib/fa/lock';
+import Unlock from 'react-icons/lib/fa/unlock';
 import Radium from 'radium';
 
 class Wrapper extends Component {
 
   render() {
-    const { onRemove, openEditor, children, name } = this.props;
+    const { onRemove, openEditor, children, name, onToggleLock, locked } = this.props;
     return (
       <div style={styles.container}>
         {children}
         <div style={styles.overlay} className="component-wrapper-overlay">
           <div style={styles.header}>
             <Gear style={styles.icon} onClick={openEditor} className="draggable-cancel"/>
+            { locked ? (
+              <Lock style={styles.icon} onClick={onToggleLock} className="draggable-cancel"/>
+            ) : (
+              <Unlock style={styles.icon} onClick={onToggleLock} className="draggable-cancel"/>
+            )}
             <div style={{flex: 1, marginLeft: 5}}>{name}</div>
             <Close style={styles.icon} onClick={onRemove} className="draggable-cancel"/>
           </div>
