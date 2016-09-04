@@ -57779,9 +57779,10 @@
 	  };
 	};
 	
-	var destroyComponent = exports.destroyComponent = function destroyComponent(component) {
+	var destroyComponent = exports.destroyComponent = function destroyComponent(pageId, component) {
 	  return {
 	    type: DESTROY_COMPONENT,
+	    pageId: pageId,
 	    component: component
 	  };
 	};
@@ -58540,13 +58541,17 @@
 	
 	var _normalizr = __webpack_require__(356);
 	
-	var site = exports.site = new _normalizr.Schema('sites');
+	var site = exports.site = new _normalizr.Schema('sites', { idAttribute: 'identifier' });
 	var arrayOfSites = exports.arrayOfSites = (0, _normalizr.arrayOf)(site);
 	
 	var template = exports.template = new _normalizr.Schema('templates');
 	var arrayOfTemplates = exports.arrayOfTemplates = (0, _normalizr.arrayOf)(template);
 	
-	var page = exports.page = new _normalizr.Schema('pages');
+	var pageId = function pageId(entity) {
+	  return '' + entity.site_id + entity.path;
+	};
+	
+	var page = exports.page = new _normalizr.Schema('pages', { idAttribute: pageId });
 	var arrayOfPages = exports.arrayOfPages = (0, _normalizr.arrayOf)(page);
 	
 	var component = exports.component = new _normalizr.Schema('components');
@@ -61841,13 +61846,14 @@
 	    return function (action) {
 	      switch (action.type) {
 	        case _component_actions.CREATE_COMPONENT:
+	          var pId = getState().pages[action.pageId].id;
 	          (0, _api_utils.call)({
 	            dispatch: dispatch,
-	            request: (0, _component_api.createComponent)(action.pageId, (0, _util.stringify)(action.component)),
+	            request: (0, _component_api.createComponent)(pId, (0, _util.stringify)(action.component)),
 	            loading: ['component', 'Creating component...'],
 	            success: function success(resp) {
 	              dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(resp, _schema.component)));
-	              dispatch((0, _page_actions.addComponent)(resp.page_id, resp.id));
+	              dispatch((0, _page_actions.addComponent)(action.pageId, resp.id));
 	            }
 	          });
 	          return next(action);
@@ -61857,7 +61863,7 @@
 	            request: (0, _component_api.destroyComponent)(action.component),
 	            loading: ['component', 'Destroying component...'],
 	            success: function success(resp) {
-	              dispatch((0, _page_actions.removeComponent)(resp.page_id, resp.id));
+	              dispatch((0, _page_actions.removeComponent)(action.pageId, resp.id));
 	              dispatch((0, _entity_actions.removeEntity)((0, _normalizr.normalize)(resp, _schema.component)));
 	            }
 	          });
@@ -67660,6 +67666,7 @@
 	        _react2.default.createElement(
 	          _reactRouter.Route,
 	          { path: 'preview/:siteId', onEnter: (0, _router_utils.fetchSite)(store) },
+	          _react2.default.createElement(_reactRouter.IndexRoute, { component: _preview_container2.default }),
 	          _react2.default.createElement(_reactRouter.Route, { path: ':pageId', component: _preview_container2.default })
 	        ),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/templates', component: _templates_index_container2.default, onEnter: (0, _router_utils.fetchTemplates)(store) }),
@@ -67674,7 +67681,7 @@
 	            _react2.default.createElement(
 	              _reactRouter.Route,
 	              { path: 'editor', component: _pages_main_container2.default },
-	              _react2.default.createElement(_reactRouter.IndexRoute, { component: _page_editor2.default }),
+	              _react2.default.createElement(_reactRouter.IndexRoute, { component: _layout_editor_container2.default }),
 	              _react2.default.createElement(_reactRouter.Route, {
 	                path: ':pageId',
 	                onEnter: function onEnter() {},
@@ -69782,7 +69789,7 @@
 	    _react2.default.createElement(
 	      'div',
 	      { className: 'sites-index-item', onClick: function onClick() {
-	          return router.push('/sites/' + site.id + '/editor');
+	          return router.push('/sites/' + site.identifier + '/editor');
 	        } },
 	      _react2.default.createElement(
 	        'h1',
@@ -71530,8 +71537,8 @@
 	          'li',
 	          { key: page.id, className: 'page-list-item' },
 	          _react2.default.createElement(
-	            _reactRouter.Link,
-	            { to: location + '/' + page.id, activeClassName: 'active' },
+	            _reactRouter.IndexLink,
+	            { to: '' + location + page.path, activeClassName: 'active' },
 	            _react2.default.createElement(_fileO2.default, null),
 	            page.name
 	          )
@@ -71958,7 +71965,7 @@
 	  var params = _ref2.params;
 	  return {
 	    create: function create(name) {
-	      return dispatch((0, _component_actions.createComponent)(params.pageId, makeComponent(name)));
+	      return dispatch((0, _component_actions.createComponent)(params.siteId + '/' + (params.pageId === undefined ? "" : params.pageId), makeComponent(name)));
 	    }
 	  };
 	};
@@ -72332,10 +72339,11 @@
 	  var loading = _ref.loading;
 	  var pages = _ref.pages;
 	  var editor = _ref.editor;
+	  var sites = _ref.sites;
 	  var params = _ref2.params;
 	  return {
 	    loading: loading['page'],
-	    components: (0, _entity_utils.map)(pages[params.pageId], 'components', components),
+	    components: (0, _entity_utils.map)(pages[params.siteId + '/' + (params.pageId === undefined ? "" : params.pageId)], 'components', components),
 	    params: params,
 	    locked: false,
 	    editor: editor
@@ -72349,10 +72357,10 @@
 	      return dispatch((0, _component_actions.updateLayout)(layout));
 	    },
 	    destroyComponent: function destroyComponent(component) {
-	      return dispatch((0, _component_actions.destroyComponent)(component));
+	      return dispatch((0, _component_actions.destroyComponent)(params.siteId + '/' + (params.pageId === undefined ? "" : params.pageId), component));
 	    },
 	    savePage: function savePage() {
-	      return dispatch((0, _page_actions.savePage)(params.pageId));
+	      return dispatch((0, _page_actions.savePage)(params.siteId + '/' + (params.pageId === undefined ? "" : params.pageId)));
 	    },
 	    openEditor: function openEditor(i, inputs) {
 	      return dispatch((0, _editor_actions.openEditor)(i, inputs));
@@ -72475,7 +72483,7 @@
 	        ),
 	        _react2.default.createElement(
 	          _reactRouter.Link,
-	          { to: '/preview/' + this.props.params.siteId + '/' + this.props.params.pageId },
+	          { to: '/preview/' + this.props.params.siteId + '/' + (this.props.params.pageId === undefined ? "" : this.props.params.pageId) },
 	          'Preview'
 	        ),
 	        _react2.default.createElement(
@@ -82543,7 +82551,7 @@
 	  var params = _ref2.params;
 	  return {
 	    loading: loading['site'],
-	    components: (0, _entity_utils.map)(pages[params.pageId], 'components', components)
+	    components: (0, _entity_utils.map)(pages[params.siteId + '/' + (params.pageId === undefined ? "" : params.pageId)], 'components', components)
 	  };
 	};
 	

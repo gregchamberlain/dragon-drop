@@ -47,7 +47,7 @@ class GridLayout extends Component {
     return (
       <LoadingPage loading={this.props.loading}>
         <button onClick={this.props.savePage}>Save</button>
-        <Link to={`/preview/${this.props.params.siteId}/${this.props.params.pageId}`}>Preview</Link>
+        <Link to={`/preview/${this.props.params.siteId}/${this.props.params.pageId === undefined ? "" : this.props.params.pageId}`}>Preview</Link>
         <div className="grid-wrapper">
           <Grid
             margin={[0,0]}

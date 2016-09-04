@@ -40,6 +40,6 @@ const makeComponent = name => ({
 });
 
 const mapDispatchToProps = (dispatch, { params }) => ({
-  create: (name) => dispatch(createComponent(params.pageId, makeComponent(name))),
+  create: (name) => dispatch(createComponent(`${params.siteId}/${params.pageId === undefined ? "" : params.pageId}`, makeComponent(name))),
 });
 export default connect(null, mapDispatchToProps)(CatalogContainerr);

@@ -1,5 +1,10 @@
 class Site < ActiveRecord::Base
-	has_many :pages, dependent: :destroy
+	has_many :pages,
+		class_name: :Page,
+		primary_key: :identifier,
+		foreign_key: :site_id,
+		dependent: :destroy
+
 	belongs_to :user
 
 	validates :name, :user_id, presence: true

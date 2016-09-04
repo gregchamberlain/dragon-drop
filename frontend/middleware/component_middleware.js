@@ -10,13 +10,14 @@ import { stringify } from '../util';
 const ComponentMiddleware = ({ getState, dispatch }) => next => action => {
   switch(action.type) {
     case CREATE_COMPONENT:
+      let pId = getState().pages[action.pageId].id
       call({
         dispatch,
-        request: createComponent(action.pageId, stringify(action.component)),
+        request: createComponent(pId, stringify(action.component)),
         loading: ['component', 'Creating component...'],
         success: resp => {
           dispatch(receiveEntity(normalize(resp, component)));
-          dispatch(addComponent(resp.page_id, resp.id));
+          dispatch(addComponent(action.pageId, resp.id));
         }
       });
       return next(action);
@@ -26,7 +27,7 @@ const ComponentMiddleware = ({ getState, dispatch }) => next => action => {
         request: destroyComponent(action.component),
         loading: ['component', 'Destroying component...'],
         success: resp => {
-          dispatch(removeComponent(resp.page_id, resp.id));
+          dispatch(removeComponent(action.pageId, resp.id));
           dispatch(removeEntity(normalize(resp, component)));
         }
       });

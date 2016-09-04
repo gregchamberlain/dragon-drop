@@ -9,8 +9,9 @@ export const createComponent = (pageId, component) => ({
   component
 });
 
-export const destroyComponent = component => ({
+export const destroyComponent = (pageId, component) => ({
   type: DESTROY_COMPONENT,
+  pageId,
   component
 });
 

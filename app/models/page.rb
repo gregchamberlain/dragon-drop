@@ -1,5 +1,9 @@
 class Page < ActiveRecord::Base
-	belongs_to :site
+	belongs_to :site,
+		class_name: :Site,
+		primary_key: :identifier,
+		foreign_key: :site_id
+
 	has_many :components, dependent: :destroy
 
 	accepts_nested_attributes_for :components, allow_destroy: true

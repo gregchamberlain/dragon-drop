@@ -19,8 +19,6 @@ class Api::PagesController < ApplicationController
   end
 
   def update
-    p 'asdajsdkahdlASKJDHASLDKJlasdhLAD'
-    p page_params
     @page = Page.find(params[:id])
     if @page.path == '/' && page_params[:path] != '/'
       return render json: ["The root pages path cannot be changed"], status: 400

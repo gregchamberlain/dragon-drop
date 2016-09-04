@@ -26,7 +26,7 @@ class Api::SitesController < ApplicationController
 	end
 
 	def show
-		@site = Site.includes(pages: :components).find(params[:id])
+		@site = Site.includes(pages: :components).find_by_identifier(params[:id])
 		render json: @site.to_json(include: {pages: {include: :components } } )
 	end
 
@@ -40,7 +40,7 @@ class Api::SitesController < ApplicationController
 
 	private
 	def find_site
-		@site = Site.find(params[:id])
+		@site = Site.find_by_identifier(params[:id])
 		if @site.user != current_user
 			render json: ["You don't have permissions for this site"], status: 403
 		end

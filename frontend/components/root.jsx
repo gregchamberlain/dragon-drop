@@ -44,6 +44,7 @@ const Root = ({ store, history }) => (
           <Route path="signup" component={RegistrationLayout}/>
         </Route>
         <Route path="preview/:siteId" onEnter={fetchSite(store)} >
+          <IndexRoute component={SitePreview} />
           <Route path=":pageId" component={SitePreview} />
         </Route>
 
@@ -53,7 +54,7 @@ const Root = ({ store, history }) => (
           <Route path=":siteId" component={SiteDetail} onEnter={fetchSite(store)}>
             <IndexRedirect to='editor' />
             <Route path="editor" component={PagesMain}>
-              <IndexRoute component={PageEditor} />
+              <IndexRoute component={LayoutEditor} />
               <Route
                 path=":pageId"
                 onEnter={() => {}}

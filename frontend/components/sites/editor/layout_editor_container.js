@@ -5,9 +5,9 @@ import { savePage } from '../../../actions/page_actions';
 import { map } from '../../../util/entity_utils';
 import { openEditor } from '../../../actions/editor_actions';
 
-const mapStateToProps = ({ components, loading, pages, editor }, { params }) => ({
+const mapStateToProps = ({ components, loading, pages, editor, sites }, { params }) => ({
   loading: loading['page'],
-  components: map(pages[params.pageId], 'components', components),
+  components: map(pages[`${params.siteId}/${params.pageId === undefined ? "" : params.pageId}`], 'components', components),
   params: params,
   locked: false,
   editor
@@ -15,8 +15,8 @@ const mapStateToProps = ({ components, loading, pages, editor }, { params }) => 
 
 const mapDispatchToProps = (dispatch, { params }) => ({
   updateLayout: layout => dispatch(updateLayout(layout)),
-  destroyComponent: component => dispatch(destroyComponent(component)),
-  savePage: () => dispatch(savePage(params.pageId)),
+  destroyComponent: component => dispatch(destroyComponent(`${params.siteId}/${params.pageId === undefined ? "" : params.pageId}`, component)),
+  savePage: () => dispatch(savePage(`${params.siteId}/${params.pageId === undefined ? "" : params.pageId}`)),
   openEditor: (i, inputs) => dispatch(openEditor(i, inputs)),
 });
 
