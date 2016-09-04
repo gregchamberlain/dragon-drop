@@ -82702,7 +82702,7 @@
 	    { loading: loading },
 	    _react2.default.createElement(
 	      'div',
-	      { style: { width: '100%', height: '100%', background: '#fff', fontSize: '1.43vw', overflowX: 'hidden' } },
+	      { style: { width: '100%', height: '100%', background: '#fff', fontSize: '1.43vw' } },
 	      _react2.default.createElement(
 	        Grid,
 	        {
