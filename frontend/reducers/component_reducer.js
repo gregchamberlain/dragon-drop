@@ -22,7 +22,7 @@ const ComponentReducer = (state = {}, action) => {
       return nextState;
     case UPDATE_PROPS:
       nextState = merge({}, state);
-      nextState[parseInt(action.id)].props = action.props
+      nextState[action.id || action.tempId].props = action.props
       return nextState;
     case CREATE_COMPONENT:
       return merge({}, state, {[action.component.tempId]: action.component});

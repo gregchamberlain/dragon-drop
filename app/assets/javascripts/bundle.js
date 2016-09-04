@@ -72,14 +72,10 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var wing = new Audio('/assets/wing.mp3');
-	var dragon = new Audio('/assets/dragon.mp3');
-	document.addEventListener('click', function () {
-	  return dragon.play();
-	});
-	document.addEventListener('mousemove', function () {
-	  return wing.play();
-	});
+	// let wing = new Audio('/assets/wing.mp3');
+	// let dragon = new Audio('/assets/dragon.mp3');
+	// document.addEventListener('click', () => dragon.play());
+	// document.addEventListener('mousemove', () => wing.play());
 	
 	document.addEventListener('DOMContentLoaded', function () {
 	
@@ -57806,7 +57802,7 @@
 	      return nextState;
 	    case _component_actions.UPDATE_PROPS:
 	      nextState = (0, _lodash.merge)({}, state);
-	      nextState[parseInt(action.id)].props = action.props;
+	      nextState[action.id || action.tempId].props = action.props;
 	      return nextState;
 	    case _component_actions.CREATE_COMPONENT:
 	      return (0, _lodash.merge)({}, state, _defineProperty({}, action.component.tempId, action.component));
