@@ -130,9 +130,12 @@ class GridLayout extends Component {
           </Grid>
         </div>
         { this.props.editor ? <PropsEditor /> : ""}
-        <div className='catalog-container'>
-          <CatalogView params={this.props.params} />
-        </div>
+        { this.props.catalog ? (
+          <div className='catalog-container'>
+            <div onClick={this.props.closeCatalog} style={{padding: 5, background: '#666', cursor: 'pointer'}}>Close</div>
+            <CatalogView params={this.props.params} />
+          </div>
+        ) : ""}
         <img style={this.state.gifStyle} src={ this.state.gifStyle.display !== 'none' ? "http://www.animatedimages.org/data/media/188/animated-dragon-image-0010.gif" : ""} alt="animated-dragon-image-0010"/>
       </LoadingPage>
     );

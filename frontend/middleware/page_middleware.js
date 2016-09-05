@@ -40,6 +40,7 @@ const PageMiddleware = ({ getState, dispatch }) => next => action => {
         success: resp => {
           dispatch(receiveEntity(normalize(resp, page)));
           dispatch(addPage(action.siteId, `${action.siteId}${resp.path}`));
+          dispatch(push(`/sites/${action.siteId}/editor${resp.path}`));
           return 'Page successfully created';
         }
       });

@@ -22412,8 +22412,13 @@
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
+	var defaultState = {
+	  current: false,
+	  catalogOpen: false
+	};
+	
 	var EditorReducer = function EditorReducer() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? { current: false } : arguments[0];
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? defaultState : arguments[0];
 	  var action = arguments[1];
 	
 	  switch (action.type) {
@@ -22421,6 +22426,10 @@
 	      return (0, _lodash.merge)({}, state, { current: action.i });
 	    case EDITOR_ACTIONS.CLOSE_EDITOR:
 	      return (0, _lodash.merge)({}, state, { current: false });
+	    case EDITOR_ACTIONS.OPEN_CATALOG:
+	      return (0, _lodash.merge)({}, state, { catalogOpen: true });
+	    case EDITOR_ACTIONS.CLOSE_CATALOG:
+	      return (0, _lodash.merge)({}, state, { catalogOpen: false });
 	    case _component_actions.DESTROY_COMPONENT:
 	      if (action.component.layout.i === state.current) return (0, _lodash.merge)({}, state, { current: false });
 	      return state;
@@ -22444,6 +22453,10 @@
 	});
 	var OPEN_EDITOR = exports.OPEN_EDITOR = 'OPEN_EDITOR';
 	var CLOSE_EDITOR = exports.CLOSE_EDITOR = 'CLOSE_EDITOR';
+	var COPY_COMPONENT = exports.COPY_COMPONENT = 'COPY_COMPONENT';
+	var PASTE_COMPONENT = exports.PASTE_COMPONENT = 'PASTE_COMPONENT';
+	var OPEN_CATALOG = exports.OPEN_CATALOG = 'OPEN_CATALOG';
+	var CLOSE_CATALOG = exports.CLOSE_CATALOG = 'CLOSE_CATALOG';
 	
 	var openEditor = exports.openEditor = function openEditor(i, inputTypes) {
 	  return {
@@ -22456,6 +22469,22 @@
 	var closeEditor = exports.closeEditor = function closeEditor() {
 	  return {
 	    type: CLOSE_EDITOR
+	  };
+	};
+	
+	var copyComponent = exports.copyComponent = function copyComponent(component) {
+	  component;
+	};
+	
+	var openCatalog = exports.openCatalog = function openCatalog() {
+	  return {
+	    type: OPEN_CATALOG
+	  };
+	};
+	
+	var closeCatalog = exports.closeCatalog = function closeCatalog() {
+	  return {
+	    type: CLOSE_CATALOG
 	  };
 	};
 
@@ -76133,6 +76162,7 @@
 	              success: function success(resp) {
 	                dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(resp, _schema.page)));
 	                dispatch((0, _site_actions.addPage)(action.siteId, '' + action.siteId + resp.path));
+	                dispatch((0, _reactRouterRedux.push)('/sites/' + action.siteId + '/editor' + resp.path));
 	                return 'Page successfully created';
 	              }
 	            });
@@ -76624,6 +76654,10 @@
 	
 	var _editor_toolbar_container2 = _interopRequireDefault(_editor_toolbar_container);
 	
+	var _new_page_form = __webpack_require__(762);
+	
+	var _new_page_form2 = _interopRequireDefault(_new_page_form);
+	
 	var _page_actions = __webpack_require__(574);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -76684,6 +76718,7 @@
 	              _reactRouter.Route,
 	              { path: 'editor', component: _editor_toolbar_container2.default },
 	              _react2.default.createElement(_reactRouter.IndexRoute, { component: _layout_editor_container2.default }),
+	              _react2.default.createElement(_reactRouter.Route, { path: 'new-page', component: _new_page_form2.default }),
 	              _react2.default.createElement(_reactRouter.Route, { path: ':pageId', component: _layout_editor_container2.default })
 	            ),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'store', component: function component() {
@@ -81418,6 +81453,8 @@
 	
 	var _router_utils = __webpack_require__(652);
 	
+	var _editor_actions2 = __webpack_require__(189);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
@@ -81435,7 +81472,8 @@
 	      return !c._destroy;
 	    }),
 	    locked: false,
-	    editor: editor.current
+	    editor: editor.current,
+	    catalog: editor.catalogOpen
 	  };
 	};
 	
@@ -81453,6 +81491,9 @@
 	    },
 	    openEditor: function openEditor(i, inputs) {
 	      return dispatch((0, _editor_actions.openEditor)(i, inputs));
+	    },
+	    closeCatalog: function closeCatalog() {
+	      return dispatch((0, _editor_actions2.closeCatalog)());
 	    }
 	  };
 	};
@@ -81659,11 +81700,16 @@
 	          )
 	        ),
 	        this.props.editor ? _react2.default.createElement(_Editor2.default, null) : "",
-	        _react2.default.createElement(
+	        this.props.catalog ? _react2.default.createElement(
 	          'div',
 	          { className: 'catalog-container' },
+	          _react2.default.createElement(
+	            'div',
+	            { onClick: this.props.closeCatalog, style: { padding: 5, background: '#666', cursor: 'pointer' } },
+	            'Close'
+	          ),
 	          _react2.default.createElement(_Catalog2.default, { params: this.props.params })
-	        ),
+	        ) : "",
 	        _react2.default.createElement('img', { style: this.state.gifStyle, src: this.state.gifStyle.display !== 'none' ? "http://www.animatedimages.org/data/media/188/animated-dragon-image-0010.gif" : "", alt: 'animated-dragon-image-0010' })
 	      );
 	    }
@@ -91899,10 +91945,11 @@
 	  var sites = _ref.sites;
 	  var pages = _ref.pages;
 	  var params = _ref2.params;
+	  var location = _ref2.location;
 	  return {
 	    site: sites[params.siteId],
 	    pages: (0, _entity_utils.map)(sites[params.siteId], 'pages', pages),
-	    currentPage: params.pageId ? '/' + params.pageId : '/',
+	    currentPage: params.pageId ? '/' + params.pageId : location.pathname.indexOf('new-page') === -1 ? '/' : '/new-page',
 	    location: '/sites/' + params.siteId + '/editor'
 	  };
 	};
@@ -91919,6 +91966,9 @@
 	    },
 	    preview: function preview() {
 	      return dispatch((0, _reactRouterRedux.push)('/preview/' + (0, _router_utils.parsePageId)(params)));
+	    },
+	    openCatalog: function openCatalog() {
+	      return dispatch((0, _editor_actions.openCatalog)());
 	    }
 	  };
 	};
@@ -91949,6 +91999,7 @@
 	  var savePage = _ref.savePage;
 	  var preview = _ref.preview;
 	  var site = _ref.site;
+	  var openCatalog = _ref.openCatalog;
 	  return _react2.default.createElement(
 	    'div',
 	    null,
@@ -91960,6 +92011,11 @@
 	    _react2.default.createElement(
 	      'div',
 	      { className: 'editor-toolbar' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'toolbar-item action', onClick: openCatalog },
+	        'Catalog'
+	      ),
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'toolbar-item brand' },
@@ -91975,9 +92031,9 @@
 	            page.name
 	          );
 	        }),
-	        _react2.default.createElement(
+	        pages.length >= 5 ? "" : _react2.default.createElement(
 	          'option',
-	          { key: 'new-page', value: 'new-page' },
+	          { key: 'new-page', value: '/new-page' },
 	          'New Page'
 	        )
 	      ),
@@ -91997,6 +92053,99 @@
 	};
 	
 	exports.default = EditorToolbar;
+
+/***/ },
+/* 762 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(611);
+	
+	var _page_actions = __webpack_require__(574);
+	
+	var PAGE_ACTIONS = _interopRequireWildcard(_page_actions);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var NewPageForm = function (_Component) {
+	  _inherits(NewPageForm, _Component);
+	
+	  function NewPageForm(props) {
+	    _classCallCheck(this, NewPageForm);
+	
+	    var _this = _possibleConstructorReturn(this, (NewPageForm.__proto__ || Object.getPrototypeOf(NewPageForm)).call(this, props));
+	
+	    _this.update = function (name) {
+	      return function (e) {
+	        _this.setState(_defineProperty({}, name, e.target.value));
+	      };
+	    };
+	
+	    _this.handleSubmit = function (e) {
+	      e.preventDefault();
+	      _this.props.createPage(_this.state);
+	    };
+	
+	    _this.state = {
+	      name: ''
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(NewPageForm, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'form',
+	        { onSubmit: this.handleSubmit },
+	        _react2.default.createElement('input', { type: 'text', value: this.state.name, onChange: this.update('name') }),
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'submit' },
+	          'Save'
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return NewPageForm;
+	}(_react.Component);
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {};
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, _ref) {
+	  var params = _ref.params;
+	  return {
+	    createPage: function createPage(page) {
+	      return dispatch(PAGE_ACTIONS.createPage(params.siteId, page));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(NewPageForm);
 
 /***/ }
 /******/ ]);

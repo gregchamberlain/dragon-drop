@@ -16,6 +16,7 @@ import TemplatesIndex from './templates/templates_index_container.jsx';
 import LayoutEditor from './sites/editor/layout_editor_container.js';
 import SitePreview from './sites/preview_container.jsx';
 import EditorToolbar from './sites/editor/editor_toolbar_container';
+import NewPageForm from './sites/pages/new_page_form.jsx';
 import { savePage } from '../actions/page_actions.js';
 
 const validateUser = (store) => {
@@ -53,6 +54,7 @@ const Root = ({ store, history }) => (
             <IndexRedirect to='editor' />
             <Route path="editor" component={EditorToolbar}>
               <IndexRoute component={LayoutEditor}  />
+              <Route path="new-page" component={NewPageForm} />
               <Route path=":pageId" component={LayoutEditor}  />
             </Route>
             <Route path="store" component={() => <div>Store</div>}/>
