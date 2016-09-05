@@ -20,6 +20,9 @@ class Api::PagesController < ApplicationController
 
   def update
     @page = Page.find(params[:id])
+    if (@page.site.user != current_user)
+      return render json: ["This site doesn't belong to you!"], status: 403
+    end
     if @page.path == '/' && page_params[:path] != '/'
       return render json: ["The root pages path cannot be changed"], status: 400
     end

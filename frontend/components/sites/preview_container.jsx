@@ -3,7 +3,8 @@ import SitePreview from './preview.jsx';
 import { map } from '../../util/entity_utils.js'
 import { parsePageId } from '../../util/router_utils.js';
 
-const mapStateToProps = ({ loading, pages, components }, { params }) => ({
+const mapStateToProps = ({ loading, pages, components, sites }, { params }) => ({
+  site: sites[params.siteId],
   siteId: params.siteId,
   loading: loading['site'],
   components: map(pages[parsePageId(params)], 'components', components)

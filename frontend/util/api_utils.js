@@ -10,11 +10,11 @@ export const call = ({ dispatch, request, loading, success, error, prev, preload
   };
 
   const onError = e => {
-    error && error(e);
     dispatch(stopLoading(loading[0]));
     e.responseJSON && e.responseJSON.forEach(err => {
       dispatch(createNotification('error', err));
     });
+    error && error(e);
   };
 
 

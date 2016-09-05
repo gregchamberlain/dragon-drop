@@ -2,9 +2,9 @@ import React, { PropTypes, Component } from 'react';
 import Inputs from '../util/inputs';
 import Link from './Link';
 
-const Toolbar = ({left, right, brand, ...style}) => (
+const Toolbar = ({left, right, brand, ...style}, { site }) => (
   <div style={styles.container(style)}>
-    <Link to={brand.to} text={brand.text} style={{...styles.item(style), ...styles.brand}}/>
+    <Link to={brand.to} text={brand.text === "#site-name" ? site.name : brand.text} style={{...styles.item(style), ...styles.brand}}/>
     {left.map((item, idx) => <Link to={item.to} text={item.text} style={styles.item(style)} key={`left-${idx}`}/>)}
     <div style={styles.space}/>
     {right.map((item, idx) => <Link to={item.to} text={item.text} style={styles.item(style)} key={`right-${idx}`}/>)}
@@ -38,6 +38,10 @@ const styles = {
   }
 }
 
+Toolbar.contextTypes = {
+  site: PropTypes.object
+}
+
 Toolbar.propTypes = {
   background: PropTypes.string,
   url: PropTypes.bool,
@@ -54,7 +58,7 @@ Toolbar.defaultProps = {
   url: false,
   padding: 0,
   brand: {
-    text: "Home",
+    text: "#site-name",
     to: "/"
   },
   left: [],
@@ -80,7 +84,7 @@ Toolbar.defaultLayout = {
   minW: 10,
   minH: 2,
   w: 12,
-  h: 6
+  h: 5
 }
 
 export default Toolbar;

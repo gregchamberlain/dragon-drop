@@ -10,6 +10,7 @@ import { createNotification } from '../actions/notification_actions.js'
 import { call } from '../util/api_utils.js';
 import { stringify } from '../util';
 import { push } from 'react-router-redux';
+import { merge } from 'lodash';
 
 const PageMiddleware = ({ getState, dispatch }) => next => action => {
   switch (action.type) {
@@ -51,11 +52,12 @@ const PageMiddleware = ({ getState, dispatch }) => next => action => {
         success: resp => {
           dispatch(receiveEntity(normalize(resp, page)))
           return 'Page successfully updated';
-        }
+        },
       });
       return next(action);
     case SAVE_PAGE:
-      let p = getState().pages[action.pageId];
+      let p = merge({}, getState().pages[action.pageId]);
+      console.log(p);
       p.components_attributes = stringify(p.components.map(id => getState().components[id]))
       delete p.components
       call({
@@ -66,6 +68,9 @@ const PageMiddleware = ({ getState, dispatch }) => next => action => {
           dispatch(receiveEntity(normalize(resp, page)))
           if (action.preview) dispatch(push(action.preview));
           return `${p.name} Page saved!`
+        },
+        error: e => {
+          if (e.status === 403) dispatch(push('/sites'));
         }
       })
       return next(action);

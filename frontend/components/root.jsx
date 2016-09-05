@@ -52,8 +52,8 @@ const Root = ({ store, history }) => (
           <Route path=":siteId" component={SiteDetail} onEnter={fetchSite(store)}>
             <IndexRedirect to='editor' />
             <Route path="editor" component={EditorToolbar}>
-              <IndexRoute component={LayoutEditor} onLeave={saveOnLeave(store)} />
-              <Route path=":pageId" component={LayoutEditor} onLeave={saveOnLeave(store)} />
+              <IndexRoute component={LayoutEditor}  />
+              <Route path=":pageId" component={LayoutEditor}  />
             </Route>
             <Route path="store" component={() => <div>Store</div>}/>
             <Route path="analytics" component={() => <div>Analytics</div>}/>

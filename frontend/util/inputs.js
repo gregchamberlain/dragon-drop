@@ -73,9 +73,11 @@ class List extends Component {
     return (
       <ul style={styles.ul}>
         {this.state.items.map((item, idx) => (
-          <li key={`item-${idx}`}>
-            <this.props.inputType value={item} onChange={this.onChange(idx)} />
-            <span onClick={this.removeItem(idx)}>&times;</span>
+          <li key={`item-${idx}`} style={styles.li}>
+            <div style={styles.arrInputs}>
+              <this.props.inputType value={item} onChange={this.onChange(idx)} />
+            </div>
+            <span onClick={this.removeItem(idx)} style={styles.remove}>&times;</span>
           </li>
         ))}
         <li><div onClick={this.addItem}>Add Item</div></li>
@@ -161,7 +163,18 @@ class ColorInput extends Component {
 const styles = {
   ul: {
     listStyle: 'none',
-    padding: 0
+    padding: 0,
+  },
+  li: {
+    border: '1px solid #ccc',
+    display: 'flex',
+    alignItems: 'center',
+    padding: 5
+  },
+  remove: {
+    fontSize: 20,
+    marginLeft: 5,
+    cursor: 'pointer'
   }
 }
 

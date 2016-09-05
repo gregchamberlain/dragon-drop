@@ -21,7 +21,8 @@ class SitePreview extends Component {
 
   getChildContext = () => {
     return {
-      preview: this.props.siteId
+      preview: this.props.siteId,
+      site: this.props.site
     }
   }
 
@@ -50,7 +51,8 @@ class SitePreview extends Component {
 }
 
 SitePreview.childContextTypes = {
-  preview: PropTypes.string
+  preview: PropTypes.string,
+  site: PropTypes.object,
 }
 
 export default SitePreview;

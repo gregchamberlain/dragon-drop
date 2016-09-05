@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import ReactGridLayout, { WidthProvider } from 'react-grid-layout';
 import _ from 'lodash';
 const Grid = WidthProvider(ReactGridLayout);
@@ -25,6 +25,12 @@ class GridLayout extends Component {
         display: 'none',
         position: 'fixed',
       }
+    }
+  }
+
+  getChildContext() {
+    return {
+      site: this.props.site
     }
   }
 
@@ -133,5 +139,8 @@ class GridLayout extends Component {
   }
 }
 
+GridLayout.childContextTypes = {
+  site: PropTypes.object
+}
 
 export default GridLayout
