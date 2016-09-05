@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import Inputs from '../util/inputs';
+import Inputs, { colorToString } from '../util/inputs';
 import Link from './Link';
 
 const Toolbar = ({left, right, brand, ...style}, { site }) => (
@@ -15,8 +15,8 @@ const styles = {
   container: obj => ({
     width: '100%',
     height: '100%',
-    color: obj.fontColor,
-    background: obj.background,
+    color: colorToString(obj.fontColor),
+    background: colorToString(obj.background),
     overflow: 'hidden',
     padding: obj.padding,
     display: 'flex'
@@ -31,7 +31,7 @@ const styles = {
     height: '100%',
     padding: '0 15px',
     textDecoration: 'none',
-    color: obj.fontColor,
+    color: colorToString(obj.fontColor),
   }),
   brand: {
     fontWeight: 'bold',
@@ -43,9 +43,9 @@ Toolbar.contextTypes = {
 }
 
 Toolbar.propTypes = {
-  background: PropTypes.string,
+  background: PropTypes.object,
   url: PropTypes.bool,
-  fontColor: PropTypes.string,
+  fontColor: PropTypes.object,
   padding: PropTypes.number,
   brand: PropTypes.object,
   left: PropTypes.array,
@@ -53,8 +53,8 @@ Toolbar.propTypes = {
 };
 
 Toolbar.defaultProps = {
-  background: '#444',
-  fontColor: '#eee',
+  background: {r:68, g:68, b:68, a: 1},
+  fontColor: {r:238, g:238, b:238, a: 1},
   url: false,
   padding: 0,
   brand: {

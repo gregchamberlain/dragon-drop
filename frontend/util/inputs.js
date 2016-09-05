@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { merge } from 'lodash';
 import { ChromePicker } from 'react-color';
+import ColorInput from './inputs/color';
 
 const string = ({value, onChange}) => (
   <input type="text" onChange={e => onChange(e.target.value)} value={value} />
@@ -135,30 +136,34 @@ const color = ({value, onChange}) => (
   <ColorInput value={value} onChange={onChange}/>
 );
 
-class ColorInput extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      color: props.value,
-      picking: false,
-    }
-  }
-
-  handleChange = color => {
-    this.setState({color: color.hex}, () => {
-      this.props.onChange(color.hex);
-    })
-  }
-
-  render() {
-    return (
-      <ChromePicker
-        color={this.state.color}
-        onChangeComplete={this.handleChange}
-       />
-    );
-  }
+export const colorToString = color => {
+  return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`
 }
+
+// class ColorInput extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       color: props.value,
+//       picking: false,
+//     }
+//   }
+//
+//   handleChange = color => {
+//     this.setState({color: color.hex}, () => {
+//       this.props.onChange(color.hex);
+//     })
+//   }
+//
+//   render() {
+//     return (
+//       <ChromePicker
+//         color={this.state.color}
+//         onChangeComplete={this.handleChange}
+//        />
+//     );
+//   }
+// }
 
 const styles = {
   ul: {

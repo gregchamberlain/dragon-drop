@@ -58,8 +58,7 @@ const PageMiddleware = ({ getState, dispatch }) => next => action => {
       return next(action);
     case SAVE_PAGE:
       let p = merge({}, getState().pages[action.pageId]);
-      console.log(p);
-      p.components_attributes = stringify(p.components.map(id => getState().components[id]))
+      p.components_attributes = stringify(p.components.map(id => merge({}, getState().components[id])))
       delete p.components
       call({
         dispatch,
