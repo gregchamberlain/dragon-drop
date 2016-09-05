@@ -8,11 +8,12 @@ import LoadingPage from '../../ui/loading_page.jsx';
 import PropsEditor from '../../Editor/Editor';
 import { Link } from 'react-router';
 import { parsePageId } from '../../../util/router_utils';
+import CatalogView from '../../Catalog';
 
 const viewHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
 const viewWidth = Math.max(document.documentElement.width || 0, window.innerWidth || 0);
 const ratio = viewWidth / viewHeight;
-const contentWidth = viewWidth - 264 - 50;
+const contentWidth = viewWidth - 56 - 100;
 const contentHeight = contentWidth / ratio;
 
 class GridLayout extends Component {
@@ -86,24 +87,26 @@ class GridLayout extends Component {
 
     return (
       <LoadingPage loading={this.props.loading}>
-        <button onClick={this.props.savePage}>Save</button>
-        <Link to={`preview/${parsePageId(this.props.params)}`}>Preview</Link>
         <div className="grid-wrapper" style={{fontSize: .0143 * contentWidth}}>
           <Grid
+            style={{minHeight: contentHeight}}
             margin={[0,0]}
             isDraggable={!this.props.locked}
             isResizable={!this.props.locked}
             className="layout-editor"
-            verticalCompact={false}
+            verticalCompact={true}
             layout={layout}
             onLayoutChange={this.layoutChange}
             draggableCancel=".draggable-cancel"
             cols={12}
-            rowHeight={Math.floor(contentHeight / 25)} >
+            rowHeight={Math.floor(contentHeight / 50)} >
             {components}
           </Grid>
         </div>
         { this.props.editor ? <PropsEditor /> : ""}
+        <div className='catalog-container'>
+          <CatalogView params={this.props.params} />
+        </div>
         <img style={this.state.gifStyle} src={ this.state.gifStyle.display !== 'none' ? "http://www.animatedimages.org/data/media/188/animated-dragon-image-0010.gif" : ""} alt="animated-dragon-image-0010"/>
       </LoadingPage>
     );

@@ -28,20 +28,22 @@ class Editor extends Component {
 
   render() {
 
-    const inputs = Object.keys(this.props.inputTypes).map(label => (
-      <label key={label} style={{textAlign: 'center'}}>
-        {label.charAt(0).toUpperCase() + label.slice(1)}<br/>
-        {this.props.inputTypes[label](this.state[label], this.update(label))}
-      </label>
-    ));
+    const inputs = Object.keys(this.props.inputTypes).map(label => {
+      const Input = this.props.inputTypes[label];
+      return (
+        <label key={label} style={{textAlign: 'center'}}>
+          {label.charAt(0).toUpperCase() + label.slice(1)}<br/>
+          <Input value={this.state[label]} onChange={this.update(label)}/>
+        </label>
+      )
+    });
 
     return (
       <div style={styles.container}>
         <div style={styles.header}>
-          <div style={{flex: 1, textAlign: 'center'}}>Editor</div>
-          <Close onClick={this.props.close} style={{cursor: 'pointer'}}/>
+          <div style={{flex: 1, textAlign: 'center'}}>{this.props.item && this.props.item.name}</div>
+          <Close onClick={this.props.close} style={{cursor: 'pointer', position: 'absolute', top: 5, right: 5, fontSize: 12}}/>
         </div>
-        <h3>{this.props.item && this.props.item.name}</h3>
         {inputs}
       </div>
     );
@@ -51,24 +53,25 @@ class Editor extends Component {
 const styles = {
   container: {
     position: 'fixed',
-    top: 0,
-    right: 0,
-    bottom: 0,
+    top: 96,
+    right: 40,
+    // bottom: 40,
+    padding: 25,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    width: 300,
-    background: 'rgba(200,200,200,0.8)',
-    boxShadow: '0 0 10px black'
+    background: 'rgba(68,68,68, 1)',
+    borderRadius: 5,
+    boxShadow: '0 0 10px black',
+    color: '#eee'
   },
   header: {
-    color: '#fff',
+    position: 'relative',
     display: 'flex',
     justifyContent: 'center',
     width: '100%',
-    background: 'rgba(0, 0, 0, 0.3)',
     fontSize: 24,
-    padding: 5
+    paddingBottom: 15
   }
 };
 

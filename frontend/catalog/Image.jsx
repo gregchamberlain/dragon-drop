@@ -23,6 +23,7 @@ Image.propTypes = {
 };
 
 Image.defaultProps = {
-  url: 'https://newevolutiondesigns.com/images/freebies/cool-wallpaper-1.jpg',
+  url: 'http://cumbrianrun.co.uk/wp-content/uploads/2014/02/default-placeholder.png',
+  // url: 'https://newevolutiondesigns.com/images/freebies/cool-wallpaper-1.jpg',
   padding: 0,
 };

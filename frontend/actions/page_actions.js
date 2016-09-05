@@ -6,9 +6,10 @@ export const ADD_COMPONENT = 'ADD_COMPONENT';
 export const REMOVE_COMPONENT = 'REMOVE_COMPONENT';
 export const SAVE_PAGE = 'SAVE_PAGE';
 
-export const savePage = pageId => ({
+export const savePage = (pageId, preview) => ({
   type: SAVE_PAGE,
-  pageId
+  pageId,
+  preview
 });
 
 export const requestPages = siteId => ({

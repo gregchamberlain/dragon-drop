@@ -7,7 +7,7 @@ import SitesIndex from './sites/sites_index_container.js';
 import SiteDetail from './sites/site_detail_container.js';
 import Home from './home.jsx';
 import RegistrationLayout from './registration/registration_layout.jsx';
-import { fetchSites, fetchSite, fetchTemplates, fetchPage } from '../util/router_utils.js';
+import { fetchSites, fetchSite, fetchTemplates, fetchPage, parsePageId } from '../util/router_utils.js';
 import PageEditor from './sites/pages/page_editor.jsx';
 import PagesMain from './sites/pages/pages_main_container.jsx';
 import SiteSettings from './sites/settings/settings_container.jsx';
@@ -15,6 +15,8 @@ import Notifications from './ui/notifications.jsx';
 import TemplatesIndex from './templates/templates_index_container.jsx';
 import LayoutEditor from './sites/editor/layout_editor_container.js';
 import SitePreview from './sites/preview_container.jsx';
+import EditorToolbar from './sites/editor/editor_toolbar_container';
+import { savePage } from '../actions/page_actions.js';
 
 const validateUser = (store) => {
   return (nextState, replace) => {
@@ -27,13 +29,9 @@ const validateUser = (store) => {
   };
 };
 
-const takeCurrentUserToSites = (store) => {
-  return (nextState, replace) => {
-    if (store.getState().session.currentUser) {
-      replace('/sites');
-    }
-  };
-};
+const saveOnLeave = store => ({ params }) => {
+  store.dispatch(savePage(parsePageId(params)));
+}
 
 const Root = ({ store, history }) => (
   <Provider store={store}>
@@ -53,12 +51,9 @@ const Root = ({ store, history }) => (
           <IndexRoute component={SitesIndex} onEnter={fetchSites(store)}/>
           <Route path=":siteId" component={SiteDetail} onEnter={fetchSite(store)}>
             <IndexRedirect to='editor' />
-            <Route path="editor" component={PagesMain}>
-              <IndexRoute component={LayoutEditor} />
-              <Route
-                path=":pageId"
-                onEnter={() => {}}
-                component={LayoutEditor}/>
+            <Route path="editor" component={EditorToolbar}>
+              <IndexRoute component={LayoutEditor} onLeave={saveOnLeave(store)} />
+              <Route path=":pageId" component={LayoutEditor} onLeave={saveOnLeave(store)} />
             </Route>
             <Route path="store" component={() => <div>Store</div>}/>
             <Route path="analytics" component={() => <div>Analytics</div>}/>

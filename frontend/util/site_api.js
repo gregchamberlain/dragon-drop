@@ -10,12 +10,12 @@ export const fetchSite = (siteId) => ({
 
 export const destroySite = site => ({
   method: 'DELETE',
-  url: `api/sites/${site.id}`
+  url: `api/sites/${site.identifier}`
 });
 
 export const updateSite = site => ({
   method: 'PATCH',
-  url: `api/sites/${site.id}`,
+  url: `api/sites/${site.identifier}`,
   data: {site}
 });
 

@@ -3,6 +3,7 @@ import Catalog from '../catalog';
 import { connect } from 'react-redux';
 import { createComponent } from '../actions/component_actions';
 import { parsePageId } from '../util/router_utils';
+import { merge } from 'lodash';
 
 const CatalogContainerr = ({ create }) => (
   <div style={styles.container}>
@@ -34,7 +35,7 @@ let nextId = 0;
 const makeComponent = name => ({
   tempId: `new${nextId++}`,
   name: name,
-  layout: {
+  layout: merge({
     i: `new${nextId++}`,
     moved: false,
     static: false,
@@ -42,7 +43,7 @@ const makeComponent = name => ({
     y: 0, // puts it at the bottom
     w: 4,
     h: 6,
-  },
+  }, Catalog[name].defaultLayout),
   props: Catalog[name].defaultProps
 });
 
