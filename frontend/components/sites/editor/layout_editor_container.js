@@ -11,7 +11,7 @@ const mapStateToProps = ({ components, loading, pages, editor, sites }, { params
   loading: loading['page'],
   components: map(pages[parsePageId(params)], 'components', components).filter(c => !c._destroy),
   locked: false,
-  editor
+  editor: editor.current
 });
 
 const mapDispatchToProps = (dispatch, { params }) => ({

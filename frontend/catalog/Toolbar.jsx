@@ -67,8 +67,8 @@ const LinkInput = Inputs.object({
 });
 
 Toolbar.inputTypes = {
-  background: Inputs.string,
-  fontColor: Inputs.string,
+  background: Inputs.color,
+  fontColor: Inputs.color,
   url: Inputs.bool,
   padding: Inputs.number,
   brand: LinkInput,

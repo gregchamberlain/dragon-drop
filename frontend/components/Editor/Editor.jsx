@@ -12,6 +12,20 @@ class Editor extends Component {
     this.state = props.props;
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyPress);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyPress);
+  }
+
+  handleKeyPress = e => {
+    if (e.keyCode === 27) {
+      this.props.close();
+    }
+  }
+
   componentWillReceiveProps(newProps) {
     if (newProps.props) {
       this.setState(newProps.props);
@@ -53,7 +67,7 @@ class Editor extends Component {
 const styles = {
   container: {
     position: 'absolute',
-    top: 96,
+    top: 40,
     right: 40,
     // bottom: 40,
     padding: 25,
@@ -75,11 +89,11 @@ const styles = {
   }
 };
 
-const mapStateToProps = state => ({
-  item: state.components[state.editor],
-  id: state.editor,
-  props: state.components[state.editor] && state.components[state.editor].props,
-  inputTypes: state.components[state.editor] && Catalog[state.components[state.editor].name].inputTypes || {},
+const mapStateToProps = ({editor: { current }, components}) => ({
+  item: components[current],
+  id: current,
+  props: components[current] && components[current].props,
+  inputTypes: components[current] && Catalog[components[current].name].inputTypes || {},
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -28,13 +28,19 @@ class GridLayout extends Component {
     }
   }
 
+  handleKeyPress = e => {
+    if (e.keyCode === 83 && e.ctrlKey === true) {
+      e.preventDefault();
+      this.props.savePage();
+    }
+  }
+
   componentDidMount() {
-    document.addEventListener('keydown', e => {
-      if (e.keyCode === 83 && e.ctrlKey === true) {
-        e.preventDefault();
-        this.props.savePage();
-      }
-    })
+    document.addEventListener('keydown', this.handleKeyPress);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyPress);
   }
 
   createElement = (el) => {
@@ -103,7 +109,7 @@ class GridLayout extends Component {
       <LoadingPage loading={this.props.loading}>
         <div className="grid-wrapper" style={{fontSize: .0143 * contentWidth}}>
           <Grid
-            style={{minHeight: contentHeight}}
+            style={{minHeight: Math.floor(contentHeight / 50) * 50}}
             margin={[0,0]}
             isDraggable={!this.props.locked}
             isResizable={!this.props.locked}

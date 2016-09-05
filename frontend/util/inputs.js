@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { merge } from 'lodash';
+import { ChromePicker } from 'react-color';
 
 const string = ({value, onChange}) => (
   <input type="text" onChange={e => onChange(e.target.value)} value={value} />
@@ -128,6 +129,35 @@ class ObjectInput extends Component {
   }
 }
 
+const color = ({value, onChange}) => (
+  <ColorInput value={value} onChange={onChange}/>
+);
+
+class ColorInput extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      color: props.value,
+      picking: false,
+    }
+  }
+
+  handleChange = color => {
+    this.setState({color: color.hex}, () => {
+      this.props.onChange(color.hex);
+    })
+  }
+
+  render() {
+    return (
+      <ChromePicker
+        color={this.state.color}
+        onChangeComplete={this.handleChange}
+       />
+    );
+  }
+}
+
 const styles = {
   ul: {
     listStyle: 'none',
@@ -142,5 +172,6 @@ export default {
   select,
   bool,
   array,
-  object
+  object,
+  color
 };
