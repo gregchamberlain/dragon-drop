@@ -9,6 +9,7 @@ import { arrayOfPages, page } from '../actions/schema.js';
 import { createNotification } from '../actions/notification_actions.js'
 import { call } from '../util/api_utils.js';
 import { stringify } from '../util';
+import { push } from 'react-router-redux';
 
 const PageMiddleware = ({ getState, dispatch }) => next => action => {
   switch (action.type) {
@@ -63,7 +64,8 @@ const PageMiddleware = ({ getState, dispatch }) => next => action => {
         loading: ['page', 'Saving Page...'],
         success: resp => {
           dispatch(receiveEntity(normalize(resp, page)))
-          return 'Page saved!'
+          if (action.preview) dispatch(push(action.preview));
+          return `${p.name} Page saved!`
         }
       })
       return next(action);

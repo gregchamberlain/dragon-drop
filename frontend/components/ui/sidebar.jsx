@@ -1,6 +1,7 @@
 import React from 'react';
 import Pages from 'react-icons/lib/fa/copy';
 import Cart from 'react-icons/lib/fa/shopping-cart';
+import Back from 'react-icons/lib/fa/arrow-left';
 import Chart from 'react-icons/lib/fa/pie-chart';
 import Gear from 'react-icons/lib/fa/cog';
 import { Link } from 'react-router';
@@ -9,6 +10,11 @@ import LoadingPage from './loading_page.jsx';
 const Sidebar = ({ children, params, loading }) => (
   <div className='sidebar-container'>
     <div className="sites-sidebar">
+      <Link
+        to={`/sites`}
+        className='sidebar-item'>
+        <Back />
+      </Link>
       <Link
         to={`/sites/${params.siteId}/editor`}
         className='sidebar-item'

@@ -1,0 +1,67 @@
+$toolbar-height: 56px;
+
+.editor-toolbar {
+  position: fixed;
+  top: 0;
+  left: 56px;
+  right: 0;
+  height: $toolbar-height;
+  background: #666;
+  display: flex;
+  align-items: center;
+  color: #eee;
+
+  .toolbar-item {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: #eee;
+    padding: 0 15px;
+
+    &.brand {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    &.action {
+      cursor: pointer;
+      text-transform: uppercase;
+      &:hover {
+        color: #fff
+      }
+    }
+
+  }
+
+  select {
+    height: 100%;
+    background: #666;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    color: #eee;
+    padding: 0 15px;
+
+    option {
+      border: none;
+      outline: none;
+    }
+  }
+}
+
+.editor-content {
+  position: fixed;
+  top: $toolbar-height;
+  left: 64px;
+  right: 0;
+  bottom: 0;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+
+  .catalog-container {
+    position: fixed;
+    left: 96px;
+    top: 96px;
+  }
+}

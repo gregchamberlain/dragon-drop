@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import ReactGridLayout, { WidthProvider } from 'react-grid-layout';
 import LoadingPage from '../ui/loading_page.jsx';
 import _ from 'lodash';
 import Catalog from '../../catalog';
 const Grid = WidthProvider(ReactGridLayout);
 
-const createElement = el => {
+const createElement = siteId => el => {
   let i = `${el.id}`;
   let Comp = Catalog[el.name];
   return (
@@ -17,22 +17,40 @@ const createElement = el => {
 
 const height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
-const SitePreview = ({ loading, components }) => (
-  <LoadingPage loading={loading}>
-    <div style={{width: '100%', height: '100%', background: '#fff', fontSize: '1.43vw'}}>
-      <Grid
-        margin={[0,0]}
-        isDraggable={false}
-        isResizable={false}
-        className="site-preview"
-        verticalCompact={false}
-        cols={12}
-        rowHeight={height / 25}
-        width={1200}>
-        {_.map(components, createElement)}
-      </Grid>
-    </div>
-  </LoadingPage>
-);
+class SitePreview extends Component {
+
+  getChildContext = () => {
+    return {
+      preview: this.props.siteId
+    }
+  }
+
+  render () {
+    const { loading, components, siteId } = this.props
+    const layout = components.map(c => _.merge({}, c.layout));
+
+    return (
+      <LoadingPage loading={loading}>
+        <div style={{width: '100%', flex: 1, background: '#fff', fontSize: '1.43vw'}}>
+          <Grid
+            margin={[0,0]}
+            isDraggable={false}
+            layout={layout}
+            isResizable={false}
+            className="site-preview"
+            verticalCompact={false}
+            cols={12}
+            rowHeight={height / 50}>
+            {_.map(components, createElement(siteId))}
+          </Grid>
+        </div>
+      </LoadingPage>
+    );
+  }
+}
+
+SitePreview.childContextTypes = {
+  preview: PropTypes.string
+}
 
 export default SitePreview;
