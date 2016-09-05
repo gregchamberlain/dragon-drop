@@ -28,6 +28,15 @@ class GridLayout extends Component {
     }
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', e => {
+      if (e.keyCode === 83 && e.ctrlKey === true) {
+        e.preventDefault();
+        this.props.savePage();
+      }
+    })
+  }
+
   createElement = (el) => {
     let i = `${el.id || el.tempId}`;
     let layout = _.merge({}, el.layout);

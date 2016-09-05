@@ -73105,6 +73105,18 @@
 	  }
 	
 	  _createClass(GridLayout, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+	
+	      document.addEventListener('keydown', function (e) {
+	        if (e.keyCode === 83 && e.ctrlKey === true) {
+	          e.preventDefault();
+	          _this2.props.savePage();
+	        }
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	
