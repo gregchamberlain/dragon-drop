@@ -5,13 +5,19 @@ const string = ({value, onChange}) => (
   <input type="text" onChange={e => onChange(e.target.value)} value={value} />
 );
 
+string.defaultValue = "";
+
 const text = ({value, onChange}) => (
   <textarea onChange={e => onChange(e.target.value)} value={value} />
 );
 
+text.defaultValue = "";
+
 const number = ({value, onChange}) => (
   <input type="number" onChange={e => onChange(parseInt(e.target.value))} value={value} />
 );
+
+number.defaultValue = 0;
 
 const select = (...options) => ({value, onChange}) => (
   <select value={value} onChange={e => onChange(e.target.value)}>
@@ -19,9 +25,17 @@ const select = (...options) => ({value, onChange}) => (
   </select>
 );
 
+const bool = ({value, onChange}) => (
+  <input type="checkbox" checked={value} onChange={e => onChange(e.target.checked)} />
+);
+
+bool.defaultValue = false;
+
 const array = inputType => ({value, onChange}) => (
   <List value={value} onChange={onChange} inputType={inputType}/>
 );
+
+array.defaultValue = []
 
 class List extends Component {
   constructor(props) {
@@ -40,7 +54,7 @@ class List extends Component {
   }
 
   addItem = () => {
-    this.setState({items: this.state.items.concat("")}, () => {
+    this.setState({items: this.state.items.concat(this.props.inputType.defaultValue)}, () => {
       this.props.onChange(this.state.items);
     });
   }
@@ -54,6 +68,7 @@ class List extends Component {
   }
 
   render() {
+
     return (
       <ul style={styles.ul}>
         {this.state.items.map((item, idx) => (
@@ -62,8 +77,53 @@ class List extends Component {
             <span onClick={this.removeItem(idx)}>&times;</span>
           </li>
         ))}
-        <li><button onClick={this.addItem}>Add Item</button></li>
+        <li><div onClick={this.addItem}>Add Item</div></li>
       </ul>
+    );
+  }
+}
+
+const object = inputTypes => {
+  const InputWrapper = ({value, onChange}) => (
+    <ObjectInput onChange={onChange} value={value} inputTypes={inputTypes}/>
+  )
+  const defaultValue = {};
+  Object.keys(inputTypes).forEach(key => {
+    defaultValue[key] = inputTypes[key].defaultValue
+  });
+  InputWrapper.defaultValue = defaultValue;
+  return InputWrapper;
+};
+
+
+class ObjectInput extends Component {
+  constructor(props) {
+    super(props);
+    this.state = props.value;
+  }
+
+  onChange = key => val => {
+    const nextState = merge({}, this.state);
+    nextState[key] = val;
+    this.setState(nextState, () => {
+      this.props.onChange(this.state);
+    })
+  }
+
+  render() {
+    const { inputTypes } = this.props;
+    return (
+      <div>
+        {Object.keys(inputTypes).map(key => {
+          const Input = inputTypes[key];
+          return (
+            <div key={`input${key}`}>
+              {key}
+              <Input value={this.state[key]} onChange={this.onChange(key)}/>
+            </div>
+          );
+        })}
+      </div>
     );
   }
 }
@@ -80,5 +140,7 @@ export default {
   text,
   number,
   select,
-  array
+  bool,
+  array,
+  object
 };

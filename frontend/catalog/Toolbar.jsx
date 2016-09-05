@@ -1,11 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 import Inputs from '../util/inputs';
+import Link from './Link';
 
-const Toolbar = ({ background, padding, left, right, fontColor }) => (
-  <div style={styles.container({background, padding, fontColor})}>
-    {left.map((item, idx) => <div key={`left-${idx}`} style={styles.item}>{item}</div>)}
+const Toolbar = ({left, right, brand, ...style}) => (
+  <div style={styles.container(style)}>
+    <Link to={brand.to} text={brand.text} style={{...styles.item(style), ...styles.brand}}/>
+    {left.map((item, idx) => <Link to={item.to} text={item.text} style={styles.item(style)} key={`left-${idx}`}/>)}
     <div style={styles.space}/>
-    {right.map((item, idx) => <div key={`right-${idx}`} style={styles.item}>{item}</div>)}
+    {right.map((item, idx) => <Link to={item.to} text={item.text} style={styles.item(style)} key={`right-${idx}`}/>)}
   </div>
 );
 
@@ -22,19 +24,26 @@ const styles = {
   space: {
     flex: 1
   },
-  item: {
+  item: obj => ({
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
     height: '100%',
-    padding: '0 15px'
+    padding: '0 15px',
+    textDecoration: 'none',
+    color: obj.fontColor,
+  }),
+  brand: {
+    fontWeight: 'bold',
   }
 }
 
 Toolbar.propTypes = {
   background: PropTypes.string,
+  url: PropTypes.bool,
   fontColor: PropTypes.string,
   padding: PropTypes.number,
+  brand: PropTypes.object,
   left: PropTypes.array,
   right: PropTypes.array,
 };
@@ -42,24 +51,36 @@ Toolbar.propTypes = {
 Toolbar.defaultProps = {
   background: '#444',
   fontColor: '#eee',
+  url: false,
   padding: 0,
+  brand: {
+    text: "Home",
+    to: "/"
+  },
   left: [],
   right: []
 };
 
+const LinkInput = Inputs.object({
+  text: Inputs.string,
+  to: Inputs.string,
+});
+
 Toolbar.inputTypes = {
   background: Inputs.string,
   fontColor: Inputs.string,
+  url: Inputs.bool,
   padding: Inputs.number,
-  left: Inputs.array(Inputs.string),
-  right: Inputs.array(Inputs.string),
+  brand: LinkInput,
+  left: Inputs.array(LinkInput),
+  right: Inputs.array(LinkInput),
 };
 
 Toolbar.defaultLayout = {
   minW: 10,
   minH: 2,
   w: 12,
-  h: 3
+  h: 6
 }
 
 export default Toolbar;

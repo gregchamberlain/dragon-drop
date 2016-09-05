@@ -52,7 +52,7 @@ class Editor extends Component {
 
 const styles = {
   container: {
-    position: 'fixed',
+    position: 'absolute',
     top: 96,
     right: 40,
     // bottom: 40,

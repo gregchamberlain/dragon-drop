@@ -38,6 +38,7 @@ class GridLayout extends Component {
         <Wrapper
           name={el.name}
           locked={el.layout.static}
+          onContextMenu={this.handleRightClick}
           onToggleLock={this.toggleComponentLock.bind(this, layout)}
           openEditor={this.props.openEditor.bind(null, i, Comp.inputTypes)}
           onRemove={this.removeComponent.bind(this, el)}>
@@ -78,6 +79,10 @@ class GridLayout extends Component {
 
   layoutChange = layout => {
     this.props.updateLayout(layout);
+  }
+
+  handleRightClick = e => {
+    e.preventDefault();
   }
 
   render() {

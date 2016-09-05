@@ -2,9 +2,9 @@ import React, { PropTypes, Component } from 'react';
 import Inputs from '../util/inputs';
 import { Link } from 'react-router';
 
-const DynamicLink = ({ to, text }, { preview }) => (
+const DynamicLink = ({ to, text, ...props }, { preview }) => (
   <div style={{overflow: 'hidden', height: '100%'}}>
-    <Link to={preview ? `preview/${preview}${to}` : to }>{text}</Link>
+    <Link to={preview ? `preview/${preview}${to}` : to } {...props}>{text}</Link>
   </div>
 );
 

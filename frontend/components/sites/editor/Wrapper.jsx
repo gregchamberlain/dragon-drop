@@ -8,11 +8,11 @@ import Radium from 'radium';
 class Wrapper extends Component {
 
   render() {
-    const { onRemove, openEditor, children, name, onToggleLock, locked } = this.props;
+    const { onRemove, openEditor, children, name, onToggleLock, locked, onContextMenu } = this.props;
     return (
       <div style={styles.container} onDoubleClick={openEditor} ref="wrapper">
         {children}
-        <div style={styles.overlay} className="component-wrapper-overlay">
+        <div style={styles.overlay} className="component-wrapper-overlay" onContextMenu={onContextMenu}>
           <div style={styles.header}>
             <Gear style={styles.icon} onClick={openEditor} className="draggable-cancel"/>
             { locked ? (
