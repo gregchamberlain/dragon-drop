@@ -11,6 +11,7 @@ export default class PageSettings extends Component {
   componentWillReceiveProps = ({ loading, page }) => {
     if (!loading && this.props.loading) {
       this.setState(merge({}, page));
+      this.props.close();
     }
   }
 
@@ -20,7 +21,7 @@ export default class PageSettings extends Component {
 
   submit = e => {
     e.preventDefault();
-    this.props.updatePage(this.state);
+    this.props.updatePage(this.state, this.props.page);
   }
 
   render () {
@@ -29,18 +30,17 @@ export default class PageSettings extends Component {
 
     return (
       <LoadingPage loading={loading} small={true} light={true}>
-        <div className='page-settings'>
-          <h3>{`${page.name} Settings`}</h3>
+        <div className='page-settings' onClick={e => e.stopPropagation()}>
           <form onSubmit={this.submit}>
             <label>
-              Page Name
+              Name
               <input
                 type="text"
                 value={this.state.name}
                 onChange={this.updateState("name")} />
             </label>
             <label>
-              Page Path
+              Path
               <input
                 type="text"
                 value={this.state.path}

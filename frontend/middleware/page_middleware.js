@@ -1,5 +1,5 @@
 import { REQUEST_PAGES, receivePages,
-  CREATE_PAGE, UPDATE_PAGE, REQUEST_PAGE, SAVE_PAGE } from '../actions/page_actions.js';
+  CREATE_PAGE, UPDATE_PAGE, REQUEST_PAGE, SAVE_PAGE, removePage } from '../actions/page_actions.js';
 import { addPage } from '../actions/site_actions.js';
 import { fetchPages, createPage, updatePage, fetchPage } from '../util/page_api.js';
 import { normalize } from 'normalizr';
@@ -51,7 +51,12 @@ const PageMiddleware = ({ getState, dispatch }) => next => action => {
         request: updatePage(action.page),
         loading: ['update-page', 'Saving page...'],
         success: resp => {
-          dispatch(receiveEntity(normalize(resp, page)))
+          dispatch(receiveEntity(normalize(resp, page)));
+          if (action.oldPage.path !== resp.path) {
+            dispatch(addPage(resp.site_id, `${resp.site_id}${resp.path}`));
+            dispatch(push(`/sites/${resp.site_id}/editor${resp.path}`));
+            dispatch(removePage(action.oldPage));
+          }
           return 'Page successfully updated';
         },
       });

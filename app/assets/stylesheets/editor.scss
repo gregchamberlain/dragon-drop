@@ -12,6 +12,7 @@ $toolbar-height: 56px;
   color: #eee;
 
   .toolbar-item {
+    position: relative;
     height: 100%;
     display: flex;
     align-items: center;

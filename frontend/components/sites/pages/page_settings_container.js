@@ -10,7 +10,7 @@ const mapStateToProps = ( { pages, loading }, { params }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updatePage: page => dispatch(updatePage(page)),
+  updatePage: (page, oldPage) => dispatch(updatePage(page, oldPage)),
 });
 
 export default withRouter(

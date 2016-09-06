@@ -22344,7 +22344,7 @@
 	
 	var _site_reducer2 = _interopRequireDefault(_site_reducer);
 	
-	var _page_reducer = __webpack_require__(574);
+	var _page_reducer = __webpack_require__(575);
 	
 	var _page_reducer2 = _interopRequireDefault(_page_reducer);
 	
@@ -74416,8 +74416,11 @@
 	
 	var _site_actions = __webpack_require__(573);
 	
+	var _page_actions = __webpack_require__(574);
+	
 	var _lodash = __webpack_require__(192);
 	
+	var nextState = void 0;
 	var SiteReducer = function SiteReducer() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
@@ -74448,6 +74451,16 @@
 	        newState[action.siteId].pages.push(action.pageId);
 	        return {
 	          v: newState
+	        };
+	      case _page_actions.REMOVE_PAGE:
+	        nextState = (0, _lodash.merge)({}, state);
+	        var site = nextState[action.page.site_id];
+	        var pageId = '' + site.identifier + action.page.path;
+	        site.pages = site.pages.filter(function (id) {
+	          return id !== pageId;
+	        });
+	        return {
+	          v: nextState
 	        };
 	      default:
 	        return {
@@ -74556,51 +74569,6 @@
 
 /***/ },
 /* 574 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _entity_actions = __webpack_require__(572);
-	
-	var _page_actions = __webpack_require__(575);
-	
-	var _component_actions = __webpack_require__(191);
-	
-	var _lodash = __webpack_require__(192);
-	
-	var nextState = void 0;
-	var PageReducer = function PageReducer() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	  var action = arguments[1];
-	
-	  switch (action.type) {
-	    case _entity_actions.RECEIVE_ENTITY:
-	      return (0, _lodash.merge)({}, state, action.resp.entities.pages);
-	    case _entity_actions.CLEAR_ENTITIES:
-	      return {};
-	    case _component_actions.CREATE_COMPONENT:
-	      nextState = (0, _lodash.merge)({}, state);
-	      nextState[action.pageId].components.push(action.component.tempId);
-	      return nextState;
-	    case _component_actions.DESTROY_COMPONENT:
-	      nextState = (0, _lodash.merge)({}, state);
-	      nextState[action.pageId].components = nextState[action.pageId].components.filter(function (id) {
-	        return id !== action.component.tempId;
-	      });
-	      return nextState;
-	    default:
-	      return state;
-	  }
-	};
-	
-	exports.default = PageReducer;
-
-/***/ },
-/* 575 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -74612,9 +74580,17 @@
 	var REQUEST_PAGE = exports.REQUEST_PAGE = 'REQUEST_PAGE';
 	var CREATE_PAGE = exports.CREATE_PAGE = 'CREATE_PAGE';
 	var UPDATE_PAGE = exports.UPDATE_PAGE = 'UPDATE_PAGE';
+	var REMOVE_PAGE = exports.REMOVE_PAGE = 'REMOVE_PAGE';
 	var ADD_COMPONENT = exports.ADD_COMPONENT = 'ADD_COMPONENT';
 	var REMOVE_COMPONENT = exports.REMOVE_COMPONENT = 'REMOVE_COMPONENT';
 	var SAVE_PAGE = exports.SAVE_PAGE = 'SAVE_PAGE';
+	
+	var removePage = exports.removePage = function removePage(page) {
+	  return {
+	    type: REMOVE_PAGE,
+	    page: page
+	  };
+	};
 	
 	var savePage = exports.savePage = function savePage(pageId, preview) {
 	  return {
@@ -74646,10 +74622,11 @@
 	  };
 	};
 	
-	var updatePage = exports.updatePage = function updatePage(page) {
+	var updatePage = exports.updatePage = function updatePage(page, oldPage) {
 	  return {
 	    type: UPDATE_PAGE,
-	    page: page
+	    page: page,
+	    oldPage: oldPage
 	  };
 	};
 	
@@ -74668,6 +74645,53 @@
 	    componentId: componentId
 	  };
 	};
+
+/***/ },
+/* 575 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _entity_actions = __webpack_require__(572);
+	
+	var _page_actions = __webpack_require__(574);
+	
+	var _component_actions = __webpack_require__(191);
+	
+	var _lodash = __webpack_require__(192);
+	
+	var nextState = void 0;
+	var PageReducer = function PageReducer() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _entity_actions.RECEIVE_ENTITY:
+	      nextState = (0, _lodash.merge)({}, state);
+	
+	      return (0, _lodash.merge)({}, state, action.resp.entities.pages);
+	    case _entity_actions.CLEAR_ENTITIES:
+	      return {};
+	    case _component_actions.CREATE_COMPONENT:
+	      nextState = (0, _lodash.merge)({}, state);
+	      nextState[action.pageId].components.push(action.component.tempId);
+	      return nextState;
+	    case _component_actions.DESTROY_COMPONENT:
+	      nextState = (0, _lodash.merge)({}, state);
+	      nextState[action.pageId].components = nextState[action.pageId].components.filter(function (id) {
+	        return id !== action.component.tempId;
+	      });
+	      return nextState;
+	    default:
+	      return state;
+	  }
+	};
+	
+	exports.default = PageReducer;
 
 /***/ },
 /* 576 */
@@ -76227,7 +76251,7 @@
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 	
-	var _page_actions = __webpack_require__(575);
+	var _page_actions = __webpack_require__(574);
 	
 	var _site_actions = __webpack_require__(573);
 	
@@ -76301,6 +76325,11 @@
 	              loading: ['update-page', 'Saving page...'],
 	              success: function success(resp) {
 	                dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(resp, _schema.page)));
+	                if (action.oldPage.path !== resp.path) {
+	                  dispatch((0, _site_actions.addPage)(resp.site_id, '' + resp.site_id + resp.path));
+	                  dispatch((0, _reactRouterRedux.push)('/sites/' + resp.site_id + '/editor' + resp.path));
+	                  dispatch((0, _page_actions.removePage)(action.oldPage));
+	                }
 	                return 'Page successfully updated';
 	              }
 	            });
@@ -76651,7 +76680,7 @@
 	
 	var _entity_actions = __webpack_require__(572);
 	
-	var _page_actions = __webpack_require__(575);
+	var _page_actions = __webpack_require__(574);
 	
 	var _component_api = __webpack_require__(610);
 	
@@ -76785,15 +76814,15 @@
 	
 	var _editor_toolbar_container2 = _interopRequireDefault(_editor_toolbar_container);
 	
-	var _new_page_form = __webpack_require__(749);
+	var _new_page_form = __webpack_require__(751);
 	
 	var _new_page_form2 = _interopRequireDefault(_new_page_form);
 	
-	var _new_site_page = __webpack_require__(750);
+	var _new_site_page = __webpack_require__(752);
 	
 	var _new_site_page2 = _interopRequireDefault(_new_site_page);
 	
-	var _page_actions = __webpack_require__(575);
+	var _page_actions = __webpack_require__(574);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -84858,7 +84887,7 @@
 	
 	var _template_actions = __webpack_require__(608);
 	
-	var _page_actions = __webpack_require__(575);
+	var _page_actions = __webpack_require__(574);
 	
 	var fetchSites = exports.fetchSites = function fetchSites(store) {
 	  return function () {
@@ -86130,7 +86159,7 @@
 	
 	var _component_actions = __webpack_require__(191);
 	
-	var _page_actions = __webpack_require__(575);
+	var _page_actions = __webpack_require__(574);
 	
 	var _entity_utils = __webpack_require__(646);
 	
@@ -91385,7 +91414,7 @@
 	
 	var _editor_toolbar2 = _interopRequireDefault(_editor_toolbar);
 	
-	var _page_actions = __webpack_require__(575);
+	var _page_actions = __webpack_require__(574);
 	
 	var _entity_utils = __webpack_require__(646);
 	
@@ -91447,6 +91476,8 @@
 	  value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -91455,82 +91486,306 @@
 	
 	var _plus2 = _interopRequireDefault(_plus);
 	
+	var _cog = __webpack_require__(654);
+	
+	var _cog2 = _interopRequireDefault(_cog);
+	
+	var _page_settings_container = __webpack_require__(749);
+	
+	var _page_settings_container2 = _interopRequireDefault(_page_settings_container);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var EditorToolbar = function EditorToolbar(_ref) {
-	  var pages = _ref.pages;
-	  var currentPage = _ref.currentPage;
-	  var changePage = _ref.changePage;
-	  var children = _ref.children;
-	  var savePage = _ref.savePage;
-	  var preview = _ref.preview;
-	  var site = _ref.site;
-	  var openCatalog = _ref.openCatalog;
-	  var catalogOpen = _ref.catalogOpen;
-	  var closeCatalog = _ref.closeCatalog;
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    _react2.default.createElement(
-	      'div',
-	      { className: 'editor-content' },
-	      children
-	    ),
-	    _react2.default.createElement(
-	      'div',
-	      { className: 'editor-toolbar' },
-	      _react2.default.createElement(
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var EditorToolbar = function (_Component) {
+	  _inherits(EditorToolbar, _Component);
+	
+	  function EditorToolbar(props) {
+	    _classCallCheck(this, EditorToolbar);
+	
+	    var _this = _possibleConstructorReturn(this, (EditorToolbar.__proto__ || Object.getPrototypeOf(EditorToolbar)).call(this, props));
+	
+	    _this.openSettings = function () {
+	      _this.setState({ settings: true });
+	    };
+	
+	    _this.closeSettings = function () {
+	      _this.setState({ settings: false });
+	    };
+	
+	    _this.state = {
+	      settings: false
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(EditorToolbar, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var pages = _props.pages;
+	      var currentPage = _props.currentPage;
+	      var changePage = _props.changePage;
+	      var children = _props.children;
+	      var savePage = _props.savePage;
+	      var preview = _props.preview;
+	      var site = _props.site;
+	      var openCatalog = _props.openCatalog;
+	      var catalogOpen = _props.catalogOpen;
+	      var closeCatalog = _props.closeCatalog;
+	      var params = _props.params;
+	
+	      return _react2.default.createElement(
 	        'div',
-	        {
-	          className: 'toolbar-item action brand',
-	          onClick: catalogOpen ? closeCatalog : openCatalog },
-	        _react2.default.createElement(_plus2.default, { className: 'icon' + (catalogOpen ? " rotated" : "") })
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'toolbar-item brand' },
-	        site.name
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'toolbar-item' },
-	        '/'
-	      ),
-	      _react2.default.createElement(
-	        'select',
-	        { value: currentPage, onChange: changePage },
-	        pages.map(function (page) {
-	          return _react2.default.createElement(
-	            'option',
-	            { key: page.path, value: page.path },
-	            page.name
-	          );
-	        }),
-	        pages.length >= 5 ? "" : _react2.default.createElement(
-	          'option',
-	          { key: 'new-page', value: '/new-page' },
-	          'New Page'
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'editor-content' },
+	          children
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'editor-toolbar' },
+	          _react2.default.createElement(
+	            'div',
+	            {
+	              className: 'toolbar-item action brand',
+	              onClick: catalogOpen ? closeCatalog : openCatalog },
+	            _react2.default.createElement(_plus2.default, { className: 'icon' + (catalogOpen ? " rotated" : "") })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'toolbar-item brand' },
+	            site.name
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'toolbar-item' },
+	            '/'
+	          ),
+	          _react2.default.createElement(
+	            'select',
+	            { value: currentPage, onChange: changePage },
+	            pages.map(function (page) {
+	              return _react2.default.createElement(
+	                'option',
+	                { key: page.path, value: page.path },
+	                page.name
+	              );
+	            }),
+	            pages.length >= 5 ? "" : _react2.default.createElement(
+	              'option',
+	              { key: 'new-page', value: '/new-page' },
+	              'New Page'
+	            )
+	          ),
+	          _react2.default.createElement('div', { className: 'flex-space' }),
+	          _react2.default.createElement(
+	            'div',
+	            {
+	              className: 'toolbar-item action brand',
+	              onClick: this.state.settings ? this.closeSettings : this.openSettings },
+	            _react2.default.createElement(_cog2.default, { className: 'icon' + (this.state.settings ? " rotated" : "") }),
+	            this.state.settings ? _react2.default.createElement(
+	              'div',
+	              { className: 'page-edit-wrapper' },
+	              _react2.default.createElement(_page_settings_container2.default, { params: params, close: this.closeSettings })
+	            ) : ""
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'toolbar-item action', onClick: preview },
+	            'Preview'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'toolbar-item action', onClick: savePage },
+	            'Save'
+	          )
 	        )
-	      ),
-	      _react2.default.createElement('div', { className: 'flex-space' }),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'toolbar-item action', onClick: preview },
-	        'Preview'
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'toolbar-item action', onClick: savePage },
-	        'Save'
-	      )
-	    )
-	  );
-	};
+	      );
+	    }
+	  }]);
+	
+	  return EditorToolbar;
+	}(_react.Component);
+	// const EditorToolbar = ({ pages, currentPage, changePage,
+	//   children, savePage, preview, site, openCatalog, catalogOpen, closeCatalog }) => (
+	//
+	// );
 	
 	exports.default = EditorToolbar;
 
 /***/ },
 /* 749 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(612);
+	
+	var _page_settings = __webpack_require__(750);
+	
+	var _page_settings2 = _interopRequireDefault(_page_settings);
+	
+	var _reactRouter = __webpack_require__(507);
+	
+	var _page_actions = __webpack_require__(574);
+	
+	var _router_utils = __webpack_require__(659);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
+	  var pages = _ref.pages;
+	  var loading = _ref.loading;
+	  var params = _ref2.params;
+	  return {
+	    page: pages[(0, _router_utils.parsePageId)(params)],
+	    loading: loading['update-page']
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    updatePage: function updatePage(page, oldPage) {
+	      return dispatch((0, _page_actions.updatePage)(page, oldPage));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRouter.withRouter)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_page_settings2.default));
+
+/***/ },
+/* 750 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _loading_page = __webpack_require__(642);
+	
+	var _loading_page2 = _interopRequireDefault(_loading_page);
+	
+	var _lodash = __webpack_require__(192);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var PageSettings = function (_Component) {
+	  _inherits(PageSettings, _Component);
+	
+	  function PageSettings(props) {
+	    _classCallCheck(this, PageSettings);
+	
+	    var _this = _possibleConstructorReturn(this, (PageSettings.__proto__ || Object.getPrototypeOf(PageSettings)).call(this, props));
+	
+	    _this.componentWillReceiveProps = function (_ref) {
+	      var loading = _ref.loading;
+	      var page = _ref.page;
+	
+	      if (!loading && _this.props.loading) {
+	        _this.setState((0, _lodash.merge)({}, page));
+	        _this.props.close();
+	      }
+	    };
+	
+	    _this.updateState = function (name) {
+	      return function (e) {
+	        _this.setState(_defineProperty({}, name, e.target.value));
+	      };
+	    };
+	
+	    _this.submit = function (e) {
+	      e.preventDefault();
+	      _this.props.updatePage(_this.state, _this.props.page);
+	    };
+	
+	    _this.state = (0, _lodash.merge)({}, props.page);
+	    return _this;
+	  }
+	
+	  _createClass(PageSettings, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var page = _props.page;
+	      var loading = _props.loading;
+	
+	
+	      return _react2.default.createElement(
+	        _loading_page2.default,
+	        { loading: loading, small: true, light: true },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'page-settings', onClick: function onClick(e) {
+	              return e.stopPropagation();
+	            } },
+	          _react2.default.createElement(
+	            'form',
+	            { onSubmit: this.submit },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              'Name',
+	              _react2.default.createElement('input', {
+	                type: 'text',
+	                value: this.state.name,
+	                onChange: this.updateState("name") })
+	            ),
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              'Path',
+	              _react2.default.createElement('input', {
+	                type: 'text',
+	                value: this.state.path,
+	                onChange: this.updateState("path"),
+	                disabled: page.path === '/' })
+	            ),
+	            _react2.default.createElement(
+	              'button',
+	              { type: 'submit' },
+	              'Update'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return PageSettings;
+	}(_react.Component);
+	
+	exports.default = PageSettings;
+
+/***/ },
+/* 751 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -91547,7 +91802,7 @@
 	
 	var _reactRedux = __webpack_require__(612);
 	
-	var _page_actions = __webpack_require__(575);
+	var _page_actions = __webpack_require__(574);
 	
 	var PAGE_ACTIONS = _interopRequireWildcard(_page_actions);
 	
@@ -91658,7 +91913,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(NewPageForm);
 
 /***/ },
-/* 750 */
+/* 752 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
