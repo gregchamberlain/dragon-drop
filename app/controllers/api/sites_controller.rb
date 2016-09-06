@@ -10,7 +10,8 @@ class Api::SitesController < ApplicationController
 
 	def update
 		if @site.update(site_params)
-			render json: @site.to_json(include: { pages: {include: :components } } )
+			# render json: @site.to_json(include: { pages: {include: :components } } )
+			render 'show'
 		else
 			render json: @site.errors.full_messages, status: 400
 		end
@@ -19,7 +20,8 @@ class Api::SitesController < ApplicationController
 	def create
 		@site = current_user.sites.new(site_params);
 		if @site.save
-			render json: @site.to_json(include: :pages)
+			# render json: @site.to_json(include: :pages)
+			render 'show'
 		else
 			render json: @site.errors.full_messages, status: 400
 		end
@@ -27,7 +29,8 @@ class Api::SitesController < ApplicationController
 
 	def show
 		@site = Site.includes(pages: :components).find_by_identifier(params[:id])
-		render json: @site.to_json(include: {pages: {include: :components } } )
+		# render json: @site.to_json(include: {pages: {include: :components } } )
+		render 'show'
 	end
 
 	def destroy

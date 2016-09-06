@@ -42,7 +42,7 @@ class Api::TemplatesController < ApplicationController
 
   private
   def site_params
-    params.require(:site).permit(:name, :description)
+    params.require(:site).permit(:name, :description, :template)
   end
 
 end

@@ -10,11 +10,10 @@ $light-blue-600: #03A9F4;
 
 .sites-index-item {
   position: relative;
-  padding: 10px;
   width: 240px;
   height: 135px;
   cursor: pointer;
-  font-size: 12px;
+  // font-size: 12px;
 
 
   .preview-button {
@@ -154,6 +153,7 @@ $light-blue-600: #03A9F4;
   position: fixed;
   width: 400px;
   height: 100%;
+  top: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -188,5 +188,6 @@ $light-blue-600: #03A9F4;
 }
 
 .new-site-templates {
+  margin-top: 100px;
   margin-left: 400px;
 }

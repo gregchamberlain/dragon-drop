@@ -121,25 +121,27 @@ class LayoutEditor extends Component {
     const layout = this.props.components.map(c => _.merge({}, c.layout));
 
     return (
-      <div className="grid-wrapper" style={{fontSize: .0143 * contentWidth}}>
-        <Grid
-          style={{minHeight: Math.floor(contentHeight / 50) * 50}}
-          margin={[0,0]}
-          isDraggable={!this.props.locked}
-          isResizable={!this.props.locked}
-          className="layout-editor"
-          verticalCompact={true}
-          layout={layout}
-          onDrag={this.onMove}
-          onResize={this.onMove}
-          onLayoutChange={this.layoutChange}
-          draggableCancel=".draggable-cancel"
-          cols={12}
-          rowHeight={Math.floor(contentHeight / 50)} >
-          {components}
-        </Grid>
-        <img style={this.state.gifStyle} src={ this.state.gifStyle.display !== 'none' ? "http://www.animatedimages.org/data/media/188/animated-dragon-image-0010.gif" : ""} alt="animated-dragon-image-0010"/>
-      </div>
+      <LoadingPage loading={this.props.loading}>
+        <div className="grid-wrapper" style={{fontSize: .0143 * contentWidth}}>
+          <Grid
+            style={{minHeight: Math.floor(contentHeight / 50) * 50}}
+            margin={[0,0]}
+            isDraggable={!this.props.locked}
+            isResizable={!this.props.locked}
+            className="layout-editor"
+            verticalCompact={true}
+            layout={layout}
+            onDrag={this.onMove}
+            onResize={this.onMove}
+            onLayoutChange={this.layoutChange}
+            draggableCancel=".draggable-cancel"
+            cols={12}
+            rowHeight={Math.floor(contentHeight / 50)} >
+            {components}
+          </Grid>
+          <img style={this.state.gifStyle} src={ this.state.gifStyle.display !== 'none' ? "http://www.animatedimages.org/data/media/188/animated-dragon-image-0010.gif" : ""} alt="animated-dragon-image-0010"/>
+        </div>
+      </LoadingPage>
     );
   }
 }

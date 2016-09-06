@@ -39,6 +39,7 @@ export default class NewSiteForm extends Component {
               placeholder="Description"
               value={this.state.description}
               onChange={this.update("description")}/>
+            <input type="checkbox" value={this.state.template} onChange={this.update('template')} />
             <button type="submit">Create</button>
           </form>
         </LoadingPage>

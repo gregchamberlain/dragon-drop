@@ -4,7 +4,7 @@ import Link from './Link';
 
 const Toolbar = ({left, right, brand, ...style}, { site }) => (
   <div style={styles.container(style)}>
-    <Link to={brand.to} text={brand.text === "#site-name" ? site.name : brand.text} style={{...styles.item(style), ...styles.brand}}/>
+    <Link to={brand.to} text={brand.text === "#site-name" ? site ? site.name : brand.text : brand.text} style={{...styles.item(style), ...styles.brand}}/>
     {left.map((item, idx) => <Link to={item.to} text={item.text} style={styles.item(style)} key={`left-${idx}`}/>)}
     <div style={styles.space}/>
     {right.map((item, idx) => <Link to={item.to} text={item.text} style={styles.item(style)} key={`right-${idx}`}/>)}

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import LoadingPage from '../ui/loading_page';
+import HeaderBar from '../ui/header_bar_container';
 import { connect } from 'react-redux';
 import SitesIndexItem from './sites_index_item';
 import { toArray } from '../../util/entity_utils.js';
@@ -16,23 +17,28 @@ class NewSitePage extends Component {
     this.state = {
       name: "",
       description: "",
-      template: BLANK_SITE
+      template: false,
+      selectedTemplate: BLANK_SITE
     }
   }
 
   selectTemplate = t => {
-    this.setState({template: t});
+    this.setState({selectedTemplate: t});
   }
 
   update = name => e => {
-    this.setState({[name]: e.target.value})
+    if (name === 'template') {
+      this.setState({[name]: e.target.checked})
+    } else {
+      this.setState({[name]: e.target.value})
+    }
   }
 
   handleSubmit = e => {
     e.preventDefault();
-    const { template, fromTemplate, ...site } = this.state;
-    if (template.id !== 0) {
-      this.props.create(site, template);
+    const { selectedTemplate, fromTemplate, ...site } = this.state;
+    if (selectedTemplate.id !== 0) {
+      this.props.create(site, selectedTemplate);
     } else {
       this.props.create(site);
     }
@@ -44,6 +50,9 @@ class NewSitePage extends Component {
 
     return (
       <div className="fill">
+        <div style={{position: 'fixed', top: 0, left: 0, right: 0, height: 100, background: '#444', zIndex: 2}}>
+          <HeaderBar />
+        </div>
         <form onSubmit={this.handleSubmit} className="new-site-form">
           <label>
             Name
@@ -52,6 +61,10 @@ class NewSitePage extends Component {
           <label>
             Description
             <textarea value={this.state.description} onChange={this.update("description")} />
+          </label>
+          <label>
+            Template?
+            <input type="checkbox" value={this.state.template} onChange={this.update("template")} />
           </label>
           <button type="submit">Create</button>
         </form>
@@ -63,14 +76,14 @@ class NewSitePage extends Component {
                 site={BLANK_SITE}
                 template={false}
                 onClick={this.selectTemplate}
-                selected={this.state.template}/>
+                selected={this.state.selectedTemplate}/>
               { templates.map(template => (
                 <SitesIndexItem
                 key={template.id}
                 site={template}
                 template={false}
                 onClick={this.selectTemplate}
-                selected={this.state.template}/>
+                selected={this.state.selectedTemplate}/>
               ))}
             </div>
           </LoadingPage>

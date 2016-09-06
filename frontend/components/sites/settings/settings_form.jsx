@@ -5,11 +5,18 @@ export default class SiteSettingsForm extends Component {
 
   constructor(props) {
     super(props);
-    this.state = merge({name: "", description: "", identifier: ""}, props.site);
+    this.state = merge({
+      name: "",
+      description: "",
+      identifier: "",
+      template: false,
+    }, props.site);
   }
 
-  updateState = name => {
-    return e => {
+  updateState = name => e => {
+    if (name === 'template') {
+      this.setState({[name]: e.target.checked})
+    } else {
       this.setState({[name]: e.target.value})
     }
   }
@@ -46,6 +53,7 @@ export default class SiteSettingsForm extends Component {
           type="text"
           value={this.state.identifier}
           onChange={this.updateState("identifier")} />
+        <input type="checkbox" value={this.state.template} onChange={this.updateState('template')} />
         <button type="submit" disabled={unchanged} onClick={this.update}>Update</button>
         <button className="destroy-button" onClick={this.destroy}>delete site</button>
       </form>
