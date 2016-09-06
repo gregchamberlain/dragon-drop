@@ -7,6 +7,11 @@ export const fetchPages = (siteId, success, error) => {
   });
 };
 
+export const destroyPage = page => ({
+  method: 'DELETE',
+  url: `api/pages/${page.id}`
+});
+
 export const createPage = (siteId, page) => ({
   method: 'POST',
   url: `api/sites/${siteId}/pages`,
@@ -23,13 +28,3 @@ export const fetchPage = pageId => ({
   method: 'GET',
   url: `api/pages/${pageId}`
 });
-
-// export const createPage = (siteId, page, success, error) => {
-//   $.ajax({
-//     method: 'POST',
-//     url: `api/sites/${siteId}/pages`,
-//     data: {page},
-//     success,
-//     error
-//   });
-// };

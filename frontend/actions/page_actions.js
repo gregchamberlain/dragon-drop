@@ -5,12 +5,18 @@ export const UPDATE_PAGE = 'UPDATE_PAGE';
 export const REMOVE_PAGE = 'REMOVE_PAGE';
 export const ADD_COMPONENT = 'ADD_COMPONENT';
 export const REMOVE_COMPONENT = 'REMOVE_COMPONENT';
+export const DESTROY_PAGE = 'DESTROY_PAGE';
 export const SAVE_PAGE = 'SAVE_PAGE';
 
 export const removePage = page => ({
   type: REMOVE_PAGE,
   page
 })
+
+export  const destroyPage = page => ({
+  type: DESTROY_PAGE,
+  page
+});
 
 export const savePage = (pageId, preview) => ({
   type: SAVE_PAGE,

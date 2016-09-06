@@ -81,7 +81,7 @@ class List extends Component {
             <span onClick={this.removeItem(idx)} style={styles.remove}>&times;</span>
           </li>
         ))}
-        <li><div onClick={this.addItem}>Add Item</div></li>
+        <li><div onClick={this.addItem} style={styles.add}>Add Item</div></li>
       </ul>
     );
   }
@@ -121,10 +121,10 @@ class ObjectInput extends Component {
         {Object.keys(inputTypes).map(key => {
           const Input = inputTypes[key];
           return (
-            <div key={`input${key}`}>
+            <label key={`input${key}`}>
               {key}
               <Input value={this.state[key]} onChange={this.onChange(key)}/>
-            </div>
+            </label>
           );
         })}
       </div>
@@ -140,31 +140,6 @@ export const colorToString = color => {
   return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`
 }
 
-// class ColorInput extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       color: props.value,
-//       picking: false,
-//     }
-//   }
-//
-//   handleChange = color => {
-//     this.setState({color: color.hex}, () => {
-//       this.props.onChange(color.hex);
-//     })
-//   }
-//
-//   render() {
-//     return (
-//       <ChromePicker
-//         color={this.state.color}
-//         onChangeComplete={this.handleChange}
-//        />
-//     );
-//   }
-// }
-
 const styles = {
   ul: {
     listStyle: 'none',
@@ -172,14 +147,25 @@ const styles = {
   },
   li: {
     border: '1px solid #ccc',
+    borderRadius: 2,
     display: 'flex',
     alignItems: 'center',
-    padding: 5
+    padding: 2,
+    margin: 2
   },
   remove: {
     fontSize: 20,
     marginLeft: 5,
     cursor: 'pointer'
+  },
+  add: {
+    background: '#eee',
+    padding: 5,
+    borderRadius: 5,
+    color: '#444',
+    fontSize: 12,
+    cursor: 'pointer'
+
   }
 }
 

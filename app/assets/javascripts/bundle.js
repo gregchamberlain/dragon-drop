@@ -39782,7 +39782,7 @@
 	          null,
 	          _react2.default.createElement(
 	            'div',
-	            { onClick: this.addItem },
+	            { onClick: this.addItem, style: styles.add },
 	            'Add Item'
 	          )
 	        )
@@ -39842,7 +39842,7 @@
 	        Object.keys(inputTypes).map(function (key) {
 	          var Input = inputTypes[key];
 	          return _react2.default.createElement(
-	            'div',
+	            'label',
 	            { key: 'input' + key },
 	            key,
 	            _react2.default.createElement(Input, { value: _this4.state[key], onChange: _this4.onChange(key) })
@@ -39865,31 +39865,6 @@
 	  return 'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + color.a + ')';
 	};
 	
-	// class ColorInput extends Component {
-	//   constructor(props) {
-	//     super(props);
-	//     this.state = {
-	//       color: props.value,
-	//       picking: false,
-	//     }
-	//   }
-	//
-	//   handleChange = color => {
-	//     this.setState({color: color.hex}, () => {
-	//       this.props.onChange(color.hex);
-	//     })
-	//   }
-	//
-	//   render() {
-	//     return (
-	//       <ChromePicker
-	//         color={this.state.color}
-	//         onChangeComplete={this.handleChange}
-	//        />
-	//     );
-	//   }
-	// }
-	
 	var styles = {
 	  ul: {
 	    listStyle: 'none',
@@ -39897,14 +39872,25 @@
 	  },
 	  li: {
 	    border: '1px solid #ccc',
+	    borderRadius: 2,
 	    display: 'flex',
 	    alignItems: 'center',
-	    padding: 5
+	    padding: 2,
+	    margin: 2
 	  },
 	  remove: {
 	    fontSize: 20,
 	    marginLeft: 5,
 	    cursor: 'pointer'
+	  },
+	  add: {
+	    background: '#eee',
+	    padding: 5,
+	    borderRadius: 5,
+	    color: '#444',
+	    fontSize: 12,
+	    cursor: 'pointer'
+	
 	  }
 	};
 	
@@ -68585,7 +68571,6 @@
 	
 	Toolbar.propTypes = {
 	  background: _react.PropTypes.object,
-	  url: _react.PropTypes.bool,
 	  fontColor: _react.PropTypes.object,
 	  padding: _react.PropTypes.number,
 	  brand: _react.PropTypes.object,
@@ -68596,7 +68581,6 @@
 	Toolbar.defaultProps = {
 	  background: { r: 68, g: 68, b: 68, a: 1 },
 	  fontColor: { r: 238, g: 238, b: 238, a: 1 },
-	  url: false,
 	  padding: 0,
 	  brand: {
 	    text: "#site-name",
@@ -68614,7 +68598,6 @@
 	Toolbar.inputTypes = {
 	  background: _inputs2.default.color,
 	  fontColor: _inputs2.default.color,
-	  url: _inputs2.default.bool,
 	  padding: _inputs2.default.number,
 	  brand: LinkInput,
 	  left: _inputs2.default.array(LinkInput),
@@ -74583,11 +74566,19 @@
 	var REMOVE_PAGE = exports.REMOVE_PAGE = 'REMOVE_PAGE';
 	var ADD_COMPONENT = exports.ADD_COMPONENT = 'ADD_COMPONENT';
 	var REMOVE_COMPONENT = exports.REMOVE_COMPONENT = 'REMOVE_COMPONENT';
+	var DESTROY_PAGE = exports.DESTROY_PAGE = 'DESTROY_PAGE';
 	var SAVE_PAGE = exports.SAVE_PAGE = 'SAVE_PAGE';
 	
 	var removePage = exports.removePage = function removePage(page) {
 	  return {
 	    type: REMOVE_PAGE,
+	    page: page
+	  };
+	};
+	
+	var destroyPage = exports.destroyPage = function destroyPage(page) {
+	  return {
+	    type: DESTROY_PAGE,
 	    page: page
 	  };
 	};
@@ -74671,8 +74662,6 @@
 	
 	  switch (action.type) {
 	    case _entity_actions.RECEIVE_ENTITY:
-	      nextState = (0, _lodash.merge)({}, state);
-	
 	      return (0, _lodash.merge)({}, state, action.resp.entities.pages);
 	    case _entity_actions.CLEAR_ENTITIES:
 	      return {};
@@ -76358,6 +76347,20 @@
 	            return {
 	              v: next(action)
 	            };
+	          case _page_actions.DESTROY_PAGE:
+	            (0, _api_utils.call)({
+	              dispatch: dispatch,
+	              request: (0, _page_api.destroyPage)(action.page),
+	              loading: ['update-page', 'Destroying Page...'],
+	              success: function success(resp) {
+	                dispatch((0, _reactRouterRedux.push)('/sites/' + resp.site_id + '/editor'));
+	                dispatch((0, _page_actions.removePage)(resp));
+	                return 'Successfully Destroyed ' + resp.name + ' Page';
+	              }
+	            });
+	            return {
+	              v: next(action)
+	            };
 	          default:
 	            return {
 	              v: next(action)
@@ -76390,6 +76393,13 @@
 	  });
 	};
 	
+	var destroyPage = exports.destroyPage = function destroyPage(page) {
+	  return {
+	    method: 'DELETE',
+	    url: 'api/pages/' + page.id
+	  };
+	};
+	
 	var createPage = exports.createPage = function createPage(siteId, page) {
 	  return {
 	    method: 'POST',
@@ -76412,16 +76422,6 @@
 	    url: 'api/pages/' + pageId
 	  };
 	};
-	
-	// export const createPage = (siteId, page, success, error) => {
-	//   $.ajax({
-	//     method: 'POST',
-	//     url: `api/sites/${siteId}/pages`,
-	//     data: {page},
-	//     success,
-	//     error
-	//   });
-	// };
 
 /***/ },
 /* 604 */
@@ -90882,7 +90882,7 @@
 	      var inputs = Object.keys(this.props.inputTypes).map(function (label) {
 	        var Input = _this2.props.inputTypes[label];
 	        return _react2.default.createElement(
-	          'label',
+	          'div',
 	          { key: label, style: { textAlign: 'center' } },
 	          label.charAt(0).toUpperCase() + label.slice(1),
 	          _react2.default.createElement('br', null),
@@ -90892,7 +90892,7 @@
 	
 	      return _react2.default.createElement(
 	        'div',
-	        { style: styles.container },
+	        { className: 'props-editor' },
 	        _react2.default.createElement(
 	          'div',
 	          { style: styles.header },
@@ -91657,6 +91657,9 @@
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
+	    destroyPage: function destroyPage(page) {
+	      return dispatch((0, _page_actions.destroyPage)(page));
+	    },
 	    updatePage: function updatePage(page, oldPage) {
 	      return dispatch((0, _page_actions.updatePage)(page, oldPage));
 	    }
@@ -91705,6 +91708,12 @@
 	
 	    var _this = _possibleConstructorReturn(this, (PageSettings.__proto__ || Object.getPrototypeOf(PageSettings)).call(this, props));
 	
+	    _this.handleKeyPress = function (e) {
+	      if (e.keyCode === 27) {
+	        _this.props.close();
+	      }
+	    };
+	
 	    _this.componentWillReceiveProps = function (_ref) {
 	      var loading = _ref.loading;
 	      var page = _ref.page;
@@ -91726,16 +91735,39 @@
 	      _this.props.updatePage(_this.state, _this.props.page);
 	    };
 	
+	    _this.destroyPage = function (e) {
+	      e.preventDefault();
+	      var _this$props = _this.props;
+	      var page = _this$props.page;
+	      var destroyPage = _this$props.destroyPage;
+	
+	      var confirmation = confirm('Are you sure you want to delete ' + page.name);
+	      if (confirmation) {
+	        destroyPage(page);
+	      }
+	    };
+	
 	    _this.state = (0, _lodash.merge)({}, props.page);
 	    return _this;
 	  }
 	
 	  _createClass(PageSettings, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      document.addEventListener('keydown', this.handleKeyPress);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      document.removeEventListener('keydown', this.handleKeyPress);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
 	      var page = _props.page;
 	      var loading = _props.loading;
+	      var destroyPage = _props.destroyPage;
 	
 	
 	      return _react2.default.createElement(
@@ -91772,6 +91804,12 @@
 	              'button',
 	              { type: 'submit' },
 	              'Update'
+	            ),
+	            _react2.default.createElement('hr', null),
+	            _react2.default.createElement(
+	              'button',
+	              { className: 'destroy', onClick: this.destroyPage },
+	              'Delete'
 	            )
 	          )
 	        )

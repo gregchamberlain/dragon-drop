@@ -8,6 +8,20 @@ export default class PageSettings extends Component {
     this.state = merge({}, props.page)
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyPress);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyPress);
+  }
+
+  handleKeyPress = e => {
+    if (e.keyCode === 27) {
+      this.props.close();
+    }
+  }
+
   componentWillReceiveProps = ({ loading, page }) => {
     if (!loading && this.props.loading) {
       this.setState(merge({}, page));
@@ -24,9 +38,18 @@ export default class PageSettings extends Component {
     this.props.updatePage(this.state, this.props.page);
   }
 
+  destroyPage = e => {
+    e.preventDefault();
+    const { page, destroyPage } = this.props;
+    const confirmation = confirm(`Are you sure you want to delete ${page.name}`)
+    if (confirmation) {
+      destroyPage(page);
+    }
+  }
+
   render () {
 
-    const { page, loading } = this.props;
+    const { page, loading, destroyPage } = this.props;
 
     return (
       <LoadingPage loading={loading} small={true} light={true}>
@@ -48,6 +71,8 @@ export default class PageSettings extends Component {
                 disabled={page.path === '/'}/>
             </label>
             <button type="submit">Update</button>
+            <hr/>
+            <button className="destroy" onClick={this.destroyPage}>Delete</button>
           </form>
         </div>
       </LoadingPage>

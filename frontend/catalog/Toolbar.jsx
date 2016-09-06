@@ -44,7 +44,6 @@ Toolbar.contextTypes = {
 
 Toolbar.propTypes = {
   background: PropTypes.object,
-  url: PropTypes.bool,
   fontColor: PropTypes.object,
   padding: PropTypes.number,
   brand: PropTypes.object,
@@ -55,7 +54,6 @@ Toolbar.propTypes = {
 Toolbar.defaultProps = {
   background: {r:68, g:68, b:68, a: 1},
   fontColor: {r:238, g:238, b:238, a: 1},
-  url: false,
   padding: 0,
   brand: {
     text: "#site-name",
@@ -73,7 +71,6 @@ const LinkInput = Inputs.object({
 Toolbar.inputTypes = {
   background: Inputs.color,
   fontColor: Inputs.color,
-  url: Inputs.bool,
   padding: Inputs.number,
   brand: LinkInput,
   left: Inputs.array(LinkInput),

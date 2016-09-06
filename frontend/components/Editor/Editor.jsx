@@ -45,15 +45,15 @@ class Editor extends Component {
     const inputs = Object.keys(this.props.inputTypes).map(label => {
       const Input = this.props.inputTypes[label];
       return (
-        <label key={label} style={{textAlign: 'center'}}>
+        <div key={label} style={{textAlign: 'center'}}>
           {label.charAt(0).toUpperCase() + label.slice(1)}<br/>
           <Input value={this.state[label]} onChange={this.update(label)}/>
-        </label>
+        </div>
       )
     });
 
     return (
-      <div style={styles.container}>
+      <div className='props-editor'>
         <div style={styles.header}>
           <div style={{flex: 1, textAlign: 'center'}}>{this.props.item && this.props.item.name}</div>
           <Close onClick={this.props.close} style={{cursor: 'pointer', position: 'absolute', top: 5, right: 5, fontSize: 12}}/>

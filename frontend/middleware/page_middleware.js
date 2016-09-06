@@ -1,7 +1,8 @@
 import { REQUEST_PAGES, receivePages,
-  CREATE_PAGE, UPDATE_PAGE, REQUEST_PAGE, SAVE_PAGE, removePage } from '../actions/page_actions.js';
+  CREATE_PAGE, UPDATE_PAGE, REQUEST_PAGE,
+  SAVE_PAGE, removePage, DESTROY_PAGE } from '../actions/page_actions.js';
 import { addPage } from '../actions/site_actions.js';
-import { fetchPages, createPage, updatePage, fetchPage } from '../util/page_api.js';
+import { fetchPages, createPage, updatePage, fetchPage, destroyPage } from '../util/page_api.js';
 import { normalize } from 'normalizr';
 import { receiveEntity } from '../actions/entity_actions.js';
 import { startLoading, stopLoading } from '../actions/loading_actions.js';
@@ -76,6 +77,18 @@ const PageMiddleware = ({ getState, dispatch }) => next => action => {
         },
         error: e => {
           if (e.status === 403) dispatch(push('/sites'));
+        }
+      })
+      return next(action);
+    case DESTROY_PAGE:
+      call({
+        dispatch,
+        request: destroyPage(action.page),
+        loading: ['update-page', 'Destroying Page...'],
+        success: resp => {
+          dispatch(push(`/sites/${resp.site_id}/editor`));
+          dispatch(removePage(resp));
+          return `Successfully Destroyed ${resp.name} Page`;
         }
       })
       return next(action);

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import PageSettings from './page_settings';
 import { withRouter } from 'react-router';
-import { updatePage } from '../../../actions/page_actions';
+import { updatePage, destroyPage } from '../../../actions/page_actions';
 import { parsePageId } from '../../../util/router_utils';
 
 const mapStateToProps = ( { pages, loading }, { params }) => ({
@@ -10,6 +10,7 @@ const mapStateToProps = ( { pages, loading }, { params }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  destroyPage: page => dispatch(destroyPage(page)),
   updatePage: (page, oldPage) => dispatch(updatePage(page, oldPage)),
 });
 

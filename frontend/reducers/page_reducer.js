@@ -6,8 +6,6 @@ let nextState;
 const PageReducer = (state = {}, action) => {
   switch (action.type) {
     case RECEIVE_ENTITY:
-      nextState = merge({}, state)
-      
       return merge({}, state, action.resp.entities.pages);
     case CLEAR_ENTITIES:
       return {};

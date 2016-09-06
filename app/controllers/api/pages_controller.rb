@@ -33,6 +33,18 @@ class Api::PagesController < ApplicationController
     end
   end
 
+  def destroy
+    @page = Page.find_by(id: params[:id])
+    if @page.path == '/'
+      render json: ["Cannot destroy your root route"], staus: 400
+    end
+    if @page.destroy
+      render json: @page
+    else
+      render json: @page.errors.full_messages, status: 400
+    end
+  end
+
   def show
     @page = Page.find(params[:id])
     render json: @page.to_json(include: :components)

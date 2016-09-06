@@ -30,5 +30,13 @@
     border-radius: 5px;
     text-transform: uppercase;
     margin: 0 auto;
+
+    &.destroy {
+      font-size: 12px;
+      font-weight: normal;
+      width: 75%;
+      background: red;
+      color: #fff
+    }
   }
 }
