@@ -85074,19 +85074,39 @@
 	      return _react2.default.createElement(
 	        'form',
 	        { className: 'site-settings-form' },
-	        _react2.default.createElement('input', {
-	          type: 'text',
-	          value: this.state.name,
-	          onChange: this.updateState("name") }),
-	        _react2.default.createElement('textarea', {
-	          placeholder: 'Description',
-	          value: this.state.description,
-	          onChange: this.updateState("description") }),
-	        _react2.default.createElement('input', {
-	          type: 'text',
-	          value: this.state.identifier,
-	          onChange: this.updateState("identifier") }),
-	        _react2.default.createElement('input', { type: 'checkbox', value: this.state.template, onChange: this.updateState('template') }),
+	        _react2.default.createElement(
+	          'label',
+	          null,
+	          'Name',
+	          _react2.default.createElement('input', {
+	            type: 'text',
+	            value: this.state.name,
+	            onChange: this.updateState("name") })
+	        ),
+	        _react2.default.createElement(
+	          'label',
+	          null,
+	          'Description',
+	          _react2.default.createElement('textarea', {
+	            placeholder: 'Description',
+	            value: this.state.description,
+	            onChange: this.updateState("description") })
+	        ),
+	        _react2.default.createElement(
+	          'label',
+	          null,
+	          'Identifier',
+	          _react2.default.createElement('input', {
+	            type: 'text',
+	            value: this.state.identifier,
+	            onChange: this.updateState("identifier") })
+	        ),
+	        _react2.default.createElement(
+	          'label',
+	          null,
+	          'Template',
+	          _react2.default.createElement('input', { type: 'checkbox', value: this.state.template, onChange: this.updateState('template') })
+	        ),
 	        _react2.default.createElement(
 	          'button',
 	          { type: 'submit', disabled: unchanged, onClick: this.update },
