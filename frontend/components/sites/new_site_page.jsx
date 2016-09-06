@@ -70,7 +70,6 @@ class NewSitePage extends Component {
         </form>
         <div className="new-site-templates">
           <LoadingPage loading={loading}>
-            <h2>Templates</h2>
             <div className="sites-index-items">
               <SitesIndexItem
                 site={BLANK_SITE}

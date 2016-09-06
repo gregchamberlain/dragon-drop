@@ -21,7 +21,7 @@ const SitesIndex = ({ loading, sites, title, form }) => (
           <SitesIndexItem key={site.id} site={site} template={form} />
         ))}
         { form ? (
-          <div>
+          <div className="site-item">
             <div className="site-wrapper">
               <div
                 className="sites-index-item flex center"

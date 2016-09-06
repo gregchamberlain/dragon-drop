@@ -46,8 +46,8 @@ class SitesIndexItem extends Component {
 
     const { site, router, template, selected, onClick } = this.props;
     return (
-      <div>
-        <div className={`site-wrapper${ isEqual(selected, site) ? " selected" : ""}`}>
+      <div className={`site-item${ isEqual(selected, site) ? " selected" : ""}`}>
+        <div className="site-wrapper">
           <div ref="box" className="sites-index-item" onClick={this.handleClick}>
             { site.id !== 0 ? (
               <Grid

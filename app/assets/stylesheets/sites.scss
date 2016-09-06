@@ -40,20 +40,45 @@ $light-blue-600: #03A9F4;
   }
 }
 
+.site-item {
+  position: relative;
+  border-color: #ccc;
+
+  &.selected {
+    border-color: #333;
+  }
+
+  &:before {
+    display: block;
+    height: 30px;
+    width: 30px;
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 150px;
+    border-bottom: 30px solid #CCC;
+    border-right: 30px solid transparent;
+    border-left: 30px solid transparent;
+  }
+}
+
 .site-wrapper {
   position: relative;
   border-top: 5px solid #ccc;
   border-left: 5px solid #ccc;
   border-right: 5px solid #ccc;
-  border-bottom: 10px solid #ccc;
+  border-bottom: 15px solid #ccc;
+  border-color: inherit;
   box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 2px 1px -1px rgba(0,0,0,0.12);
   border-radius: 5px;
   margin: 15px;
   background: #fff;
 
-  &.selected {
-    border-color: blue;
-  }
+  // &.selected {
+  //   border-color: blue;
+  // }
   // &:after {
   //   content: "";
   //   position: absolute;
