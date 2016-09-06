@@ -41,6 +41,8 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
         loading: ['new-site', 'Creating Site...'],
         success: resp => {
           dispatch(receiveEntity(normalize(resp, site)));
+          dispatch(push(`/sites/${resp.identifier}/editor`));
+          return 'Site successfully created!'
         }
       })
       return next(action);

@@ -7,7 +7,11 @@ Rails.application.routes.draw do
     resources :sites, only: [:index, :create, :show, :destroy, :update] do
       resources :pages, only: [:index, :create]
     end
-    resources :templates, only: [:index]
+    resources :templates, only: [:index] do
+      member do
+        post :clone
+      end
+    end
     resources :pages, only: [:update, :destroy, :show] do
       resources :components, only: [:create]
     end

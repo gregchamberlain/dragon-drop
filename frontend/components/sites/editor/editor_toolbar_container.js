@@ -14,13 +14,13 @@ const mapStateToProps = ({ sites, pages }, { params, location }) => ({
   location: `/sites/${params.siteId}/editor`
 });
 
-const mapDispatchToProps = (dispatch, { params }) => ({
+const mapDispatchToProps = (dispatch, { params, location }) => ({
   changePage: e => {
     dispatch(closeEditor());
     dispatch(push(`/sites/${params.siteId}/editor${e.target.value}`));
   },
   savePage: () => dispatch(savePage(parsePageId(params))),
-  preview: () => dispatch(push(`/preview/${parsePageId(params)}`)),
+  preview: () => dispatch(push({pathname: `/preview/${parsePageId(params)}`, query: {back: location.pathname}})),
   openCatalog: () => dispatch(openCatalog()),
 });
 

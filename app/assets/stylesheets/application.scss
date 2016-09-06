@@ -11,6 +11,7 @@
 @import "navigation";
 @import "page-settings";
 @import "editor";
+@import "preview";
 
  * {
    box-sizing: border-box;
@@ -52,6 +53,11 @@ button {
 
   .flex {
     display: flex;
+  }
+
+  .center {
+    align-items: center;
+    justify-content: center;
   }
 
   .column {

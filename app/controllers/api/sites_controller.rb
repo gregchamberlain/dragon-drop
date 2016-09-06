@@ -1,7 +1,7 @@
 class Api::SitesController < ApplicationController
 
 	before_action :find_site, only: [:destroy, :update]
-	before_action :authorize
+	# before_action :authorize
 
 	def index
 		@sites = current_user.sites

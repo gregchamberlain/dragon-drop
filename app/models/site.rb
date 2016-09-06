@@ -7,6 +7,10 @@ class Site < ActiveRecord::Base
 
 	belongs_to :user
 
+	amoeba do
+		enable
+  end
+
 	validates :name, :user_id, presence: true
 	validates :identifier, uniqueness: true
 	after_initialize :ensure_identifier, :create_home

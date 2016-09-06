@@ -29,3 +29,9 @@ export const fetchTemplates = () => ({
     method: 'GET',
     url: 'api/templates'
 });
+
+export const cloneTemplate = (template, site) => ({
+  method: 'POST',
+  url: `api/templates/${template.identifier}/clone`,
+  data: {site}
+});

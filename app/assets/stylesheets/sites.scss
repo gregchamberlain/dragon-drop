@@ -11,15 +11,37 @@ $light-blue-600: #03A9F4;
 .sites-index-item {
   position: relative;
   padding: 10px;
-  width: 100%;
-  height: 100%;
+  width: 240px;
+  height: 135px;
   cursor: pointer;
   font-size: 12px;
+
+
+  .preview-button {
+    position: absolute;
+    display: none;
+    bottom: 10px;
+    left: 5%;
+    width: 90%;
+    background: rgba(68, 68, 68, 0.8);
+    text-transform: uppercase;
+    background: #444;
+    border: none;
+    outline: none;
+    color: #fff;
+    padding: 5px 0;
+    border-radius: 5px;
+  }
+
+  &:hover {
+    .preview-button {
+      display: block;
+    }
+  }
 }
 
 .site-wrapper {
   position: relative;
-  width: 250px;
   border-top: 5px solid #ccc;
   border-left: 5px solid #ccc;
   border-right: 5px solid #ccc;
@@ -29,30 +51,33 @@ $light-blue-600: #03A9F4;
   margin: 15px;
   background: #fff;
 
-  &:after {
-    content: "";
-    position: absolute;
-    left: -3px;
-    border-top: 1px solid #888;
-    border-top-right-radius: 2px;
-    border-top-left-radius: 2px;
-    bottom: -10px;
-    height: 10px;
-    width: calc(100% + 6px);
+  &.selected {
+    border-color: blue;
   }
-
-  &:before {
-    pointer-events: none;
-    background: none !important;
-    top: -5px;
-    left: -5px;
-    border-radius: 5px;
-    content: "";
-    position: absolute;
-    width: calc(100% + 7px);
-    height: calc(100% + 12px);
-    border: 2px solid #888;
-  }
+  // &:after {
+  //   content: "";
+  //   position: absolute;
+  //   left: -3px;
+  //   border-top: 1px solid #888;
+  //   border-top-right-radius: 2px;
+  //   border-top-left-radius: 2px;
+  //   bottom: -10px;
+  //   height: 10px;
+  //   width: calc(100% + 6px);
+  // }
+  //
+  // &:before {
+  //   pointer-events: none;
+  //   background: none !important;
+  //   top: -5px;
+  //   left: -5px;
+  //   border-radius: 5px;
+  //   content: "";
+  //   position: absolute;
+  //   width: calc(100% + 7px);
+  //   height: calc(100% + 12px);
+  //   border: 2px solid #888;
+  // }
 }
 
 .sites-index-items {
@@ -60,6 +85,7 @@ $light-blue-600: #03A9F4;
   padding: 40px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .sites-content {
@@ -125,8 +151,12 @@ $light-blue-600: #03A9F4;
 
 
 .new-site-form {
-  width: 100%;
+  position: fixed;
+  width: 400px;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 15px;
   input, textarea {
     font-size: 14px;
@@ -155,4 +185,8 @@ $light-blue-600: #03A9F4;
     border-radius: 5px;
     width: 100%;
   }
+}
+
+.new-site-templates {
+  margin-left: 400px;
 }

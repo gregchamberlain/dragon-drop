@@ -16,7 +16,7 @@ const ratio = viewWidth / viewHeight;
 const contentWidth = viewWidth - 56 - 100;
 const contentHeight = contentWidth / ratio;
 
-class GridLayout extends Component {
+class LayoutEditor extends Component {
 
   constructor(props) {
     super(props);
@@ -70,6 +70,8 @@ class GridLayout extends Component {
   }
 
   removeComponent = (el, event) => {
+    this.props.destroyComponent(el);
+    return;
     let gifStyle = {};
     let width = gifStyle.width = (el.layout.w) * contentWidth / 12;
     let height = el.layout.h * contentHeight / 25;
@@ -106,44 +108,44 @@ class GridLayout extends Component {
     e.preventDefault();
   }
 
+  onMove = (_a, _b, _c, _d, e) => {
+    const fromBottom = window.innerHeight - e.clientY;
+    if (fromBottom <= 50) {
+      document.getElementsByClassName('editor-content')[0].scrollTop += (50 - fromBottom) / 2;
+    }
+  }
+
   render() {
 
     const components = _.map(_.map(this.props.components, this.createElement));
     const layout = this.props.components.map(c => _.merge({}, c.layout));
 
     return (
-      <LoadingPage loading={this.props.loading}>
-        <div className="grid-wrapper" style={{fontSize: .0143 * contentWidth}}>
-          <Grid
-            style={{minHeight: Math.floor(contentHeight / 50) * 50}}
-            margin={[0,0]}
-            isDraggable={!this.props.locked}
-            isResizable={!this.props.locked}
-            className="layout-editor"
-            verticalCompact={true}
-            layout={layout}
-            onLayoutChange={this.layoutChange}
-            draggableCancel=".draggable-cancel"
-            cols={12}
-            rowHeight={Math.floor(contentHeight / 50)} >
-            {components}
-          </Grid>
-        </div>
-        { this.props.editor ? <PropsEditor /> : ""}
-        { this.props.catalog ? (
-          <div className='catalog-container'>
-            <div onClick={this.props.closeCatalog} style={{padding: 5, background: '#666', cursor: 'pointer'}}>Close</div>
-            <CatalogView params={this.props.params} />
-          </div>
-        ) : ""}
+      <div className="grid-wrapper" style={{fontSize: .0143 * contentWidth}}>
+        <Grid
+          style={{minHeight: Math.floor(contentHeight / 50) * 50}}
+          margin={[0,0]}
+          isDraggable={!this.props.locked}
+          isResizable={!this.props.locked}
+          className="layout-editor"
+          verticalCompact={true}
+          layout={layout}
+          onDrag={this.onMove}
+          onResize={this.onMove}
+          onLayoutChange={this.layoutChange}
+          draggableCancel=".draggable-cancel"
+          cols={12}
+          rowHeight={Math.floor(contentHeight / 50)} >
+          {components}
+        </Grid>
         <img style={this.state.gifStyle} src={ this.state.gifStyle.display !== 'none' ? "http://www.animatedimages.org/data/media/188/animated-dragon-image-0010.gif" : ""} alt="animated-dragon-image-0010"/>
-      </LoadingPage>
+      </div>
     );
   }
 }
 
-GridLayout.childContextTypes = {
+LayoutEditor.childContextTypes = {
   site: PropTypes.object
 }
 
-export default GridLayout
+export default LayoutEditor

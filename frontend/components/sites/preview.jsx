@@ -4,6 +4,8 @@ import LoadingPage from '../ui/loading_page.jsx';
 import _ from 'lodash';
 import Catalog from '../../catalog';
 const Grid = WidthProvider(ReactGridLayout);
+import ArrowDown from 'react-icons/lib/fa/arrow-down';
+import Back from 'react-icons/lib/fa/arrow-left';
 
 const createElement = siteId => el => {
   let i = `${el.id}`;
@@ -27,11 +29,19 @@ class SitePreview extends Component {
   }
 
   render () {
-    const { loading, components, siteId } = this.props
+    const { loading, components, siteId, site, goBack, back } = this.props
     const layout = components.map(c => _.merge({}, c.layout));
 
     return (
       <LoadingPage loading={loading}>
+        { back ? (
+          <div className="preview-overlay">
+            <div className="item action" onClick={goBack}>
+              <Back />
+            </div>
+          <div className="item">Preview</div>
+          </div>
+        ) : ""}
         <div style={{width: '100%', flex: 1, background: '#fff', fontSize: '1.43vw'}}>
           <Grid
             margin={[0,0]}
