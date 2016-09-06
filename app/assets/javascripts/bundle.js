@@ -86419,6 +86419,8 @@
 	  value: true
 	});
 	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(1);
@@ -86456,13 +86458,43 @@
 	var Wrapper = function (_Component) {
 	  _inherits(Wrapper, _Component);
 	
-	  function Wrapper() {
+	  function Wrapper(props) {
 	    _classCallCheck(this, Wrapper);
 	
-	    return _possibleConstructorReturn(this, (Wrapper.__proto__ || Object.getPrototypeOf(Wrapper)).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, (Wrapper.__proto__ || Object.getPrototypeOf(Wrapper)).call(this, props));
+	
+	    _this.handleClick = function (e) {
+	      var bounds = _this.refs.wrapper.getBoundingClientRect();
+	      if (e.type === 'contextmenu' && e.clientX > bounds.left && e.clientX < bounds.right && e.clientY > bounds.top && e.clientY < bounds.bottom) return;
+	      _this.setState({ contextMenu: false });
+	    };
+	
+	    _this.showContextMenu = function (e) {
+	      e.preventDefault();
+	      var bounds = _this.refs.wrapper.getBoundingClientRect();
+	      _this.setState({ pos: [e.clientX - bounds.left, e.clientY - bounds.top], contextMenu: true });
+	    };
+	
+	    _this.state = {
+	      contextMenu: false,
+	      pos: [0, 0]
+	    };
+	    return _this;
 	  }
 	
 	  _createClass(Wrapper, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      document.addEventListener('click', this.handleClick);
+	      document.addEventListener('contextmenu', this.handleClick);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      document.removeEventListener('click', this.handleClick);
+	      document.removeEventListener('contextmenu', this.handleClick);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
@@ -86474,13 +86506,18 @@
 	      var locked = _props.locked;
 	      var onContextMenu = _props.onContextMenu;
 	
+	      var menuStyle = _extends({}, styles.contextMenu, {
+	        left: this.state.pos[0],
+	        top: this.state.pos[1]
+	      });
+	
 	      return _react2.default.createElement(
 	        'div',
 	        { style: styles.container, onDoubleClick: openEditor, ref: 'wrapper' },
 	        children,
 	        _react2.default.createElement(
 	          'div',
-	          { style: styles.overlay, className: 'component-wrapper-overlay', onContextMenu: onContextMenu },
+	          { style: styles.overlay, className: 'component-wrapper-overlay', onContextMenu: this.showContextMenu },
 	          _react2.default.createElement(
 	            'div',
 	            { style: styles.header },
@@ -86494,7 +86531,12 @@
 	            _react2.default.createElement(_close2.default, { style: styles.icon, onClick: onRemove, className: 'draggable-cancel' })
 	          ),
 	          _react2.default.createElement('span', { className: 'react-resizable-handle' })
-	        )
+	        ),
+	        this.state.contextMenu ? _react2.default.createElement(
+	          'div',
+	          { style: menuStyle },
+	          'Context Menu!'
+	        ) : ''
 	      );
 	    }
 	  }]);
@@ -86540,6 +86582,15 @@
 	    fontSize: 20,
 	    cursor: 'pointer',
 	    margin: 5
+	  },
+	  contextMenu: {
+	    position: 'fixed',
+	    top: 0,
+	    left: 0,
+	    background: '#fff',
+	    padding: 10,
+	    boxShadow: '2px 2px 10px black',
+	    zIndex: 2
 	  }
 	};
 	
@@ -90890,6 +90941,8 @@
 	  value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -90910,32 +90963,73 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var CatalogContainerr = function CatalogContainerr(_ref) {
-	  var create = _ref.create;
-	  var close = _ref.close;
-	  return _react2.default.createElement(
-	    'div',
-	    { className: 'catalog-container' },
-	    _react2.default.createElement(
-	      'div',
-	      { onClick: close, style: { padding: 5, background: '#666', cursor: 'pointer' } },
-	      'Close'
-	    ),
-	    _react2.default.createElement(
-	      'div',
-	      { style: styles.container },
-	      Object.keys(_catalog2.default).map(function (key) {
-	        return _react2.default.createElement(
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var CatalogContainer = function (_Component) {
+	  _inherits(CatalogContainer, _Component);
+	
+	  function CatalogContainer() {
+	    var _ref;
+	
+	    var _temp, _this, _ret;
+	
+	    _classCallCheck(this, CatalogContainer);
+	
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+	
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = CatalogContainer.__proto__ || Object.getPrototypeOf(CatalogContainer)).call.apply(_ref, [this].concat(args))), _this), _this.handleKeyPress = function (e) {
+	      if (e.keyCode === 27) {
+	        _this.props.close();
+	      }
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+	
+	  _createClass(CatalogContainer, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      document.addEventListener('keydown', this.handleKeyPress);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      document.removeEventListener('keydown', this.handleKeyPress);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var create = this.props.create;
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'catalog-container' },
+	        _react2.default.createElement(
 	          'div',
-	          { style: styles.item, key: key, onClick: function onClick() {
-	              return create(key);
-	            } },
-	          key
-	        );
-	      })
-	    )
-	  );
-	};
+	          { style: styles.container },
+	          Object.keys(_catalog2.default).map(function (key) {
+	            return _react2.default.createElement(
+	              'div',
+	              { style: styles.item, key: key, onClick: function onClick() {
+	                  return create(key);
+	                } },
+	              key
+	            );
+	          })
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return CatalogContainer;
+	}(_react.Component);
+	// const CatalogContainer = ({ create, close }) => (
+	//
+	// );
 	
 	var styles = {
 	  container: {
@@ -90982,7 +91076,7 @@
 	    }
 	  };
 	};
-	exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(CatalogContainerr);
+	exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(CatalogContainer);
 
 /***/ },
 /* 743 */
@@ -91306,13 +91400,15 @@
 	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
 	  var sites = _ref.sites;
 	  var pages = _ref.pages;
+	  var editor = _ref.editor;
 	  var params = _ref2.params;
 	  var location = _ref2.location;
 	  return {
 	    site: sites[params.siteId],
 	    pages: (0, _entity_utils.map)(sites[params.siteId], 'pages', pages),
 	    currentPage: params.pageId ? '/' + params.pageId : location.pathname.indexOf('new-page') === -1 ? '/' : '/new-page',
-	    location: '/sites/' + params.siteId + '/editor'
+	    location: '/sites/' + params.siteId + '/editor',
+	    catalogOpen: editor.catalogOpen
 	  };
 	};
 	
@@ -91332,6 +91428,9 @@
 	    },
 	    openCatalog: function openCatalog() {
 	      return dispatch((0, _editor_actions.openCatalog)());
+	    },
+	    closeCatalog: function closeCatalog() {
+	      return dispatch((0, _editor_actions.closeCatalog)());
 	    }
 	  };
 	};
@@ -91352,6 +91451,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _plus = __webpack_require__(645);
+	
+	var _plus2 = _interopRequireDefault(_plus);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var EditorToolbar = function EditorToolbar(_ref) {
@@ -91363,6 +91466,8 @@
 	  var preview = _ref.preview;
 	  var site = _ref.site;
 	  var openCatalog = _ref.openCatalog;
+	  var catalogOpen = _ref.catalogOpen;
+	  var closeCatalog = _ref.closeCatalog;
 	  return _react2.default.createElement(
 	    'div',
 	    null,
@@ -91376,13 +91481,20 @@
 	      { className: 'editor-toolbar' },
 	      _react2.default.createElement(
 	        'div',
-	        { className: 'toolbar-item action', onClick: openCatalog },
-	        'Catalog'
+	        {
+	          className: 'toolbar-item action brand',
+	          onClick: catalogOpen ? closeCatalog : openCatalog },
+	        _react2.default.createElement(_plus2.default, { className: 'icon' + (catalogOpen ? " rotated" : "") })
 	      ),
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'toolbar-item brand' },
 	        site.name
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'toolbar-item' },
+	        '/'
 	      ),
 	      _react2.default.createElement(
 	        'select',
@@ -91443,6 +91555,8 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -91459,19 +91573,37 @@
 	
 	    var _this = _possibleConstructorReturn(this, (NewPageForm.__proto__ || Object.getPrototypeOf(NewPageForm)).call(this, props));
 	
+	    _this.parsePath = function (name) {
+	      return '/' + name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+	    };
+	
 	    _this.update = function (name) {
 	      return function (e) {
+	        var path = _this.state.path;
+	        if (name === 'name' && (!_this.state.pathChanged || _this.state.path === '/')) {
+	          path = _this.parsePath(e.target.value);
+	          _this.setState({ name: e.target.value, path: path, pathChanged: false });
+	        }
+	        if (name === 'path') _this.setState({ pathChanged: true });
+	        if (name === 'path' && _this.state.path === '/') return;
 	        _this.setState(_defineProperty({}, name, e.target.value));
 	      };
 	    };
 	
 	    _this.handleSubmit = function (e) {
 	      e.preventDefault();
-	      _this.props.createPage(_this.state);
+	      var _this$state = _this.state;
+	      var pathChanged = _this$state.pathChanged;
+	
+	      var page = _objectWithoutProperties(_this$state, ['pathChanged']);
+	
+	      _this.props.createPage(page);
 	    };
 	
 	    _this.state = {
-	      name: ''
+	      name: '',
+	      path: '/',
+	      pathChanged: false
 	    };
 	    return _this;
 	  }
@@ -91480,13 +91612,28 @@
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
-	        'form',
-	        { onSubmit: this.handleSubmit },
-	        _react2.default.createElement('input', { type: 'text', value: this.state.name, onChange: this.update('name') }),
+	        'div',
+	        { className: 'fill flex center' },
 	        _react2.default.createElement(
-	          'button',
-	          { type: 'submit' },
-	          'Save'
+	          'form',
+	          { onSubmit: this.handleSubmit, className: 'new-site-form' },
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            'Name',
+	            _react2.default.createElement('input', { type: 'text', value: this.state.name, onChange: this.update('name') })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            'Path',
+	            _react2.default.createElement('input', { type: 'text', value: this.state.path, onChange: this.update('path') })
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { type: 'submit' },
+	            'Save'
+	          )
 	        )
 	      );
 	    }

@@ -6,25 +6,48 @@ class NewPageForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: ''
+      name: '',
+      path: '/',
+      pathChanged: false
     }
   }
 
+  parsePath = name => {
+    return `/${name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')}`
+  }
+
   update = name => e => {
+    let path = this.state.path;
+    if (name === 'name' && (!this.state.pathChanged || this.state.path === '/')) {
+      path = this.parsePath(e.target.value)
+      this.setState({name: e.target.value, path, pathChanged: false})
+    }
+    if (name === 'path') this.setState({pathChanged: true})
+    if (name === 'path' && this.state.path === '/') return;
     this.setState({[name]: e.target.value});
   }
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.createPage(this.state);
+    const { pathChanged, ...page } = this.state;
+    this.props.createPage(page);
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <input type="text" value={this.state.name} onChange={this.update('name')} />
-        <button type="submit">Save</button>
-      </form>
+      <div className="fill flex center">
+        <form onSubmit={this.handleSubmit} className="new-site-form">
+          <label>
+            Name
+            <input type="text" value={this.state.name} onChange={this.update('name')} />
+          </label>
+          <label>
+            Path
+            <input type="text" value={this.state.path} onChange={this.update('path')} />
+          </label>
+          <button type="submit">Save</button>
+        </form>
+      </div>
     );
   }
 }

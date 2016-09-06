@@ -1,14 +1,20 @@
 import React from 'react';
+import Plus from 'react-icons/lib/fa/plus'
 
 const EditorToolbar = ({ pages, currentPage, changePage,
-  children, savePage, preview, site, openCatalog }) => (
+  children, savePage, preview, site, openCatalog, catalogOpen, closeCatalog }) => (
   <div>
     <div className='editor-content'>
       {children}
     </div>
     <div className='editor-toolbar'>
-    <div className='toolbar-item action' onClick={openCatalog}>Catalog</div>
-    <div className='toolbar-item brand'>{site.name}</div>
+      <div
+        className='toolbar-item action brand'
+        onClick={catalogOpen ? closeCatalog : openCatalog}>
+        <Plus className={`icon${catalogOpen ? " rotated" : ""}`}/>
+      </div>
+      <div className='toolbar-item brand'>{site.name}</div>
+      <div className='toolbar-item'>/</div>
       <select value={currentPage} onChange={changePage}>
         { pages.map(page => (
           <option key={page.path} value={page.path}>{page.name}</option>
