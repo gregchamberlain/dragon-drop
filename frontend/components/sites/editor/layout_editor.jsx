@@ -70,8 +70,8 @@ class LayoutEditor extends Component {
   }
 
   removeComponent = (el, event) => {
-    this.props.destroyComponent(el);
-    return;
+    // this.props.destroyComponent(el);
+    // return;
     let gifStyle = {};
     let width = gifStyle.width = (el.layout.w) * contentWidth / 12;
     let height = el.layout.h * contentHeight / 25;

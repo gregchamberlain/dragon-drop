@@ -86288,8 +86288,8 @@
 	    };
 	
 	    _this.removeComponent = function (el, event) {
-	      _this.props.destroyComponent(el);
-	      return;
+	      // this.props.destroyComponent(el);
+	      // return;
 	      var gifStyle = {};
 	      var width = gifStyle.width = el.layout.w * contentWidth / 12;
 	      var height = el.layout.h * contentHeight / 25;
