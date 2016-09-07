@@ -30,7 +30,7 @@ export default class SiteSettingsForm extends Component {
 
   update = e => {
     e.preventDefault();
-    this.props.update(this.state);
+    this.props.update(this.state, this.props.site);
   }
 
   deploy = e => {
@@ -46,8 +46,10 @@ export default class SiteSettingsForm extends Component {
 
     return (
       <div>
-        <form className="site-settings-form">
+        <div className="site-settings-form">
           <button onClick={this.deploy}>Deploy</button>
+        </div>
+        <form className="site-settings-form">
           <label>
             Name
             <input
@@ -65,6 +67,7 @@ export default class SiteSettingsForm extends Component {
           <label>
             Identifier
             <input
+              disabled={true}
               type="text"
               value={this.state.identifier}
               onChange={this.updateState("identifier")} />

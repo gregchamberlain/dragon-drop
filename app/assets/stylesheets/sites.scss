@@ -147,6 +147,11 @@ $light-blue-600: #03A9F4;
     padding: 5px;
     outline: none;
 
+    &:disabled {
+      border: none;
+      cursor: not-allowed;
+    }
+
     &:focus {
       border-bottom: 2px solid black;
 

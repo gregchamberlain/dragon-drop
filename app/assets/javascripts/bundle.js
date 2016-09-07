@@ -74544,10 +74544,11 @@
 	  };
 	};
 	
-	var updateSite = exports.updateSite = function updateSite(site) {
+	var updateSite = exports.updateSite = function updateSite(site, oldSite) {
 	  return {
 	    type: UPDATE_SITE,
-	    site: site
+	    site: site,
+	    oldSite: oldSite
 	  };
 	};
 	
@@ -75633,7 +75634,7 @@
 	        case ACTIONS.UPDATE_SITE:
 	          (0, _api_utils.call)({
 	            dispatch: dispatch,
-	            request: API.updateSite(action.site),
+	            request: API.updateSite(action.site, action.oldSite),
 	            loading: ['site', 'Updating Site...'],
 	            success: function success(resp) {
 	              dispatch((0, _entity_actions.receiveEntity)((0, _normalizr.normalize)(resp, _schema.site)));
@@ -75709,10 +75710,10 @@
 	  };
 	};
 	
-	var updateSite = exports.updateSite = function updateSite(site) {
+	var updateSite = exports.updateSite = function updateSite(site, oldSite) {
 	  return {
 	    method: 'PATCH',
-	    url: 'api/sites/' + site.identifier,
+	    url: 'api/sites/' + oldSite.identifier,
 	    data: { site: site }
 	  };
 	};
@@ -84972,8 +84973,8 @@
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
-	    update: function update(site) {
-	      return dispatch((0, _site_actions.updateSite)(site));
+	    update: function update(site, oldSite) {
+	      return dispatch((0, _site_actions.updateSite)(site, oldSite));
 	    },
 	    destroy: function destroy(site) {
 	      return dispatch((0, _site_actions.destroySite)(site));
@@ -85081,7 +85082,7 @@
 	
 	    _this.update = function (e) {
 	      e.preventDefault();
-	      _this.props.update(_this.state);
+	      _this.props.update(_this.state, _this.props.site);
 	    };
 	
 	    _this.deploy = function (e) {
@@ -85109,13 +85110,17 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(
-	          'form',
+	          'div',
 	          { className: 'site-settings-form' },
 	          _react2.default.createElement(
 	            'button',
 	            { onClick: this.deploy },
 	            'Deploy'
-	          ),
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { className: 'site-settings-form' },
 	          _react2.default.createElement(
 	            'label',
 	            null,
@@ -85139,6 +85144,7 @@
 	            null,
 	            'Identifier',
 	            _react2.default.createElement('input', {
+	              disabled: true,
 	              type: 'text',
 	              value: this.state.identifier,
 	              onChange: this.updateState("identifier") })

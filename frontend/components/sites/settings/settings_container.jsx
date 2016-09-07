@@ -7,7 +7,7 @@ const mapStateToProps = ({ sites }, { params }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  update: site => dispatch(updateSite(site)),
+  update: (site, oldSite) => dispatch(updateSite(site, oldSite)),
   destroy: site => dispatch(destroySite(site)),
   deploy: site => dispatch(deploySite(site))
 });

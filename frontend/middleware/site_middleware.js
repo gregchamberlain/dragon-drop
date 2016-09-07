@@ -49,7 +49,7 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
     case ACTIONS.UPDATE_SITE:
       call({
         dispatch,
-        request: API.updateSite(action.site),
+        request: API.updateSite(action.site, action.oldSite),
         loading: ['site', 'Updating Site...'],
         success: resp => {
           dispatch(receiveEntity(normalize(resp, site)));

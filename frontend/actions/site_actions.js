@@ -33,9 +33,10 @@ export const requestSite = siteId => ({
   siteId
 });
 
-export const updateSite = site => ({
+export const updateSite = (site, oldSite) => ({
   type: UPDATE_SITE,
-  site
+  site,
+  oldSite
 });
 
 export const destroySite = site => ({
