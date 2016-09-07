@@ -74507,12 +74507,20 @@
 	var UPDATE_SITE = exports.UPDATE_SITE = 'UPDATE_SITE';
 	var DESTROY_SITE = exports.DESTROY_SITE = 'DESTROY_SITE';
 	var ADD_PAGE = exports.ADD_PAGE = 'ADD_PAGE';
+	var DEPLOY_SITE = exports.DEPLOY_SITE = 'DEPLOY_SITE';
 	
 	var addPage = exports.addPage = function addPage(siteId, pageId) {
 	  return {
 	    type: ADD_PAGE,
 	    siteId: siteId,
 	    pageId: pageId
+	  };
+	};
+	
+	var deploySite = exports.deploySite = function deploySite(site) {
+	  return {
+	    type: DEPLOY_SITE,
+	    site: site
 	  };
 	};
 	
@@ -75645,6 +75653,16 @@
 	            }
 	          });
 	          return next(action);
+	        case ACTIONS.DEPLOY_SITE:
+	          (0, _api_utils.call)({
+	            dispatch: dispatch,
+	            request: API.deploySite(action.site),
+	            loading: ['site', 'Deploying Site...'],
+	            success: function success(resp) {
+	              return 'Site Successfully Deployed';
+	            }
+	          });
+	          return next(state);
 	        default:
 	          return next(action);
 	      }
@@ -75667,6 +75685,13 @@
 	  return {
 	    method: 'GET',
 	    url: 'api/sites'
+	  };
+	};
+	
+	var deploySite = exports.deploySite = function deploySite(site) {
+	  return {
+	    method: 'POST',
+	    url: 'api/sites/' + site.identifier + '/deploy'
 	  };
 	};
 	
@@ -84952,6 +84977,9 @@
 	    },
 	    destroy: function destroy(site) {
 	      return dispatch((0, _site_actions.destroySite)(site));
+	    },
+	    deploy: function deploy(site) {
+	      return dispatch((0, _site_actions.deploySite)(site));
 	    }
 	  };
 	};
@@ -84983,6 +85011,7 @@
 	  var site = _ref.site;
 	  var update = _ref.update;
 	  var destroy = _ref.destroy;
+	  var deploy = _ref.deploy;
 	  return _react2.default.createElement(
 	    'div',
 	    { className: 'site-settings-page' },
@@ -84991,7 +85020,7 @@
 	      null,
 	      'Site Settings'
 	    ),
-	    _react2.default.createElement(_settings_form2.default, { site: site, update: update, destroy: destroy })
+	    _react2.default.createElement(_settings_form2.default, { site: site, update: update, destroy: destroy, deploy: deploy })
 	  );
 	};
 	
@@ -85055,6 +85084,11 @@
 	      _this.props.update(_this.state);
 	    };
 	
+	    _this.deploy = function (e) {
+	      e.preventDefault();
+	      _this.props.deploy(_this.state);
+	    };
+	
 	    _this.state = (0, _lodash.merge)({
 	      name: "",
 	      description: "",
@@ -85072,50 +85106,59 @@
 	      var unchanged = (0, _lodash.isEqual)(site, this.state);
 	
 	      return _react2.default.createElement(
-	        'form',
-	        { className: 'site-settings-form' },
+	        'div',
+	        null,
 	        _react2.default.createElement(
-	          'label',
-	          null,
-	          'Name',
-	          _react2.default.createElement('input', {
-	            type: 'text',
-	            value: this.state.name,
-	            onChange: this.updateState("name") })
-	        ),
-	        _react2.default.createElement(
-	          'label',
-	          null,
-	          'Description',
-	          _react2.default.createElement('textarea', {
-	            placeholder: 'Description',
-	            value: this.state.description,
-	            onChange: this.updateState("description") })
-	        ),
-	        _react2.default.createElement(
-	          'label',
-	          null,
-	          'Identifier',
-	          _react2.default.createElement('input', {
-	            type: 'text',
-	            value: this.state.identifier,
-	            onChange: this.updateState("identifier") })
-	        ),
-	        _react2.default.createElement(
-	          'label',
-	          null,
-	          'Template',
-	          _react2.default.createElement('input', { type: 'checkbox', value: this.state.template, onChange: this.updateState('template') })
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          { type: 'submit', disabled: unchanged, onClick: this.update },
-	          'Update'
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          { className: 'destroy-button', onClick: this.destroy },
-	          'delete site'
+	          'form',
+	          { className: 'site-settings-form' },
+	          _react2.default.createElement(
+	            'button',
+	            { onClick: this.deploy },
+	            'Deploy'
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            'Name',
+	            _react2.default.createElement('input', {
+	              type: 'text',
+	              value: this.state.name,
+	              onChange: this.updateState("name") })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            'Description',
+	            _react2.default.createElement('textarea', {
+	              placeholder: 'Description',
+	              value: this.state.description,
+	              onChange: this.updateState("description") })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            'Identifier',
+	            _react2.default.createElement('input', {
+	              type: 'text',
+	              value: this.state.identifier,
+	              onChange: this.updateState("identifier") })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            'Template',
+	            _react2.default.createElement('input', { type: 'checkbox', value: this.state.template, onChange: this.updateState('template') })
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { type: 'submit', disabled: unchanged, onClick: this.update },
+	            'Update'
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'destroy-button', onClick: this.destroy },
+	            'delete site'
+	          )
 	        )
 	      );
 	    }

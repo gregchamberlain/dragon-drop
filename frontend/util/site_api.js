@@ -3,6 +3,11 @@ export const fetchSites = () => ({
   url: 'api/sites',
 });
 
+export const deploySite = site => ({
+  method: 'POST',
+  url: `api/sites/${site.identifier}/deploy`
+});
+
 export const fetchSite = (siteId) => ({
   method: 'GET',
   url: `api/sites/${siteId}`,

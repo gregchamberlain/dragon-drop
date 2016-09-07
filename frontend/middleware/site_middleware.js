@@ -69,6 +69,16 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
         }
       });
       return next(action);
+    case ACTIONS.DEPLOY_SITE:
+      call({
+        dispatch,
+        request: API.deploySite(action.site),
+        loading: ['site', 'Deploying Site...'],
+        success: resp => {
+          return 'Site Successfully Deployed'
+        }
+      })
+      return next(state);
     default:
       return next(action);
   }

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import SiteSettings from './settings.jsx';
-import { updateSite, destroySite } from '../../../actions/site_actions.js';
+import { updateSite, destroySite, deploySite } from '../../../actions/site_actions.js';
 
 const mapStateToProps = ({ sites }, { params }) => ({
   site: sites[params.siteId]
@@ -9,6 +9,7 @@ const mapStateToProps = ({ sites }, { params }) => ({
 const mapDispatchToProps = dispatch => ({
   update: site => dispatch(updateSite(site)),
   destroy: site => dispatch(destroySite(site)),
+  deploy: site => dispatch(deploySite(site))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SiteSettings);

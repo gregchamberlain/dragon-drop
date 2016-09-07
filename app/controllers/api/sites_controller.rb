@@ -41,6 +41,51 @@ class Api::SitesController < ApplicationController
 		end
 	end
 
+	def deploy
+		site = Site.includes(pages: :components).find_by_identifier(params[:id])
+		json_site = site.to_json(include: {pages: {include: :components } } );
+		json_data = "window.data = {\"site\": #{json_site} }"
+		storage = Fog::Storage.new({
+		  provider: 'AWS',
+		  aws_access_key_id: ENV["AWS_KEY"],
+		  aws_secret_access_key: ENV["AWS_SECRET"],
+			region: "us-west-1",
+			path_style: true
+		})
+		bucket_name = "#{params[:id]}.dragon-drop.com"
+		bucket = storage.directories.get(bucket_name)
+		unless bucket
+			bucket = storage.directories.create(
+			  key: bucket_name, # globally unique name
+			  public: true,
+				location: "us-west-1"
+			)
+			bucket.files.create(
+			  key: 'index.html',
+			  body: File.open("static/index.html"),
+			  public: true
+			)
+			bucket.files.create(
+			  key: 'bundle.js',
+			  body: File.open("static/bundle.js"),
+			  public: true
+			)
+			bucket.files.create(
+			  key: 'styles.css',
+			  body: File.open("static/styles.css"),
+			  public: true
+			)
+			storage.put_bucket_website(bucket_name, IndexDocument: "index.html", ErrorDocument: "index.html")
+			storage.put_bucket_policy(bucket_name, {Version:"2012-10-17",Statement:[{Sid:bucket_name,Effect:"Allow",Principal:"*",Action:"s3:GetObject",Resource:"arn:aws:s3:::#{bucket_name}/*"}]})
+		end
+		bucket.files.create(
+			key: 'data.js',
+			body: json_data,
+			public: true
+		)
+		render json: ["Site Deployed!"]
+	end
+
 	private
 	def find_site
 		@site = Site.find_by_identifier(params[:id])

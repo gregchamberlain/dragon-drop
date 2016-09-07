@@ -6,6 +6,9 @@ Rails.application.routes.draw do
     resources :layouts, only: [:index, :create]
     resources :sites, only: [:index, :create, :show, :destroy, :update] do
       resources :pages, only: [:index, :create]
+      member do
+        post :deploy
+      end
     end
     resources :templates, only: [:index] do
       member do

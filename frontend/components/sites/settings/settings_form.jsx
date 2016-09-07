@@ -33,6 +33,11 @@ export default class SiteSettingsForm extends Component {
     this.props.update(this.state);
   }
 
+  deploy = e => {
+    e.preventDefault();
+    this.props.deploy(this.state);
+  }
+
 
   render() {
 
@@ -40,35 +45,38 @@ export default class SiteSettingsForm extends Component {
     const unchanged = isEqual(site, this.state);
 
     return (
-      <form className="site-settings-form">
-        <label>
-          Name
-          <input
-            type="text"
-            value={this.state.name}
-            onChange={this.updateState("name")} />
-        </label>
-        <label>
-          Description
-          <textarea
-            placeholder="Description"
-            value={this.state.description}
-            onChange={this.updateState("description")} />
-        </label>
-        <label>
-          Identifier
-          <input
-            type="text"
-            value={this.state.identifier}
-            onChange={this.updateState("identifier")} />
-        </label>
-        <label>
-          Template
-          <input type="checkbox" value={this.state.template} onChange={this.updateState('template')} />
-        </label>
-        <button type="submit" disabled={unchanged} onClick={this.update}>Update</button>
-        <button className="destroy-button" onClick={this.destroy}>delete site</button>
-      </form>
+      <div>
+        <form className="site-settings-form">
+          <button onClick={this.deploy}>Deploy</button>
+          <label>
+            Name
+            <input
+              type="text"
+              value={this.state.name}
+              onChange={this.updateState("name")} />
+          </label>
+          <label>
+            Description
+            <textarea
+              placeholder="Description"
+              value={this.state.description}
+              onChange={this.updateState("description")} />
+          </label>
+          <label>
+            Identifier
+            <input
+              type="text"
+              value={this.state.identifier}
+              onChange={this.updateState("identifier")} />
+          </label>
+          <label>
+            Template
+            <input type="checkbox" value={this.state.template} onChange={this.updateState('template')} />
+          </label>
+          <button type="submit" disabled={unchanged} onClick={this.update}>Update</button>
+          <button className="destroy-button" onClick={this.destroy}>delete site</button>
+        </form>
+      </div>
     );
   }
 }
