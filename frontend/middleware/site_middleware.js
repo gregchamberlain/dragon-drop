@@ -79,7 +79,7 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
           return 'Site Successfully Deployed';
         }
       })
-      return next(state);
+      return next(action);
     default:
       return next(action);
   }
