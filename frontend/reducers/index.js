@@ -7,6 +7,7 @@ import SessionReducer from './session_reducer.js';
 import TemplateReducer from './template_reducer.js';
 import NotificationReducer from './notification_reducer.js';
 import LoadingReducer from './loading_reducer.js';
+import ViewReducer from './view_reducer';
 import ComponentReducer from './component_reducer.js';
 import { routerReducer } from 'react-router-redux';
 import { combineReducers } from 'redux';
@@ -22,5 +23,6 @@ export default combineReducers({
   templates: TemplateReducer,
   components: ComponentReducer,
   loading: LoadingReducer,
+  views: ViewReducer,
   notifications: NotificationReducer
 });

@@ -5,7 +5,7 @@ class Site < ActiveRecord::Base
 		foreign_key: :site_id,
 		dependent: :destroy
 
-	has_many :views
+	has_many :views, dependent: :destroy
 
 	belongs_to :user
 

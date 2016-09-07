@@ -4,7 +4,7 @@ class Page < ActiveRecord::Base
 		primary_key: :identifier,
 		foreign_key: :site_id
 
-	has_many :views
+	has_many :views, dependent: :destroy
 
 	has_many :components, dependent: :destroy
 

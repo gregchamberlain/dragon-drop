@@ -14,6 +14,7 @@ import SitePreview from './sites/preview_container.jsx';
 import EditorToolbar from './sites/editor/editor_toolbar_container';
 import NewPageForm from './sites/pages/new_page_form.jsx';
 import NewSitePage from './sites/new_site_page';
+import AnalyticsPage from './sites/analytics/analytics_page_container';
 import { savePage } from '../actions/page_actions.js';
 
 const validateUser = (store) => {
@@ -56,7 +57,7 @@ const Root = ({ store, history }) => (
               <Route path=":pageId" component={EditorContent}  />
             </Route>
             <Route path="store" component={() => <div>Store</div>}/>
-            <Route path="analytics" component={() => <div>Analytics</div>}/>
+            <Route path="analytics" component={AnalyticsPage} />
             <Route path="settings" component={SiteSettings}/>
           </Route>
         </Route>

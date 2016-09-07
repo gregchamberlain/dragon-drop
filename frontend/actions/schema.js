@@ -14,12 +14,17 @@ export const arrayOfPages = arrayOf(page);
 export const component = new Schema('components');
 export const arrayOfComponents = arrayOf(component);
 
+export const view = new Schema('views');
+export const arrayOfViews = arrayOf(view);
+
 page.define({
-  components: arrayOfComponents
+  components: arrayOfComponents,
+  views: arrayOfViews,
 });
 
 site.define({
-  pages: arrayOfPages
+  pages: arrayOfPages,
+  views: arrayOfViews,
 });
 
 template.define({
