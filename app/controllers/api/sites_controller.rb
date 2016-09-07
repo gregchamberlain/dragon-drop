@@ -55,8 +55,8 @@ class Api::SitesController < ApplicationController
 	end
 
 	def deploy
-		site = Site.includes(pages: :components).find_by_identifier(params[:id])
-		json_site = site.to_json(include: {pages: {include: :components } } );
+		@site = Site.includes(pages: :components).find_by_identifier(params[:id])
+		json_site = @site.to_json(include: {pages: {include: :components } } );
 		json_data = "window.data = {\"site\": #{json_site} }"
 		storage = Fog::Storage.new({
 		  provider: 'AWS',
@@ -96,7 +96,12 @@ class Api::SitesController < ApplicationController
 			body: json_data,
 			public: true
 		)
-		render json: ["Site Deployed!"]
+		@site.deployed = Time.now
+		if @site.save
+			render 'show'
+		else
+			render json: site.errors.full_messages, status: 400
+		end
 	end
 
 	private

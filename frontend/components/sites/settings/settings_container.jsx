@@ -8,7 +8,11 @@ const mapStateToProps = ({ sites }, { params }) => ({
 
 const mapDispatchToProps = dispatch => ({
   update: (site, oldSite) => dispatch(updateSite(site, oldSite)),
-  destroy: site => dispatch(destroySite(site)),
+  destroy: site => {
+    if (confirm("are you sure you want to delete this site?")) {
+      dispatch(destroySite(site));
+    }
+  },
   deploy: site => dispatch(deploySite(site))
 });
 

@@ -119,19 +119,51 @@ $light-blue-600: #03A9F4;
 
 .site-settings-page {
   height: 100%;
+  flex: 1;
+  width: 100%;
   overflow: auto;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
   h1 {
     margin: 10px 0;
   }
+
+  button {
+    border:none;
+    background: #444;
+    font-weight: 700;
+    color: white;
+    outline: none;
+    border-radius: 2px;
+    padding: 10px 40px;
+    margin: 10px 0;
+    font-size: 14px;
+    text-transform: uppercase;
+
+    &:disabled {
+      background: #ccc;
+    }
+  }
+
+  .destroy-button {
+    padding: 10px 20px;
+    font-size: 10px;
+    background: red;
+  }
+}
+
+.site-settings-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 
 .site-settings-form {
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   input, textarea {
@@ -159,31 +191,8 @@ $light-blue-600: #03A9F4;
 
 }
 
-label {
-  width: 100%;
-}
-
-  button {
-    border:none;
-    background: #444;
-    font-weight: 700;
-    color: white;
-    outline: none;
-    border-radius: 2px;
-    padding: 10px 40px;
-    margin: 10px 0;
-    font-size: 14px;
-    text-transform: uppercase;
-
-    &:disabled {
-      background: #ccc;
-    }
-  }
-
-  .destroy-button {
-    padding: 10px 20px;
-    font-size: 10px;
-    background: red;
+  label {
+    width: 100%;
   }
 }
 

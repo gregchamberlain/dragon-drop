@@ -21,6 +21,9 @@ Rails.application.routes.draw do
     resources :components, only: [:destroy]
     resources :users, only: [:create, :destroy]
     resource :session, only: [:create, :destroy]
+    get 'view/site/:site_id/:page_id', to: 'views#view'
+    get 'view/site/:site_id', to: 'views#view'
+    get 'view/page/:page_id', to: 'views#view'
   end
 
 end

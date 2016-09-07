@@ -73,9 +73,10 @@ const SiteMiddleware = ({ getState, dispatch }) => next => action => {
       call({
         dispatch,
         request: API.deploySite(action.site),
-        loading: ['site', 'Deploying Site...'],
+        loading: ['site', action.site.deployed ? 'Deploying Site...' : 'Deploying Site for the first time, this will take a second'],
         success: resp => {
-          return 'Site Successfully Deployed'
+          dispatch(receiveEntity(normalize(resp, site)));
+          return 'Site Successfully Deployed';
         }
       })
       return next(state);

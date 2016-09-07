@@ -5,6 +5,8 @@ class Site < ActiveRecord::Base
 		foreign_key: :site_id,
 		dependent: :destroy
 
+	has_many :views
+
 	belongs_to :user
 
 	amoeba do

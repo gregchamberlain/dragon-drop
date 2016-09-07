@@ -45,10 +45,8 @@ export default class SiteSettingsForm extends Component {
     const unchanged = isEqual(site, this.state);
 
     return (
-      <div>
-        <div className="site-settings-form">
-          <button onClick={this.deploy}>Deploy</button>
-        </div>
+      <div className="site-settings-form">
+
         <form className="site-settings-form">
           <label>
             Name
@@ -77,7 +75,6 @@ export default class SiteSettingsForm extends Component {
             <input type="checkbox" value={this.state.template} onChange={this.updateState('template')} />
           </label>
           <button type="submit" disabled={unchanged} onClick={this.update}>Update</button>
-          <button className="destroy-button" onClick={this.destroy}>delete site</button>
         </form>
       </div>
     );
