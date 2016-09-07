@@ -34,6 +34,19 @@ class Api::SitesController < ApplicationController
 	end
 
 	def destroy
+		storage = Fog::Storage.new({
+		  provider: 'AWS',
+		  aws_access_key_id: ENV["AWS_KEY"],
+		  aws_secret_access_key: ENV["AWS_SECRET"],
+			region: "us-west-1",
+			path_style: true
+		})
+		bucket_name = "#{params[:id]}.dragon-drop.com"
+		bucket = storage.directories.get(bucket_name);
+		if bucket
+			storage.delete_multiple_objects(bucket_name, bucket.files.map(&:key))
+			storage.delete_bucket(bucket_name)
+		end
 		if @site.destroy
 			render json: @site
 		else
