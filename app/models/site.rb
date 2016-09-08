@@ -47,6 +47,6 @@ class Site < ActiveRecord::Base
 	end
 
 	def views_by_date
-		View.where(site_id: id).group('date(created_at)').count
+		View.where('site_id = ? AND created_at < ?', id, Time.now).group('date(created_at)').count
 	end
 end

@@ -45,6 +45,7 @@ class ColorInput extends Component {
         popover: {
           position: 'absolute',
           zIndex: '2',
+          right: 0,
         },
         cover: {
           position: 'fixed',

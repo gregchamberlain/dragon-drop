@@ -39581,35 +39581,94 @@
 	
 	var _inputs2 = _interopRequireDefault(_inputs);
 	
+	var _reactcss = __webpack_require__(202);
+	
+	var _reactcss2 = _interopRequireDefault(_reactcss);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	
+	var ALIGNMENTS = {
+	  top: 'flex-start',
+	  center: 'center',
+	  bottom: 'flex-end',
+	  left: 'flex-start',
+	  right: 'flex-end'
+	};
 	
 	var Header = function Header(_ref) {
 	  var content = _ref.content;
-	  var textAlign = _ref.textAlign;
+	
+	  var props = _objectWithoutProperties(_ref, ['content']);
+	
 	  return _react2.default.createElement(
-	    'h1',
-	    { style: { textAlign: textAlign } },
-	    content
+	    'div',
+	    { style: styles(props).container },
+	    _react2.default.createElement(
+	      'h1',
+	      null,
+	      content
+	    )
 	  );
 	};
 	
-	exports.default = Header;
-	
+	var styles = function styles(props) {
+	  return (0, _reactcss2.default)({
+	    'default': {
+	      container: {
+	        display: 'flex',
+	        height: '100%',
+	        alignItems: ALIGNMENTS[props.verticalAlign],
+	        justifyContent: ALIGNMENTS[props.horizontalAlign],
+	        background: props.background,
+	        backgroundSize: 'cover',
+	        backgroundPosition: 'center',
+	        color: (0, _inputs.colorToString)(props.fontColor),
+	        boxSizing: 'border-box',
+	        padding: props.padding,
+	        textShadow: (0, _inputs.shadowToString)(props.textShadow)
+	      }
+	    }
+	  });
+	};
 	
 	Header.inputTypes = {
 	  content: _inputs2.default.string,
-	  textAlign: _inputs2.default.select("left", "center", "right")
+	  horizontalAlign: _inputs2.default.select("left", "center", "right"),
+	  verticalAlign: _inputs2.default.select("top", "center", "bottom"),
+	  background: _inputs2.default.string,
+	  fontColor: _inputs2.default.color,
+	  padding: _inputs2.default.number,
+	  textShadow: _inputs2.default.object({
+	    xOffset: _inputs2.default.number,
+	    yOffset: _inputs2.default.number,
+	    blurRadius: _inputs2.default.number,
+	    color: _inputs2.default.color
+	  })
 	};
 	
 	Header.propTypes = {
 	  content: _react.PropTypes.string,
-	  textAlign: _react.PropTypes.string
+	  horizontalAlign: _react.PropTypes.string,
+	  verticalAlign: _react.PropTypes.string,
+	  background: _react.PropTypes.string,
+	  fontColor: _react.PropTypes.object,
+	  padding: _react.PropTypes.number,
+	  textShadow: _react.PropTypes.object
 	};
 	
 	Header.defaultProps = {
 	  content: "Your header here...",
-	  textAlign: "left"
+	  horizontalAlign: "left",
+	  verticalAlign: 'top',
+	  background: 'transparent',
+	  fontColor: { r: 0, g: 0, b: 0, a: 1 },
+	  padding: 0,
+	  textShadow: { xOffset: 0, yOffset: 0, blurRadius: 0, color: { r: 0, g: 0, b: 0, a: 0 } }
 	};
+	
+	exports.default = Header;
 
 /***/ },
 /* 199 */
@@ -39620,7 +39679,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.colorToString = undefined;
+	exports.shadowToString = exports.colorToString = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -39868,6 +39927,10 @@
 	
 	var colorToString = exports.colorToString = function colorToString(color) {
 	  return 'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + color.a + ')';
+	};
+	
+	var shadowToString = exports.shadowToString = function shadowToString(obj) {
+	  return obj.xOffset + 'px ' + obj.yOffset + 'px ' + obj.blurRadius + 'px ' + colorToString(obj.color);
 	};
 	
 	var styles = {
@@ -50818,7 +50881,8 @@
 	          },
 	          popover: {
 	            position: 'absolute',
-	            zIndex: '2'
+	            zIndex: '2',
+	            right: 0
 	          },
 	          cover: {
 	            position: 'fixed',
@@ -84269,14 +84333,6 @@
 	      _react2.default.createElement(
 	        _reactRouter.Link,
 	        {
-	          to: '/sites/' + params.siteId + '/store',
-	          className: 'sidebar-item',
-	          activeClassName: 'active' },
-	        _react2.default.createElement(_shoppingCart2.default, null)
-	      ),
-	      _react2.default.createElement(
-	        _reactRouter.Link,
-	        {
 	          to: '/sites/' + params.siteId + '/analytics',
 	          className: 'sidebar-item',
 	          activeClassName: 'active' },
@@ -106340,9 +106396,11 @@
 	var mapStateToProps = function mapStateToProps(_ref, _ref2) {
 	  var views = _ref.views;
 	  var sites = _ref.sites;
+	  var pages = _ref.pages;
 	  var params = _ref2.params;
 	  return {
-	    views: dataFromViews(sites[params.siteId].views)
+	    site: sites[params.siteId],
+	    pages: (0, _entity_utils.map)(sites[params.siteId], 'pages', pages)
 	  };
 	};
 	
@@ -106386,13 +106444,26 @@
 	  value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _moment = __webpack_require__(664);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
 	var LineChart = __webpack_require__(859).Line;
+	
 	
 	var options = {
 	  responsive: true,
@@ -106416,18 +106487,55 @@
 	  }
 	};
 	
-	var AnalyticsPage = function AnalyticsPage(_ref) {
-	  var views = _ref.views;
-	  return _react2.default.createElement(
-	    'div',
-	    { style: { padding: 50, flex: 1, width: '70%', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' } },
-	    _react2.default.createElement(
-	      'h1',
-	      null,
-	      'Site Views'
-	    ),
-	    _react2.default.createElement(LineChart, { data: views, options: options })
-	  );
+	var AnalyticsPage = function (_Component) {
+	  _inherits(AnalyticsPage, _Component);
+	
+	  function AnalyticsPage(props) {
+	    _classCallCheck(this, AnalyticsPage);
+	
+	    return _possibleConstructorReturn(this, (AnalyticsPage.__proto__ || Object.getPrototypeOf(AnalyticsPage)).call(this, props));
+	  }
+	
+	  _createClass(AnalyticsPage, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { style: { padding: 50, flex: 1, width: '70%', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' } },
+	        _react2.default.createElement(
+	          'h1',
+	          null,
+	          'Site Views'
+	        ),
+	        _react2.default.createElement(LineChart, { data: dataFromViews(this.props.site.views), options: options, ref: 'chart' })
+	      );
+	    }
+	  }]);
+	
+	  return AnalyticsPage;
+	}(_react.Component);
+	
+	var dataFromViews = function dataFromViews(views) {
+	  var data_array = Object.keys(views).map(function (date) {
+	    return { date: new Date(date), count: views[date] };
+	  }).sort(function (a, b) {
+	    return a.date - b.date;
+	  });
+	  var labels = data_array.map(function (data) {
+	    return (0, _moment2.default)(data.date).format('MMM Do');
+	  });
+	  var data = data_array.map(function (data) {
+	    return data.count;
+	  });
+	  var datasets = [{
+	    label: "Site Views",
+	    fillColor: "rgba(99,123,133,0.3)",
+	    strokeColor: "rgba(53,181,229,1)",
+	    pointColor: "rgba(53,181,229,1)",
+	    pointStrokeColor: "#fff",
+	    data: data
+	  }];
+	  return { labels: labels, datasets: datasets };
 	};
 	
 	exports.default = AnalyticsPage;

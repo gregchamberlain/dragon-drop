@@ -3,8 +3,9 @@ import AnalyticsPage from './analytics_page';
 import {toArray, map} from '../../../util/entity_utils';
 import moment from 'moment';
 
-const mapStateToProps = ({ views, sites }, { params }) => ({
-  views: dataFromViews(sites[params.siteId].views)
+const mapStateToProps = ({ views, sites, pages }, { params }) => ({
+  site: sites[params.siteId],
+  pages: map(sites[params.siteId], 'pages', pages)
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -21,12 +21,12 @@ const Sidebar = ({ children, params, loading }) => (
         activeClassName="active">
         <Pages />
       </Link>
-      <Link
+      {/* <Link
         to={`/sites/${params.siteId}/store`}
         className='sidebar-item'
         activeClassName="active">
         <Cart />
-      </Link>
+      </Link> */}
       <Link
         to={`/sites/${params.siteId}/analytics`}
         className='sidebar-item'

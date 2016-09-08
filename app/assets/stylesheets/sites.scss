@@ -75,6 +75,11 @@ $light-blue-600: #03A9F4;
   border-radius: 5px;
   margin: 15px;
   background: #fff;
+  transition: box-shadow 0.3s ease-in;
+
+  &:hover {
+    box-shadow: 0 0 10px #444;
+  }
 
   // &.selected {
   //   border-color: blue;

@@ -140,6 +140,10 @@ export const colorToString = color => {
   return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`
 }
 
+export const shadowToString = obj => (
+  `${obj.xOffset}px ${obj.yOffset}px ${obj.blurRadius}px ${colorToString(obj.color)}`
+);
+
 const styles = {
   ul: {
     listStyle: 'none',
