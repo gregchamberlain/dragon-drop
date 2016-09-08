@@ -7,6 +7,7 @@ const string = ({value, onChange}) => (
   <input type="text" onChange={e => onChange(e.target.value)} value={value} />
 );
 
+
 string.defaultValue = "";
 
 const text = ({value, onChange}) => (
