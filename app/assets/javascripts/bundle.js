@@ -106117,7 +106117,7 @@
 	    var _this = _possibleConstructorReturn(this, (NewPageForm.__proto__ || Object.getPrototypeOf(NewPageForm)).call(this, props));
 	
 	    _this.parsePath = function (name) {
-	      return '/' + name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+	      return '/' + name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').slice(0, 24);
 	    };
 	
 	    _this.update = function (name) {
@@ -106126,10 +106126,11 @@
 	        if (name === 'name' && (!_this.state.pathChanged || _this.state.path === '/')) {
 	          path = _this.parsePath(e.target.value);
 	          _this.setState({ name: e.target.value, path: path, pathChanged: false });
+	        } else if (name === 'path') {
+	          _this.setState({ path: _this.parsePath(e.target.value.slice(1)), pathChanged: true });
+	        } else {
+	          _this.setState(_defineProperty({}, name, e.target.value));
 	        }
-	        if (name === 'path') _this.setState({ pathChanged: true });
-	        if (name === 'path' && _this.state.path === '/') return;
-	        _this.setState(_defineProperty({}, name, e.target.value));
 	      };
 	    };
 	
@@ -106265,7 +106266,7 @@
 	    };
 	
 	    _this.parseIdentifier = function (name) {
-	      return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+	      return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').slice(0, 24);
 	    };
 	
 	    _this.update = function (name) {

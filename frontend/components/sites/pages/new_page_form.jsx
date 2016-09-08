@@ -13,7 +13,7 @@ class NewPageForm extends Component {
   }
 
   parsePath = name => {
-    return `/${name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')}`
+    return `/${name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').slice(0, 24)}`
   }
 
   update = name => e => {
@@ -21,10 +21,11 @@ class NewPageForm extends Component {
     if (name === 'name' && (!this.state.pathChanged || this.state.path === '/')) {
       path = this.parsePath(e.target.value)
       this.setState({name: e.target.value, path, pathChanged: false})
+    } else if (name === 'path') {
+      this.setState({path: this.parsePath(e.target.value.slice(1)), pathChanged: true})
+    } else {
+      this.setState({[name]: e.target.value})
     }
-    if (name === 'path') this.setState({pathChanged: true})
-    if (name === 'path' && this.state.path === '/') return;
-    this.setState({[name]: e.target.value});
   }
 
   handleSubmit = e => {

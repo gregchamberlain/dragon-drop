@@ -29,7 +29,7 @@ class NewSitePage extends Component {
   }
 
   parseIdentifier = name => {
-    return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')
+    return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').slice(0, 24);
   }
 
   update = name => e => {
