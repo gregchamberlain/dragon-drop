@@ -6,7 +6,9 @@ export default class NewSiteForm extends Component {
     super(props)
     this.state = {
       name: "",
-      description: ""
+      description: "",
+      identifier: "",
+      changed: false
     };
   }
 
@@ -16,13 +18,25 @@ export default class NewSiteForm extends Component {
     }
   }
 
+  parseIdentifier = name => {
+    return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')
+  }
+
   update = name => e => {
+    let identifier = this.state.identifier;
+    if (name === 'name' && (!this.state.changed || this.state.identifier === '/')) {
+      identifier = this.parseIdentifier(e.target.value)
+      this.setState({name: e.target.value, identifier, changed: false})
+    }
+    if (name === 'identifier') this.setState({changed: true})
+    if (name === 'identifier' && this.state.identifier === '/') return;
     this.setState({[name]: e.target.value});
   }
 
   submit = e => {
     e.preventDefault();
-    this.props.createSite(this.state);
+    const { changed, ...site } = this.state
+    this.props.createSite(site);
   }
 
   render() {
@@ -39,6 +53,11 @@ export default class NewSiteForm extends Component {
               placeholder="Description"
               value={this.state.description}
               onChange={this.update("description")}/>
+            <input
+              placeholder="Site Identifier (This cannot be changed later)"
+              type="text"
+              value={this.state.identifier}
+              onChange={this.update("identifier")}/>
             <input type="checkbox" value={this.state.template} onChange={this.update('template')} />
             <button type="submit">Create</button>
           </form>

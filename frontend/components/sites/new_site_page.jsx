@@ -17,7 +17,9 @@ class NewSitePage extends Component {
     this.state = {
       name: "",
       description: "",
+      identifier: "",
       template: false,
+      changed: false,
       selectedTemplate: BLANK_SITE
     }
   }
@@ -26,17 +28,35 @@ class NewSitePage extends Component {
     this.setState({selectedTemplate: t});
   }
 
+  parseIdentifier = name => {
+    return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')
+  }
+
   update = name => e => {
     if (name === 'template') {
       this.setState({[name]: e.target.checked})
     } else {
-      this.setState({[name]: e.target.value})
+      let identifier = this.state.identifier;
+      if (name === 'name' && (!this.state.changed || this.state.identifier === '')) {
+        identifier = this.parseIdentifier(e.target.value)
+        this.setState({name: e.target.value, identifier, changed: false})
+      } else if (name === 'identifier') {
+        this.setState({changed: true, identifier: this.parseIdentifier(e.target.value)})
+      } else {
+        this.setState({[name]: e.target.value});
+      }
     }
   }
 
   handleSubmit = e => {
     e.preventDefault();
-    const { selectedTemplate, fromTemplate, ...site } = this.state;
+    const { selectedTemplate, changed, ...site } = this.state;
+    if (site.identifier.slice(-1) === '-') {
+      site.identifier = site.identifier.slice(0, -1);
+    }
+    if (site.identifier.slice(0, 1) === '-') {
+      site.identifier = site.identifier.slice(1);
+    }
     if (selectedTemplate.id !== 0) {
       this.props.create(site, selectedTemplate);
     } else {
@@ -61,6 +81,10 @@ class NewSitePage extends Component {
           <label>
             Description
             <textarea value={this.state.description} onChange={this.update("description")} />
+          </label>
+          <label>
+            Site Identifier (subdomain when deploying, this cannot be changed later)
+            <input value={this.state.identifier} onChange={this.update("identifier")} />
           </label>
           <label>
             Template?

@@ -84037,6 +84037,8 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -84053,20 +84055,38 @@
 	
 	    var _this = _possibleConstructorReturn(this, (NewSiteForm.__proto__ || Object.getPrototypeOf(NewSiteForm)).call(this, props));
 	
+	    _this.parseIdentifier = function (name) {
+	      return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+	    };
+	
 	    _this.update = function (name) {
 	      return function (e) {
+	        var identifier = _this.state.identifier;
+	        if (name === 'name' && (!_this.state.changed || _this.state.identifier === '/')) {
+	          identifier = _this.parseIdentifier(e.target.value);
+	          _this.setState({ name: e.target.value, identifier: identifier, changed: false });
+	        }
+	        if (name === 'identifier') _this.setState({ changed: true });
+	        if (name === 'identifier' && _this.state.identifier === '/') return;
 	        _this.setState(_defineProperty({}, name, e.target.value));
 	      };
 	    };
 	
 	    _this.submit = function (e) {
 	      e.preventDefault();
-	      _this.props.createSite(_this.state);
+	      var _this$state = _this.state;
+	      var changed = _this$state.changed;
+	
+	      var site = _objectWithoutProperties(_this$state, ['changed']);
+	
+	      _this.props.createSite(site);
 	    };
 	
 	    _this.state = {
 	      name: "",
-	      description: ""
+	      description: "",
+	      identifier: "",
+	      changed: false
 	    };
 	    return _this;
 	  }
@@ -84099,6 +84119,11 @@
 	              placeholder: 'Description',
 	              value: this.state.description,
 	              onChange: this.update("description") }),
+	            _react2.default.createElement('input', {
+	              placeholder: 'Site Identifier (This cannot be changed later)',
+	              type: 'text',
+	              value: this.state.identifier,
+	              onChange: this.update("identifier") }),
 	            _react2.default.createElement('input', { type: 'checkbox', value: this.state.template, onChange: this.update('template') }),
 	            _react2.default.createElement(
 	              'button',
@@ -106239,12 +106264,24 @@
 	      _this.setState({ selectedTemplate: t });
 	    };
 	
+	    _this.parseIdentifier = function (name) {
+	      return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+	    };
+	
 	    _this.update = function (name) {
 	      return function (e) {
 	        if (name === 'template') {
 	          _this.setState(_defineProperty({}, name, e.target.checked));
 	        } else {
-	          _this.setState(_defineProperty({}, name, e.target.value));
+	          var identifier = _this.state.identifier;
+	          if (name === 'name' && (!_this.state.changed || _this.state.identifier === '')) {
+	            identifier = _this.parseIdentifier(e.target.value);
+	            _this.setState({ name: e.target.value, identifier: identifier, changed: false });
+	          } else if (name === 'identifier') {
+	            _this.setState({ changed: true, identifier: _this.parseIdentifier(e.target.value) });
+	          } else {
+	            _this.setState(_defineProperty({}, name, e.target.value));
+	          }
 	        }
 	      };
 	    };
@@ -106253,10 +106290,16 @@
 	      e.preventDefault();
 	      var _this$state = _this.state;
 	      var selectedTemplate = _this$state.selectedTemplate;
-	      var fromTemplate = _this$state.fromTemplate;
+	      var changed = _this$state.changed;
 	
-	      var site = _objectWithoutProperties(_this$state, ['selectedTemplate', 'fromTemplate']);
+	      var site = _objectWithoutProperties(_this$state, ['selectedTemplate', 'changed']);
 	
+	      if (site.identifier.slice(-1) === '-') {
+	        site.identifier = site.identifier.slice(0, -1);
+	      }
+	      if (site.identifier.slice(0, 1) === '-') {
+	        site.identifier = site.identifier.slice(1);
+	      }
 	      if (selectedTemplate.id !== 0) {
 	        _this.props.create(site, selectedTemplate);
 	      } else {
@@ -106267,7 +106310,9 @@
 	    _this.state = {
 	      name: "",
 	      description: "",
+	      identifier: "",
 	      template: false,
+	      changed: false,
 	      selectedTemplate: BLANK_SITE
 	    };
 	    return _this;
@@ -106305,6 +106350,12 @@
 	            null,
 	            'Description',
 	            _react2.default.createElement('textarea', { value: this.state.description, onChange: this.update("description") })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            'Site Identifier (subdomain when deploying, this cannot be changed later)',
+	            _react2.default.createElement('input', { value: this.state.identifier, onChange: this.update("identifier") })
 	          ),
 	          _react2.default.createElement(
 	            'label',
