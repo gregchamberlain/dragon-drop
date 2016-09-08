@@ -45,4 +45,8 @@ class Site < ActiveRecord::Base
 		end
 		identifier
 	end
+
+	def views_by_date
+		View.where(site_id: id).group('date(created_at)').count
+	end
 end

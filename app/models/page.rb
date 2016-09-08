@@ -21,4 +21,8 @@ class Page < ActiveRecord::Base
 	def ensure_path
 		self.path ||= "/#{self.name.downcase}"
 	end
+
+	def views_by_date
+		View.where(page_id: id).group('date(created_at)').count
+	end
 end

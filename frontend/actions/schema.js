@@ -19,12 +19,12 @@ export const arrayOfViews = arrayOf(view);
 
 page.define({
   components: arrayOfComponents,
-  views: arrayOfViews,
+  // views: arrayOfViews,
 });
 
 site.define({
   pages: arrayOfPages,
-  views: arrayOfViews,
+  // views: arrayOfViews,
 });
 
 template.define({
