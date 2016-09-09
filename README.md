@@ -4,10 +4,10 @@
 DRAGONDROP is a full-stack web application for easy and fast creation of static websites. The backend utilizes Ruby on Rails with PostgreSQL as a database. The frontend is build out with React.js for views and a Redux architecture to hold data.
 
 ## Features & Implementation
-[Website Creation](website-creation)</br>
-[Website Building](website-building)</br>
-[Website Deployment](website-deployment)</br>
-[Analytics](analytics)
+[Website Creation](#website-creation)</br>
+[Website Building](#website-building)</br>
+[Website Deployment](#website-deployment)</br>
+[Analytics](#analytics)
 ### Single-Page Application
 DRAGONDROP is a single-page application. All content is delivered on one static page, which makes requests to the backend to receive the data that it needs.
 
