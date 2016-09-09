@@ -1,0 +1,98 @@
+$bg: #35b5e5;
+
+@mixin after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  box-sizing: border-box;
+  border: 10px solid transparent;
+}
+
+.tour-container {
+  padding: 15px;
+  background: $bg;
+  min-width: 200px;
+  max-width: 500px;
+  box-shadow: 0 0 10px black;
+  border-radius: 5px;
+
+  button {
+    background: none;
+    border: none;
+    outline: none;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  .tour-cancel {
+    background: none;
+    border: none;
+    outline: none;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  &.top-left {
+    margin-left: -15px;
+    margin-top: 10px;
+    &:after {
+      @include after;
+      top: -20px;
+      left: 5px;
+      border-bottom: 10px solid $bg;
+    }
+  }
+
+  &.top-center {
+    &:after {
+      @include after;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom: 10px solid $bg;
+    }
+  }
+
+  &.top-right {
+    margin-left: 15px;
+    &:after {
+      @include after;
+      top: -20px;
+      right: 5px;
+      border-bottom: 10px solid $bg;
+    }
+  }
+
+  &.left-top {
+    margin-top: -15px;
+    &:after {
+      @include after;
+      top: 5px;
+      left: -20px;
+      border-right: 10px solid $bg;
+    }
+  }
+
+  &.left-middle {
+    &:after {
+      @include after;
+      top: 50%;
+      transform: translateY(-50%);
+      left: -20px;
+      border-right: 10px solid $bg;
+    }
+  }
+
+  &.left-bottom {
+    margin-bottom: -15px;
+    &:after {
+      @include after;
+      bottom: 5px;
+      left: -20px;
+      border-right: 10px solid $bg;
+    }
+  }
+}

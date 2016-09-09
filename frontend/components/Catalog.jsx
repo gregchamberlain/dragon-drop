@@ -23,12 +23,16 @@ class CatalogContainer extends Component {
   }
 
   render() {
-    const { create } = this.props;
+    const { create, close } = this.props;
     return(
       <div className='catalog-container'>
         <div style={styles.container}>
-          {Object.keys(Catalog).map(key => (
-            <div style={styles.item} key={key} onClick={() => create(key)}>
+          {Object.keys(Catalog).map((key, idx) => (
+            <div
+              style={styles.item}
+              key={key}
+              className={idx === 0 ? 'catalog-item' : ''}
+              onClick={() => {create(key); close();}}>
               {key}
             </div>
           ))}

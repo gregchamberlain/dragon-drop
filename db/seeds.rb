@@ -21,3 +21,13 @@
 #   site.pages.new(name: pages.sample)
 #   site.save!
 # end
+
+# 60.times do |i|
+#   site = Site.last
+#   rand(40).times do
+#     site.views.create!(created_at: i.days.ago)
+#   end
+#   rand(40).times do
+#     site.views.create!(created_at: i.days.from_now)
+#   end
+# end

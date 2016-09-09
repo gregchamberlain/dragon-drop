@@ -49,18 +49,18 @@ class Wrapper extends Component {
     return (
       <div style={styles.container} onDoubleClick={openEditor} ref="wrapper">
         {children}
-        <div style={styles.overlay} className="component-wrapper-overlay" onContextMenu={this.showContextMenu}>
+        <div style={styles.overlay} className="component-wrapper-overlay">
           <div style={styles.header}>
-            <Gear style={styles.icon} onClick={openEditor} className="draggable-cancel"/>
+            <Gear style={styles.icon} onClick={openEditor} className="draggable-cancel component-settings"/>
             { locked ? (
               <Lock style={styles.icon} onClick={onToggleLock} className="draggable-cancel"/>
             ) : (
-              <Unlock style={styles.icon} onClick={onToggleLock} className="draggable-cancel"/>
+              <Unlock style={styles.icon} onClick={onToggleLock} className="draggable-cancel component-lock"/>
             )}
             <div style={{flex: 1, marginLeft: 5}}>{name}</div>
             <Close style={styles.icon} onClick={onRemove} className="draggable-cancel"/>
           </div>
-          <span className="react-resizable-handle" />
+          {/* <span className="react-resizable-handle" /> */}
         </div>
         { this.state.contextMenu ? <div style={menuStyle}>Context Menu!</div> : ''}
       </div>
@@ -82,11 +82,7 @@ const styles = {
     left: 0,
     width: '100%',
     height: '100%',
-    opacity: 0,
-    background: 'rgba(0, 0, 0, 0.3)',
-    ':hover': {
-      opacity: 1,
-    }
+    boxShadow: 'rgba(0, 0, 0, 0.4) 0px 55px 30px -20px inset',
   },
   header: {
     position: "absolute",
@@ -97,7 +93,6 @@ const styles = {
     right: 0,
     height: 30,
     padding: 10,
-    // background: 'rgba(0, 0, 0, 0.6)',
     color: "#fff",
     fontSize: 16,
     fontWeight: 'bold'
